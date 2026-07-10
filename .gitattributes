@@ -1,0 +1,19 @@
+# Simpan semua teks dengan LF di repo. Tanpa ini, checkout di Windows mengubahnya
+# jadi CRLF dan bertabrakan dengan .editorconfig, Prettier, serta Spotless di CI.
+* text=auto eol=lf
+
+# Skrip Windows harus tetap CRLF supaya bisa dieksekusi.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Maven Wrapper: jar biner, mvnw shell script harus LF.
+mvnw text eol=lf
+*.jar binary
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.mp4 binary
