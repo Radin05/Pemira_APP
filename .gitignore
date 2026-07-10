@@ -6,6 +6,10 @@ target/
 *.war
 
 # ── Frontend (Node / Next.js) ──────────────────────────
+# Root package.json hanya delegator skrip, tidak punya dependensi. Lockfile yang
+# sempat dibuat npm di root membingungkan Turbopack saat menebak root workspace.
+/package-lock.json
+
 node_modules/
 .next/
 out/

@@ -1,0 +1,14 @@
+{
+  "name": "pemira-ikm-ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistem pelaporan pelanggaran PEMIRA IKM UI 2025 — monorepo frontend + backend",
+  "scripts": {
+    "dev": "cd pemira-frontend && npm run dev",
+    "build": "cd pemira-frontend && npm run build",
+    "start": "cd pemira-frontend && npm run start",
+    "lint": "cd pemira-frontend && npm run lint",
+    "typecheck": "cd pemira-frontend && npx tsc --noEmit",
+    "setup": "cd pemira-frontend && npm install"
+  }
+}
