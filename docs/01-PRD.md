@@ -1,11 +1,11 @@
-# PRD — Sistem Pelaporan Pelanggaran PEMIRA IKM UI 2025
+# PRD — Sistem Pelaporan Pelanggaran PEMIRA KM Poltekkes Kemenkes Bandung 2025
 
 | | |
 |---|---|
 | **Versi** | 1.0 |
 | **Tanggal** | 10 Juli 2026 |
 | **Status** | Draft untuk review |
-| **Owner** | Komisi Pemilihan (KP) IKM UI |
+| **Owner** | Komite Pengawasan (KP) KM Poltekkes Kemenkes Bandung |
 | **Dokumen terkait** | [ERD](02-ERD.md) · [Arsitektur](../ARSITEKTUR-PEMIRA.md) · [Task Breakdown](04-TASK-BREAKDOWN.md) |
 
 ---
@@ -42,7 +42,7 @@ Membangun kanal resmi tunggal (single source of truth) untuk **pelaporan → inv
 - ❌ Tidak ada auto-posting ke Instagram lewat Graph API — PDD posting manual, sistem hanya menyimpan URL post-nya.
 - ❌ Tidak ada mobile app native. Web responsive saja.
 - ❌ Tidak ada chat/diskusi real-time antar role.
-- ❌ Tidak ada integrasi SSO UI di v1 (pakai OTP email kampus). SSO ditaruh di v2.
+- ❌ Tidak ada integrasi SSO kampus di v1 (pakai OTP email kampus). SSO ditaruh di v2.
 
 ---
 
@@ -50,7 +50,7 @@ Membangun kanal resmi tunggal (single source of truth) untuk **pelaporan → inv
 
 | Persona | Role sistem | Kebutuhan utama | Frekuensi pakai |
 |---|---|---|---|
-| **Rani, mahasiswa FISIP** | `MAHASISWA` | Lapor pelanggaran tanpa ribet daftar akun; ingin tahu laporannya ditindaklanjuti | 1–2× per periode |
+| **Rani, mahasiswa D-III Keperawatan** | `MAHASISWA` | Lapor pelanggaran tanpa ribet daftar akun; ingin tahu laporannya ditindaklanjuti | 1–2× per periode |
 | **Bagas, staf Divisi Hukum & Sekretariat** | `HUKUM_SEKRETARIAT` | Lihat antrean laporan, cross-check bukti, tandai VALID/HOAX, tulis laporan investigasi | Harian, saat masa kampanye |
 | **Dimas, Ketua KP** | `KETUA_KP` | Baca laporan investigasi ringkas, approve/reject dengan alasan tertulis | 2–3× seminggu |
 | **Sinta, staf PDD** | `PDD` | Ambil materi laporan yang disetujui, susun caption + banner, publikasikan | Setelah tiap approval |
@@ -85,7 +85,7 @@ Prioritas: **P0** = wajib rilis, **P1** = sangat diinginkan, **P2** = nice-to-ha
 
 | ID | Story | Prio | Acceptance Criteria |
 |---|---|---|---|
-| US-201 | Sebagai mahasiswa, saya ingin verifikasi lewat OTP ke email kampus, sehingga bisa lapor tanpa bikin password | P0 | Given email berakhiran `@ui.ac.id`, when minta OTP, then kode 6 digit terkirim & berlaku 10 menit; salah 5× → blokir 15 menit |
+| US-201 | Sebagai mahasiswa, saya ingin verifikasi lewat OTP ke email kampus, sehingga bisa lapor tanpa bikin password | P0 | Given email berakhiran `@poltekkesbandung.ac.id`, when minta OTP, then kode 6 digit terkirim & berlaku 10 menit; salah 5× → blokir 15 menit |
 | US-202 | Sebagai staf KP, saya ingin login dengan email + password, sehingga bisa akses dashboard | P0 | Password di-hash BCrypt cost ≥ 10; salah 5× → akun terkunci 15 menit |
 | US-203 | Sebagai user login, saya ingin sesi saya diperpanjang otomatis, sehingga tidak perlu login ulang tiap 15 menit | P0 | Access token 15 menit; refresh token 7 hari di httpOnly cookie; rotasi refresh token tiap pakai |
 | US-204 | Sebagai user, saya ingin logout, sehingga sesi saya benar-benar mati | P0 | Refresh token di-revoke di DB; cookie di-clear; token lama ditolak |
@@ -207,7 +207,7 @@ stateDiagram-v2
 ## 6. Asumsi, Dependensi, dan Risiko
 
 ### Asumsi
-- Semua mahasiswa UI punya email `@ui.ac.id` yang aktif.
+- Semua mahasiswa punya email `@poltekkesbandung.ac.id` yang aktif.
 - KP menyediakan daftar staf beserta rolenya sebelum go-live (untuk seeding user).
 - Tata tertib & daftar pasal pelanggaran sudah final sebelum development sprint 3.
 

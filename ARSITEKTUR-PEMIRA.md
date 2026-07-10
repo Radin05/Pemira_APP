@@ -1,4 +1,4 @@
-# Arsitektur Teknis — Aplikasi PEMIRA IKM UI 2025
+# Arsitektur Teknis — Aplikasi PEMIRA KM Poltekkes Kemenkes Bandung 2025
 
 Stack: **Java Spring Boot (backend)** + **Next.js/React + TypeScript (frontend)**
 
@@ -33,7 +33,7 @@ Gunakan **package-by-feature**, bukan package-by-layer murni (`controller/`, `se
 
 ```
 pemira-backend/
-├── src/main/java/id/ikmui/pemira/
+├── src/main/java/id/kppoltekkesbdg/pemira/
 │   ├── PemiraApplication.java
 │   │
 │   ├── config/                     # konfigurasi global
@@ -146,7 +146,7 @@ pemira-backend/
 │       ├── V2__seed_roles.sql
 │       └── ...
 │
-├── src/test/java/id/ikmui/pemira/
+├── src/test/java/id/kppoltekkesbdg/pemira/
 │   └── (mirror struktur main, per modul: *ServiceTest.java, *ControllerTest.java)
 │
 ├── pom.xml
@@ -252,7 +252,7 @@ pemira-frontend/
 - Backend: `@PreAuthorize("hasRole('KETUA_KP')")` di method service/controller — **ini satu-satunya otorisasi yang mengikat**
 - Frontend: `proxy.ts` (Next 16) cek role dari token sebelum render route dashboard, plus role check di tiap `layout.tsx` dashboard sebagai lapisan kedua. Keduanya hanya untuk UX; jangan pernah jadikan penjaga tunggal — lihat [ADR-010](docs/03-ARCHITECTURE.md#adr-010--role-guard-edge-ada-di-proxyts-dan-bukan-otorisasi-sebenarnya)
 
-**Mahasiswa pelapor**: kalau mau simpel, boleh tanpa akun penuh — cukup verifikasi NIM + email kampus (OTP email), dapat token sesi terbatas hanya untuk submit & tracking laporan sendiri. Kalau mau lebih ketat, pakai SSO kampus (SIAK/SSO UI) via OAuth2.
+**Mahasiswa pelapor**: kalau mau simpel, boleh tanpa akun penuh — cukup verifikasi NIM + email kampus (OTP email), dapat token sesi terbatas hanya untuk submit & tracking laporan sendiri. Kalau mau lebih ketat, pakai SSO kampus via OAuth2.
 
 ---
 
@@ -261,7 +261,7 @@ pemira-frontend/
 ### Java (Backend)
 | Item | Konvensi | Contoh |
 |---|---|---|
-| Package | lowercase, tanpa underscore | `id.ikmui.pemira.report` |
+| Package | lowercase, tanpa underscore | `id.kppoltekkesbdg.pemira.report` |
 | Class / Interface | PascalCase | `ReportService`, `ReportServiceImpl` |
 | Method / variable | camelCase | `submitReport()`, `reportStatus` |
 | Constant | UPPER_SNAKE_CASE | `MAX_EVIDENCE_SIZE_MB` |

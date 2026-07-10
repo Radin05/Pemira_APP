@@ -1,4 +1,4 @@
-# Rencana Testing — PEMIRA IKM UI 2025
+# Rencana Testing — PEMIRA KM Poltekkes Kemenkes Bandung 2025
 
 > Sebelumnya: [Task Breakdown](04-TASK-BREAKDOWN.md)
 

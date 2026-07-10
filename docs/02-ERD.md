@@ -1,4 +1,4 @@
-# ERD — Sistem Pelaporan Pelanggaran PEMIRA IKM UI 2025
+# ERD — Sistem Pelaporan Pelanggaran PEMIRA KM Poltekkes Kemenkes Bandung 2025
 
 Database: **PostgreSQL 16**. Migrasi: **Flyway**. Semua tabel `snake_case`, primary key `BIGSERIAL`, timestamp `TIMESTAMPTZ`.
 
@@ -42,7 +42,7 @@ erDiagram
         varchar email UK
         varchar full_name
         varchar password_hash "nullable utk mhs OTP-only"
-        varchar faculty
+        varchar study_program
         varchar phone
         boolean is_active
         timestamptz email_verified_at
@@ -96,7 +96,7 @@ erDiagram
         varchar election_type "BEM|BPM"
         varchar chief_name
         varchar vice_name
-        varchar faculty
+        varchar study_program
         varchar photo_url
         text vision
         text mission

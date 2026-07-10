@@ -87,6 +87,19 @@ Jembatannya di `:root`: `--primary: var(--color-navy)`, `--ring: var(--color-gol
 **Konteks.** shadcn versi terbaru membangun komponennya di atas `@base-ui/react`, bukan Radix.
 **Keputusan.** Untuk merender komponen sebagai elemen lain (misal `Button` sebagai `Link`), pakai prop `render`: `<Button render={<Link href="/lapor" />}>Lapor</Button>`.
 **Alasan.** `asChild` adalah API Radix dan tidak ada di Base UI. Contoh shadcn yang beredar di internet umumnya masih memakai `asChild` — itu akan gagal typecheck di proyek ini.
+### ADR-013 — Identitas institusi: Komite Pengawasan KM Poltekkes Kemenkes Bandung
+**Konteks.** Draft awal dokumen ini ditulis untuk "PEMIRA IKM UI". Logo resmi yang diberikan justru milik **Komite Pengawasan KM Poltekkes Kemenkes Bandung**, dan lingkup sebenarnya adalah badan pengawas calon **BEM & BPM**.
+**Keputusan.** Seluruh dokumen dan kode diselaraskan ke Poltekkes Kemenkes Bandung:
+- Package backend: `id.ikmui.pemira` → `id.kppoltekkesbdg.pemira`
+- Domain email OTP: `@ui.ac.id` → `@poltekkesbandung.ac.id`
+- Kolom `users.faculty` → `users.study_program` (Poltekkes memakai jurusan/prodi, bukan fakultas)
+- Semua string identitas frontend diambil dari satu sumber: `lib/constant/site.ts`
+- Akronim **KP** kini berarti **Komite Pengawasan**, bukan Komisi Pemilihan. Nama role `KETUA_KP` tetap.
+
+**⚠️ Belum dikonfirmasi KP** — perlu divalidasi sebelum EPIC-02:
+1. Domain email kampus yang benar (`poltekkesbandung.ac.id` masih asumsi). Ini memblokir validasi OTP di US-201.
+2. Alamat email kontak resmi dan jam operasional yang tampil di footer.
+
 
 ---
 

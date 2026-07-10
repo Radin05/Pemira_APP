@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { SITE } from "@/lib/constant/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,11 +12,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "PEMIRA IKM UI 2025",
-    template: "%s · PEMIRA IKM UI 2025",
+    default: `${SITE.orgName} · ${SITE.tagline}`,
+    template: `%s · ${SITE.orgName}`,
   },
-  description:
-    "Kanal resmi pelaporan pelanggaran Pemilihan Raya Ikatan Keluarga Mahasiswa Universitas Indonesia 2025.",
+  description: `Kanal resmi pengawasan dan pelaporan pelanggaran pemilihan raya calon BEM dan BPM ${SITE.institutionShort}.`,
+  icons: { icon: SITE.logo.src },
 };
 
 export default function RootLayout({

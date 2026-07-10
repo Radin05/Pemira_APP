@@ -1,4 +1,4 @@
-# Dokumentasi PEMIRA IKM UI 2025
+# Dokumentasi PEMIRA KM Poltekkes Kemenkes Bandung 2025
 
 Rantai dokumen perencanaan, dibaca berurutan:
 

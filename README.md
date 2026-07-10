@@ -1,4 +1,4 @@
-# PEMIRA IKM UI 2025 — Sistem Pelaporan Pelanggaran
+# PEMIRA KM Poltekkes Kemenkes Bandung 2025 — Sistem Pelaporan Pelanggaran
 
 Kanal resmi tunggal untuk **pelaporan → investigasi → persetujuan → publikasi** pelanggaran PEMIRA, dengan jejak audit yang tidak bisa dimanipulasi.
 
