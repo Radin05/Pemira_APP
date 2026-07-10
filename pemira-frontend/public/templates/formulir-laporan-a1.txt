@@ -1,0 +1,36 @@
+FORMULIR MODEL A-1 — LAPORAN DUGAAN PELANGGARAN
+Komite Pengawasan PEMIRA — KM Poltekkes Kemenkes Bandung
+
+[CATATAN: Ini template sementara. Ganti dengan formulir resmi dari KP.]
+
+================================================================
+
+A. IDENTITAS PELAPOR
+   Nama lengkap    : ______________________________________
+   NPM             : ______________________________________
+   Program studi   : ______________________________________
+   Email kampus    : ______________________________________
+   No. telepon     : ______________________________________
+   ( ) Saya meminta identitas saya dirahasiakan (anonim)
+
+B. URAIAN DUGAAN PELANGGARAN
+   Kategori        : ______________________________________
+   Tanggal kejadian: ______________________________________
+   Lokasi kejadian : ______________________________________
+   Kandidat terlapor (bila diketahui): __________________
+
+   Kronologi (uraikan apa, kapan, di mana, siapa):
+   ______________________________________________________
+   ______________________________________________________
+   ______________________________________________________
+
+C. DAFTAR BUKTI YANG DILAMPIRKAN
+   1. ___________________________________________________
+   2. ___________________________________________________
+   3. ___________________________________________________
+
+D. PERNYATAAN
+   Dengan ini saya menyatakan bahwa laporan ini benar dan
+   dapat dipertanggungjawabkan.
+
+   Tanggal: ____________     Tanda tangan: ____________

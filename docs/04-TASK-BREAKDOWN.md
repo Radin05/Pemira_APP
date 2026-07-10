@@ -94,8 +94,8 @@ Cara baca:
 | | └ **Test**: laporan ke-4 dalam 24 jam → 429; Redis down → tetap terbatas lewat Postgres | | | | |
 | T-04-10 | `GET /reports/track` — hanya status + timeline, tanpa isi laporan (ADR-007); `GET /reports/mine` | BE | 3 | T-04-07 | US-404 |
 | | └ **Test**: response tidak mengandung `description`, `findings`, atau identitas | | | | |
-| T-04-11 | FE: halaman `/lapor` — react-hook-form + zod, field bertahap, dropzone bukti dengan preview & progress | FE | 8 | T-02-12 | US-401/402 |
-| T-04-12 | FE: halaman sukses (tampilkan kode tiket, tombol salin) + halaman `/status` (input tiket+NPM → timeline vertikal) | FE | 5 | T-04-10 | US-403/404 |
+| T-04-11 | 🟡 FE: halaman `/lapor` — react-hook-form + zod, field bertahap, dropzone bukti (validasi tipe/ukuran/jumlah). **UI selesai**; submit masih mode preview (`report.service.ts` PREVIEW_MODE), belum POST ke API. Dependensi diubah dari T-02-12 → mandiri (belum butuh auth) | FE | 8 | — | US-401/402 |
+| T-04-12 | 🟡 FE: panel sukses (kode tiket + salin) + halaman `/status` (input tiket+NPM → timeline). **UI selesai**; masih mode preview, belum GET ke API | FE | 5 | — | US-403/404 |
 | T-04-13 | FE: `report.service.ts`, `report.types.ts`, `report.schema.ts` (zod), hook `useSubmitReport`, `useTrackReport` | FE | 3 | T-02-11 | — |
 
 **Exit criteria:** Mahasiswa submit laporan + 3 bukti → dapat kode tiket → cek status di `/status` → laporan muncul di antrean investigator.
@@ -169,7 +169,8 @@ Cara baca:
 | T-08-05 | `/kandidat` grid + `/kandidat/[id]` detail visi/misi/proker (SSR/ISR) | FE | 4 | T-03-02, T-08-03 | US-802 |
 | T-08-06 | ✅ `/aturan` — daftar pasal dari `lib/constant/rules.ts` (bukan markdown; kode pasal harus sinkron dengan `violation_rules.code`), anchor per pasal, daftar isi sticky | FE | 3 | T-08-03 | US-803 |
 | T-08-07 | `GET /public/publications` + `/{slug}` (backend) | BE | 3 | T-07-06 | US-804 |
-| T-08-08 | `/publikasi` feed kartu + filter kandidat/kategori; `/publikasi/[slug]` detail + tautan IG | FE | 5 | T-08-07 | US-804 |
+| T-08-08 | 🟡 `/publikasi` (Transparansi) — dashboard statistik + feed berita/putusan. **UI selesai** dengan data placeholder (`lib/constant/publications.ts`); belum baca dari API. Filter & halaman detail `[slug]` menyusul | FE | 5 | T-08-07 | US-804 |
+| T-08-13 | 🟡 Halaman `/info#formulir` — unduh template Formulir A-1 (Laporan) & A-2 (Temuan). File `.txt` placeholder, ganti dengan formulir resmi KP | FE | 1 | T-08-12 | — |
 | T-08-09 | ✅ `/tentang` profil KP, mandat, struktur divisi, alur penanganan laporan | FE | 2 | T-08-03 | — |
 | T-08-12 | ✅ `/info` timeline tahapan PEMIRA + `components/layout/page-header.tsx` (header seragam halaman publik) | FE | 3 | T-08-03 | — |
 | T-08-10 | SEO: metadata per halaman, OG image, `sitemap.xml`, `robots.txt` | FE | 3 | T-08-08 | — |

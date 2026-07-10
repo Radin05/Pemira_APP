@@ -1,8 +1,31 @@
 import type { Metadata } from "next";
-import { CheckCircle2, CircleDot, Circle } from "lucide-react";
+import { CheckCircle2, CircleDot, Circle, Download, FileText, Search } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { PEMIRA_TIMELINE, type TimelinePhase } from "@/lib/constant/rules";
 import { cn } from "@/lib/utils";
+
+// Template formulir yang bisa diunduh — "Intelligence Hub" pada referensi.
+// TODO(konfirmasi KP): file .txt ini placeholder, ganti dengan formulir resmi.
+const FORM_TEMPLATES = [
+  {
+    code: "A-1",
+    icon: FileText,
+    iconBg: "bg-navy",
+    title: "Formulir Laporan",
+    description:
+      "Dokumen untuk menampung laporan dugaan pelanggaran yang diajukan secara resmi oleh mahasiswa sebagai bentuk pengawasan partisipatif.",
+    href: "/templates/formulir-laporan-a1.txt",
+  },
+  {
+    code: "A-2",
+    icon: Search,
+    iconBg: "bg-maroon",
+    title: "Formulir Temuan",
+    description:
+      "Instrumen pencatatan dugaan pelanggaran yang ditemukan langsung oleh internal Komite Pengawasan saat pengawasan aktif di lapangan.",
+    href: "/templates/formulir-temuan-a2.txt",
+  },
+] as const;
 
 export const metadata: Metadata = {
   title: "Info Pemira",
@@ -92,6 +115,65 @@ export default function InfoPage() {
               );
             })}
           </ol>
+        </div>
+      </section>
+
+      {/* Instrumen & Formulir — template yang bisa diunduh */}
+      <section id="formulir" className="scroll-mt-24 border-t border-white/10 bg-navy py-16 lg:py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-col items-center text-center">
+            <h2 className="text-3xl font-extrabold text-ink-inverse sm:text-4xl">
+              Instrumen &amp; Formulir
+            </h2>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-ink-inverse/70">
+              Formulir standar operasional pengawasan. Unduh, isi, lalu lampirkan saat
+              mengirim laporan.
+            </p>
+            <span aria-hidden className="mt-5 h-1 w-24 rounded-full bg-gold" />
+          </div>
+
+          <ul className="mt-14 grid gap-6 md:grid-cols-2">
+            {FORM_TEMPLATES.map((tpl) => (
+              <li
+                key={tpl.code}
+                className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-7"
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-4 bottom-0 text-8xl font-extrabold text-white/[0.04]"
+                >
+                  {tpl.code}
+                </span>
+                <div className="relative flex items-start gap-4">
+                  <span
+                    className={cn(
+                      "inline-flex size-12 shrink-0 items-center justify-center rounded-xl",
+                      tpl.iconBg,
+                    )}
+                  >
+                    <tpl.icon className="size-6 text-ink-inverse" aria-hidden />
+                  </span>
+                  <div>
+                    <span className="rounded-full bg-gold/15 px-3 py-1 text-xs font-semibold tracking-wide text-gold">
+                      Formulir Model {tpl.code}
+                    </span>
+                    <h3 className="mt-3 text-xl font-bold text-ink-inverse">{tpl.title}</h3>
+                  </div>
+                </div>
+                <p className="relative mt-4 text-sm leading-relaxed text-ink-inverse/65">
+                  {tpl.description}
+                </p>
+                <a
+                  href={tpl.href}
+                  download
+                  className="relative mt-6 inline-flex items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-sm font-semibold text-gold transition-colors hover:bg-gold/10"
+                >
+                  <Download className="size-4" aria-hidden />
+                  Unduh Template {tpl.code}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </main>
