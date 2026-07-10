@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/*
+ * Design token PEMIRA IKM UI 2025 — lihat ARSITEKTUR-PEMIRA.md §7.
+ *
+ * Tailwind v4 mendeklarasikan tema di CSS lewat @theme, bukan tailwind.config.ts.
+ * Tiap token di bawah otomatis jadi utility: --color-primary → bg-primary, text-primary, border-primary.
+ */
+@theme {
+  /* Navy — base halaman publik, hero, section gelap */
+  --color-primary: #1b2a4a;
+  --color-primary-dark: #0f1a30;
+
+  /* Gold — HANYA untuk elemen yang perlu ditonjolkan: CTA, tab aktif, angka penting.
+     Dipakai merata justru terlihat norak, bukan premium. */
+  --color-accent: #d4a72c;
+  --color-accent-light: #e8c158;
+
+  /* Merah marun — elemen dekoratif, secukupnya */
+  --color-maroon: #7a1f1f;
+
+  --color-surface: #ffffff;
+  --color-surface-dark: #0d0d0d;
+
+  --color-ink: #1a1a1a;
+  --color-ink-muted: #5c5c5c;
+  --color-ink-inverse: #ffffff;
+
+  /* Status laporan. Warning sengaja sama nilainya dengan accent (lihat tabel palet §7.1). */
+  --color-success: #2e7d32;
+  --color-danger: #b3261e;
+  --color-warning: #d4a72c;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Skala tipografi — ARSITEKTUR-PEMIRA.md §7.2 */
+  --text-hero: 3.5rem; /* 56px — H1 landing */
+  --text-hero--line-height: 1.1;
+  --text-hero--font-weight: 800;
+
+  --text-page-title: 1.75rem; /* 28px — H1 dashboard */
+  --text-page-title--line-height: 1.25;
+  --text-page-title--font-weight: 700;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Focus ring wajib terlihat — NFR aksesibilitas WCAG 2.1 AA (docs/01-PRD.md §5).
+     Jangan dihapus tanpa mengganti dengan indikator fokus lain. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
