@@ -1,0 +1,44 @@
+# ── Backend (Java / Maven) ─────────────────────────────
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+*.war
+
+# ── Frontend (Node / Next.js) ──────────────────────────
+node_modules/
+.next/
+out/
+build/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Environment & secrets ──────────────────────────────
+# JANGAN PERNAH commit file ini. Lihat docs/03-ARCHITECTURE.md §5.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ── Test & coverage ────────────────────────────────────
+coverage/
+.nyc_output/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# ── IDE & OS ───────────────────────────────────────────
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# ── Logs ───────────────────────────────────────────────
+*.log
+npm-debug.log*
+logs/
