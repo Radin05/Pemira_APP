@@ -2,7 +2,7 @@
 
 Cara baca:
 - **ID** `T-<epic>-<urut>`. **BE** = backend, **FE** = frontend, **DB** = database, **OPS** = infra/CI.
-- **Est** dalam jam kerja efektif (1 hari ≈ 6 jam). Total di bawah ~305 jam ≈ **51 hari-orang**.
+- **Est** dalam jam kerja efektif (1 hari ≈ 6 jam). Total di bawah ~308 jam ≈ **51 hari-orang**.
 - **Dep** = task yang harus selesai lebih dulu.
 - Setiap task yang menghasilkan kode punya baris **Test** — testnya bagian dari task, bukan pekerjaan terpisah yang ditunda ke akhir.
 
@@ -158,7 +158,7 @@ Cara baca:
 
 ---
 
-## EPIC-08 — Halaman Publik & Transparansi (30 j)
+## EPIC-08 — Halaman Publik & Transparansi (33 j)
 
 | ID | Task | Tipe | Est | Dep | Story |
 |---|---|---|---|---|---|
@@ -167,10 +167,11 @@ Cara baca:
 | T-08-03 | ✅ `components/layout/navbar.tsx` (dark bar + pill gold aktif) dari konstanta `NAV_MENU`, versi mobile (drawer), route group `app/(public)/` | FE | 4 | T-08-02 | §7.3 |
 | T-08-04 | Landing `/` — hero navy+gold, timeline PEMIRA (dari `app_settings`), CTA lapor | FE | 5 | T-08-03 | US-801 |
 | T-08-05 | `/kandidat` grid + `/kandidat/[id]` detail visi/misi/proker (SSR/ISR) | FE | 4 | T-03-02, T-08-03 | US-802 |
-| T-08-06 | `/aturan` — render markdown tata tertib, anchor per pasal, daftar isi | FE | 3 | T-08-03 | US-803 |
+| T-08-06 | ✅ `/aturan` — daftar pasal dari `lib/constant/rules.ts` (bukan markdown; kode pasal harus sinkron dengan `violation_rules.code`), anchor per pasal, daftar isi sticky | FE | 3 | T-08-03 | US-803 |
 | T-08-07 | `GET /public/publications` + `/{slug}` (backend) | BE | 3 | T-07-06 | US-804 |
 | T-08-08 | `/publikasi` feed kartu + filter kandidat/kategori; `/publikasi/[slug]` detail + tautan IG | FE | 5 | T-08-07 | US-804 |
-| T-08-09 | `/tentang` profil KP & struktur divisi | FE | 2 | T-08-03 | — |
+| T-08-09 | ✅ `/tentang` profil KP, mandat, struktur divisi, alur penanganan laporan | FE | 2 | T-08-03 | — |
+| T-08-12 | ✅ `/info` timeline tahapan PEMIRA + `components/layout/page-header.tsx` (header seragam halaman publik) | FE | 3 | T-08-03 | — |
 | T-08-10 | SEO: metadata per halaman, OG image, `sitemap.xml`, `robots.txt` | FE | 3 | T-08-08 | — |
 | T-08-11 | Audit aksesibilitas: kontras ≥4.5:1, navigasi keyboard, `aria-label`, focus ring | FE | 3 | T-08-08 | NFR |
 
@@ -223,10 +224,10 @@ Cara baca:
 | 05 Investigasi | 38 | 168 |
 | 06 Persetujuan | 20 | 188 |
 | 07 Publikasi | 26 | 214 |
-| 08 Halaman Publik | 30 | 244 |
-| 09 Notifikasi & Audit | 24 | 268 |
-| 10 Hardening & Deploy | 37 | 305 |
-| **Total** | **305 j** | **≈ 51 hari-orang** |
+| 08 Halaman Publik | 33 | 247 |
+| 09 Notifikasi & Audit | 24 | 271 |
+| 10 Hardening & Deploy | 37 | 308 |
+| **Total** | **308 j** | **≈ 51 hari-orang** |
 
 **Jalur kritis** (tidak bisa diparalelkan):
 ```
