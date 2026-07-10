@@ -21,17 +21,14 @@ function isActive(pathname: string, href: string): boolean {
 function Brand() {
   return (
     <Link href="/" className="flex shrink-0 items-center gap-3">
-      {/* Seal-nya berbingkai navy gelap; tanpa alas terang ia tenggelam di navbar navy. */}
-      <span className="inline-flex size-12 items-center justify-center rounded-full bg-white/95 p-1 ring-1 ring-gold/40">
-        <Image
-          src={SITE.logo.src}
-          alt={SITE.logo.alt}
-          width={SITE.logo.width}
-          height={SITE.logo.height}
-          priority
-          className="h-full w-auto"
-        />
-      </span>
+      <Image
+        src={SITE.logo.src}
+        alt={SITE.logo.alt}
+        width={SITE.logo.width}
+        height={SITE.logo.height}
+        priority
+        className="size-13 shrink-0"
+      />
       <span className="flex flex-col leading-none">
         <span className="text-lg font-extrabold tracking-tight text-ink-inverse sm:text-xl">
           {SITE.orgName}

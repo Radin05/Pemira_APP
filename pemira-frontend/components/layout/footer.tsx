@@ -51,15 +51,13 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
-              <span className="inline-flex size-13 items-center justify-center rounded-full bg-white/95 p-1 ring-1 ring-gold/40">
-                <Image
-                  src={SITE.logo.src}
-                  alt={SITE.logo.alt}
-                  width={SITE.logo.width}
-                  height={SITE.logo.height}
-                  className="h-full w-auto"
-                />
-              </span>
+              <Image
+                src={SITE.logo.src}
+                alt={SITE.logo.alt}
+                width={SITE.logo.width}
+                height={SITE.logo.height}
+                className="size-14 shrink-0"
+              />
               <span className="flex flex-col leading-none">
                 <span className="text-base font-extrabold tracking-tight text-ink-inverse uppercase">
                   {SITE.orgName}

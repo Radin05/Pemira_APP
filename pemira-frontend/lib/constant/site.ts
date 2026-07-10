@@ -17,8 +17,10 @@ export const SITE = {
   logo: {
     src: "/logo-kp.png",
     alt: "Logo Komite Pengawasan KM Poltekkes Kemenkes Bandung",
-    width: 447,
-    height: 559,
+    // Kanvas persegi 256×256, latar transparan. Aslinya 447×559 berlatar hitam
+    // opaque — sudah dipotong & di-key agar bisa tampil bulat tanpa alas.
+    width: 256,
+    height: 256,
   },
 } as const;
 
