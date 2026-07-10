@@ -15,18 +15,18 @@ Cara baca:
 | ID | Task | Tipe | Est | Dep |
 |---|---|---|---|---|
 | T-01-01 | ✅ Inisialisasi repo (monorepo `pemira-backend/` + `pemira-frontend/`), `.gitignore`, `.editorconfig`, README | OPS | 2 | — |
-| T-01-02 | Bootstrap Spring Boot 3.5 (**Java 17**, pakai Maven Wrapper `./mvnw`): `pom.xml` dengan web, jpa, validation, security, postgres, flyway, lombok, mapstruct, springdoc | BE | 3 | T-01-01 |
+| T-01-02 | ✅ Bootstrap **Spring Boot 3.5.16** (**Java 17**, Maven Wrapper `./mvnw`): `pom.xml` dengan web, jpa, validation, security, postgres, flyway, lombok, mapstruct, springdoc | BE | 3 | T-01-01 |
 | T-01-03 | ✅ Bootstrap **Next.js 16** App Router + TypeScript strict + **Tailwind v4** + shadcn/ui | FE | 3 | T-01-01 |
-| T-01-04 | ⛔ `docker-compose.yml` untuk Postgres 16 + Redis 7 + MailHog (SMTP lokal) — **BLOCKER: Docker belum ter-install di mesin dev** | OPS | 2 | T-01-01 |
-| T-01-05 | Konfigurasi profil `application.yml` / `-dev` / `-prod`; semua secret lewat env var | BE | 2 | T-01-02 |
-| T-01-06 | `ApiResponse<T>`, `PagedResponse<T>`, `GlobalExceptionHandler` + exception kustom (`ResourceNotFound`, `BadRequest`, `Forbidden`, `IllegalStateTransition`, `RateLimitExceeded`) | BE | 4 | T-01-02 |
-| | └ **Test**: tiap exception termap ke HTTP status & kode error yang benar (`@WebMvcTest`) | | | |
-| T-01-07 | Filter `RequestIdFilter` (generate ULID, masukkan ke MDC + response header) + Logback JSON encoder | BE | 3 | T-01-06 |
+| T-01-04 | 🔵 `docker-compose.yml` untuk Postgres 16 + Redis 7 + MailHog — **DITUNDA**: dev pakai Postgres lokal user (`pemira_app` @ 5435). Docker hanya perlu untuk Testcontainers | OPS | 2 | T-01-01 |
+| T-01-05 | ✅ Konfigurasi profil `application.yml` / `-dev` / `-prod`; semua secret lewat env var | BE | 2 | T-01-02 |
+| T-01-06 | ✅ `ApiResponse<T>`, `PagedResponse<T>`, `GlobalExceptionHandler` + exception kustom (`ResourceNotFound`, `BadRequest`, `Forbidden`, `IllegalStateTransition`, `RateLimitExceeded`) | BE | 4 | T-01-02 |
+| | └ **Test**: tiap exception termap ke HTTP status & kode error yang benar (`@WebMvcTest`) — *belum ditulis* | | | |
+| T-01-07 | ✅ Filter `RequestIdFilter` (id per request → MDC + header `X-Request-Id`). Logback JSON encoder *belum* | BE | 3 | T-01-06 |
 | T-01-08 | Setup Spotless + google-java-format; ESLint + Prettier; Husky + lint-staged | OPS | 3 | T-01-02, T-01-03 |
-| T-01-09 | Setup Swagger/OpenAPI (springdoc), grouping per modul, security scheme bearer | BE | 2 | T-01-02 |
+| T-01-09 | ✅ Setup Swagger/OpenAPI (springdoc) — UI di `/swagger-ui.html`. Grouping per modul + security scheme bearer menyusul di EPIC-02 | BE | 2 | T-01-02 |
 | T-01-10 | GitHub Actions: workflow lint + test + build untuk BE & FE | OPS | 4 | T-01-08 |
 
-**Exit criteria:** `docker compose up` + `mvn spring-boot:run` + `npm run dev` jalan; `/actuator/health` hijau; Swagger UI terbuka; CI hijau di PR pertama.
+**Exit criteria:** ✅ `./mvnw spring-boot:run` + `npm run dev` jalan; `/actuator/health` UP; Swagger UI terbuka; backend tersambung ke `pemira_app`. Belum: CI, formatter, JSON logging.
 
 ---
 

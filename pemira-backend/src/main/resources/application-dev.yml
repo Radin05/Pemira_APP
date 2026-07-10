@@ -1,0 +1,25 @@
+# Profil DEV — menyambung ke Postgres lokal.
+#
+# Setup mesin dev saat ini (bisa dioverride lewat env var):
+#   host 127.0.0.1, port 5435, database pemira_app, user postgres, password root
+#
+# Padanan dari gaya Laravel (.env) yang biasa kamu pakai:
+#   DB_HOST=127.0.0.1   -> DB_HOST
+#   DB_PORT=5435        -> DB_PORT
+#   DB_DATABASE=pemira_app -> DB_NAME
+#   DB_PASSWORD=root    -> DB_PASSWORD
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:127.0.0.1}:${DB_PORT:5435}/${DB_NAME:pemira_app}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:root}
+  jpa:
+    properties:
+      hibernate:
+        # Tampilkan SQL saat dev untuk memudahkan debug. Matikan di prod.
+        show_sql: false
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.flywaydb: INFO

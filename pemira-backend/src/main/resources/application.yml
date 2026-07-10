@@ -1,0 +1,44 @@
+# Konfigurasi dasar, berlaku di semua profil. Nilai spesifik lingkungan
+# ada di application-dev.yml / application-prod.yml.
+spring:
+  application:
+    name: pemira-backend
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  jpa:
+    open-in-view: false
+    # validate: skema TIDAK pernah diubah otomatis oleh Hibernate. Perubahan skema
+    # hanya lewat migrasi Flyway (docs/02-ERD.md §5). Jangan ganti ke update/create.
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+# Swagger UI di /swagger-ui.html, spec di /v3/api-docs
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized

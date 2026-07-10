@@ -1,0 +1,19 @@
+# Profil PROD — SEMUA nilai sensitif wajib lewat env var, tidak ada default.
+# Aplikasi sengaja gagal start kalau env var tidak diset, daripada diam-diam
+# menyambung ke database yang salah.
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+
+server:
+  error:
+    include-message: never
+    include-stacktrace: never
+
+logging:
+  level:
+    root: INFO

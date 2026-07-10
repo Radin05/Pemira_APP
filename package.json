@@ -1,14 +1,17 @@
 {
-  "name": "pemira-ikm-ui",
+  "name": "pemira-kp-poltekkes",
   "version": "0.1.0",
   "private": true,
-  "description": "Sistem pelaporan pelanggaran PEMIRA IKM UI 2025 — monorepo frontend + backend",
+  "description": "Sistem pelaporan pelanggaran PEMIRA KM Poltekkes Kemenkes Bandung — monorepo frontend + backend",
   "scripts": {
     "dev": "cd pemira-frontend && npm run dev",
+    "dev:be": "cd pemira-backend && ./mvnw spring-boot:run",
     "build": "cd pemira-frontend && npm run build",
+    "build:be": "cd pemira-backend && ./mvnw clean package",
     "start": "cd pemira-frontend && npm run start",
     "lint": "cd pemira-frontend && npm run lint",
     "typecheck": "cd pemira-frontend && npx tsc --noEmit",
+    "test:be": "cd pemira-backend && ./mvnw test",
     "setup": "cd pemira-frontend && npm install"
   }
 }

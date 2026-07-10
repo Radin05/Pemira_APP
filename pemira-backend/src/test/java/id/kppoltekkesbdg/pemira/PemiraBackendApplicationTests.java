@@ -1,0 +1,13 @@
+package id.kppoltekkesbdg.pemira;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class PemiraBackendApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

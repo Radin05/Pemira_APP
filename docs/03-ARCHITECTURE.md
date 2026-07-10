@@ -101,6 +101,13 @@ Jembatannya di `:root`: `--primary: var(--color-navy)`, `--ring: var(--color-gol
 2. Alamat email kontak resmi dan jam operasional yang tampil di footer.
 
 
+### ADR-014 — Spring Boot 3.5.16, bukan 4.x meski itu default terbaru
+**Konteks.** start.spring.io kini men-default ke **Spring Boot 4.1.0** (dengan Spring Framework 7, Spring Security 7, dan nama starter baru seperti `spring-boot-starter-webmvc` serta test starter yang dipecah-pecah).
+**Keputusan.** Pin ke **3.5.16** (rilis 3.x terbaru).
+**Alasan.** Seluruh pola kode di `ARSITEKTUR-PEMIRA.md` dan contoh di kontrak API ditulis untuk Spring Boot 3.x. Lompatan major ke 4 membawa perubahan pada Spring Security dan auto-config yang belum tentu cocok dengan pola itu, dan dokumentasi/contoh di ekosistem masih mayoritas 3.x. Untuk proyek dengan tenggat PEMIRA, prediktabilitas lebih berharga daripada memakai versi terbaru.
+**Catatan teknis.** Versi artifact Maven adalah `3.5.16` — **tanpa** suffix `.RELEASE`. ID di metadata start.spring.io menampilkan `3.5.16.RELEASE`, tapi itu bukan koordinat Maven yang valid (build gagal resolve). Suffix `.RELEASE` sudah ditinggalkan sejak Spring Boot 2.x.
+**Konsekuensi.** Kalau suatu saat naik ke 4.x, yang berubah terutama: nama starter, konfigurasi Spring Security (lambda DSL sudah dipakai, jadi relatif aman), dan beberapa default. Bukan pekerjaan sepele — jadwalkan terpisah, bukan disisipkan.
+
 ---
 
 ## 3. Kontrak API
