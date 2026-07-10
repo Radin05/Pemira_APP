@@ -1,37 +1,50 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /*
- * Design token PEMIRA IKM UI 2025 — lihat ARSITEKTUR-PEMIRA.md §7.
+ * ══════════════════════════════════════════════════════════════════════════
+ * DUA LAPIS TOKEN — baca ini sebelum menambah warna.
  *
- * Tailwind v4 mendeklarasikan tema di CSS lewat @theme, bukan tailwind.config.ts.
- * Tiap token di bawah otomatis jadi utility: --color-primary → bg-primary, text-primary, border-primary.
+ * 1. TOKEN BRAND (@theme di bawah): --color-navy, --color-gold, dst.
+ *    Nama warna harfiah. Dipakai langsung di halaman publik: bg-navy, text-gold.
+ *
+ * 2. TOKEN SEMANTIK shadcn (@theme inline + :root): --primary, --accent, dst.
+ *    Nama peran. Dipakai internal oleh komponen shadcn (Button, Dialog, ...).
+ *
+ * Token brand SENGAJA tidak bernama "primary"/"accent": shadcn sudah memakai
+ * nama itu untuk peran lain (--accent miliknya = warna hover netral, bukan gold).
+ * Kalau ditimpa, semua hover state komponen berubah jadi emas. Lihat ADR-011.
+ *
+ * Jembatannya ada di :root — di sana --primary dipetakan ke navy, --ring ke gold.
+ * Jadi Button shadcn otomatis ikut brand tanpa merusak skala netralnya.
+ * ══════════════════════════════════════════════════════════════════════════
  */
 @theme {
   /* Navy — base halaman publik, hero, section gelap */
-  --color-primary: #1b2a4a;
-  --color-primary-dark: #0f1a30;
+  --color-navy: #1b2a4a;
+  --color-navy-dark: #0f1a30;
 
   /* Gold — HANYA untuk elemen yang perlu ditonjolkan: CTA, tab aktif, angka penting.
      Dipakai merata justru terlihat norak, bukan premium. */
-  --color-accent: #d4a72c;
-  --color-accent-light: #e8c158;
+  --color-gold: #d4a72c;
+  --color-gold-light: #e8c158;
 
   /* Merah marun — elemen dekoratif, secukupnya */
   --color-maroon: #7a1f1f;
 
-  --color-surface: #ffffff;
   --color-surface-dark: #0d0d0d;
 
   --color-ink: #1a1a1a;
   --color-ink-muted: #5c5c5c;
   --color-ink-inverse: #ffffff;
 
-  /* Status laporan. Warning sengaja sama nilainya dengan accent (lihat tabel palet §7.1). */
+  /* Status laporan. Warning sengaja sama nilainya dengan gold (lihat tabel palet §7.1). */
   --color-success: #2e7d32;
   --color-danger: #b3261e;
   --color-warning: #d4a72c;
-
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   /* Skala tipografi — ARSITEKTUR-PEMIRA.md §7.2 */
   --text-hero: 3.5rem; /* 56px — H1 landing */
@@ -43,22 +56,95 @@
   --text-page-title--font-weight: 700;
 }
 
+/* Pemetaan semantik shadcn → variabel di :root. Jangan ubah baris-baris ini. */
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-inter);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  --background: #ffffff;
+  --foreground: var(--color-ink);
+  --card: #ffffff;
+  --card-foreground: var(--color-ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-ink);
+
+  /* Jembatan brand → semantik: tombol primer shadcn ikut navy, focus ring ikut gold. */
+  --primary: var(--color-navy);
+  --primary-foreground: var(--color-ink-inverse);
+  --ring: var(--color-gold);
+  --destructive: var(--color-danger);
+
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: var(--color-navy);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: var(--color-ink-muted);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: var(--color-navy);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: var(--color-ink);
+  --sidebar-primary: var(--color-navy);
+  --sidebar-primary-foreground: var(--color-ink-inverse);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: var(--color-navy);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: var(--color-gold);
+}
+
 @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    background: var(--color-surface);
-    color: var(--color-ink);
-    font-family: var(--font-sans);
+    @apply bg-background text-foreground font-sans;
     -webkit-font-smoothing: antialiased;
   }
 
   /* Focus ring wajib terlihat — NFR aksesibilitas WCAG 2.1 AA (docs/01-PRD.md §5).
      Jangan dihapus tanpa mengganti dengan indikator fokus lain. */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-gold);
     outline-offset: 2px;
   }
 }

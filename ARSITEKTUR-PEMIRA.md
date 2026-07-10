@@ -277,13 +277,18 @@ Style guide: ikuti **Google Java Style Guide**, pakai formatter otomatis (`Spotl
 ### TypeScript (Frontend)
 | Item | Konvensi | Contoh |
 |---|---|---|
-| Komponen | PascalCase, 1 file 1 komponen | `ReportForm.tsx` |
+| **File** komponen | kebab-case, 1 file 1 komponen | `report-form.tsx`, `status-badge.tsx` |
+| **Nama** komponen (export) | PascalCase | `export function ReportForm()` |
 | Hook | prefix `use` | `useAuth.ts`, `useReportList.ts` |
 | Fungsi/variabel | camelCase | `submitReport()`, `isLoading` |
-| Type/Interface | PascalCase, prefix opsional `I` tidak wajib | `ReportResponse`, `InvestigationDto` |
+| Type/Interface | PascalCase, prefix `I` tidak dipakai | `ReportResponse`, `InvestigationDto` |
 | File non-komponen | kebab-case | `report.service.ts`, `report.types.ts` |
 | Folder | kebab-case | `hukum-sekretariat/` |
 | Konstanta global | UPPER_SNAKE_CASE | `MAX_FILE_SIZE` |
+
+> Nama **file** komponen memakai kebab-case, bukan PascalCase seperti draft awal dokumen ini.
+> Alasannya: `shadcn` menghasilkan `components/ui/button.tsx` dan tidak bisa dikonfigurasi.
+> Mencampur dua konvensi di satu folder `components/` lebih membingungkan daripada mengikuti satu aturan.
 
 Linting: **ESLint (config Next.js default) + Prettier**, commit hook pakai **Husky + lint-staged** supaya format otomatis sebelum commit.
 
@@ -472,18 +477,24 @@ Berdasarkan referensi (poster ucapan selamat & landing page), tema utama: **navy
 | `--color-danger` | `#B3261E` | status "Hoax / Ditolak" |
 | `--color-warning` | `#D4A72C` | status "Dalam Proses / Menunggu" (reuse gold) |
 
-> ⚠️ **Usang.** Proyek memakai Tailwind v4, yang memindahkan tema dari `tailwind.config.ts` ke blok `@theme`
-> di dalam CSS. Token yang berlaku ada di `pemira-frontend/app/globals.css`. Lihat
-> [ADR-009](docs/03-ARCHITECTURE.md#adr-009--tema-tailwind-di-css-theme-bukan-tailwindconfigts).
+> ⚠️ **Usang.** Proyek memakai Tailwind v4 (tema pindah dari `tailwind.config.ts` ke blok `@theme` di CSS),
+> dan token brand **tidak** bernama `primary`/`accent` karena nama itu sudah dipakai shadcn untuk peran lain.
+> Lihat [ADR-009](docs/03-ARCHITECTURE.md) dan [ADR-011](docs/03-ARCHITECTURE.md).
+>
+> Token yang berlaku ada di `pemira-frontend/app/globals.css`:
 >
 > ```css
-> /* app/globals.css */
 > @theme {
->   --color-primary: #1b2a4a;
->   --color-accent: #d4a72c;
->   /* ... */
+>   --color-navy: #1b2a4a;      /* dipakai sebagai bg-navy   */
+>   --color-navy-dark: #0f1a30;
+>   --color-gold: #d4a72c;      /* dipakai sebagai text-gold */
+>   --color-gold-light: #e8c158;
+>   --color-maroon: #7a1f1f;
+>   --color-surface-dark: #0d0d0d;
 > }
 > ```
+>
+> Di `:root`, semantik shadcn dijembatani ke brand: `--primary: var(--color-navy)`, `--ring: var(--color-gold)`.
 
 **Aturan pakai:** navy dominan untuk hero/section besar, gold hanya untuk elemen yang perlu ditonjolkan (CTA, status aktif, angka penting) — jangan dipakai merata supaya tetap kelihatan premium, bukan norak. Halaman dashboard internal (Hukum & Sekretariat / Ketua / PDD) sebaiknya pakai versi netral (surface putih + aksen gold tipis) supaya fokus ke data, sementara halaman publik (landing, publikasi) boleh lebih ekspresif dengan navy+gold penuh gaya poster.
 
@@ -525,31 +536,17 @@ Struktur navbar referensi kamu bagus (dark bar, pill gold untuk tab aktif), aku 
 | Transparency | **Transparansi** | rekap publikasi hasil sidang/sanksi |
 | About Us | **Tentang KP** | profil KP, struktur divisi (Hukum&Sekretariat, Ketua, PDD) |
 
-Styling navbar:
-```css
-.navbar {
-  background: var(--color-surface-dark); /* #0D0D0D */
-  padding: 12px 24px;
-  display: flex;
-  gap: 8px;
-}
-.navbar-item {
-  color: #FFFFFF;
-  padding: 8px 16px;
-  border-radius: 999px; /* pill */
-  font-weight: 600;
-  font-size: 14px;
-}
-.navbar-item.active {
-  background: var(--color-accent); /* #D4A72C */
-  color: #0D0D0D;
-}
-.navbar-item:hover:not(.active) {
-  background: rgba(212, 167, 44, 0.15); /* gold tipis saat hover */
-}
-```
+Styling navbar (sudah diimplementasi dengan utility Tailwind, bukan CSS kustom):
 
-Komponen React-nya bisa taruh di `components/layout/Navbar.tsx`, list menu didefinisikan sebagai konstanta supaya gampang diubah:
+| Elemen | Kelas |
+|---|---|
+| Bar | `sticky top-0 z-50 bg-surface-dark` |
+| Item | `rounded-full px-4 py-2 text-sm font-semibold text-ink-inverse` |
+| Item aktif | `bg-gold text-surface-dark` + `aria-current="page"` |
+| Item hover | `hover:bg-gold/15` |
+
+Implementasi ada di `components/layout/navbar.tsx` (T-08-03), termasuk drawer untuk layar kecil.
+List menu didefinisikan sebagai konstanta supaya gampang diubah:
 ```ts
 // lib/constant/nav-menu.ts
 export const NAV_MENU = [

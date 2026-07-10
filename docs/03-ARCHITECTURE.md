@@ -66,12 +66,27 @@ flowchart LR
 ### ADR-009 — Tema Tailwind di CSS (`@theme`), bukan `tailwind.config.ts`
 **Konteks.** `create-next-app` menghasilkan Next.js 16 + Tailwind v4. Tailwind v4 memindahkan konfigurasi tema dari JavaScript ke CSS.
 **Keputusan.** Semua token warna & tipografi dideklarasikan di `app/globals.css` dalam blok `@theme`. Tidak ada `tailwind.config.ts`.
-**Konsekuensi.** Contoh `tailwind.config.ts` di `ARSITEKTUR-PEMIRA.md` §7.1 sudah usang — token yang berlaku ada di `globals.css`. Utility yang dihasilkan tetap sama (`bg-primary`, `text-accent`), jadi kode komponen tidak terpengaruh.
+**Konsekuensi.** Contoh `tailwind.config.ts` di `ARSITEKTUR-PEMIRA.md` §7.1 sudah usang — token yang berlaku ada di `globals.css`. Lihat juga ADR-011 soal penamaan tokennya.
 
 ### ADR-010 — Role guard edge ada di `proxy.ts`, dan bukan otorisasi sebenarnya
 **Konteks.** Next.js 16 mengganti nama `middleware.ts` menjadi `proxy.ts`. Dokumentasinya menyatakan tegas: proxy **bukan** solusi manajemen sesi atau otorisasi.
 **Keputusan.** `proxy.ts` hanya melakukan *optimistic check* — membaca role dari token untuk mengalihkan user lebih awal agar UX enak. Otorisasi yang mengikat tetap di `@PreAuthorize` backend, dengan guard kedua di `layout.tsx` dashboard.
 **Alasan.** Token di edge bisa kadaluarsa atau dipalsukan tanpa verifikasi penuh. Kalau proxy dijadikan satu-satunya penjaga, siapa pun yang bisa mengarang cookie bisa membuka dashboard Ketua KP. Backend yang memutuskan, frontend hanya mempercantik.
+
+### ADR-011 — Token brand dipisah dari token semantik shadcn
+**Konteks.** `shadcn init` menyuntikkan blok `@theme inline` yang mendefinisikan `--color-primary` dan `--color-accent` ke skala abu-abu netralnya. Karena blok itu muncul setelah `@theme` kita, `bg-primary` diam-diam berubah dari navy menjadi abu-abu — build tetap hijau, warnanya saja yang salah.
+**Keputusan.** Dua lapis token yang namanya tidak bertabrakan:
+- **Brand** (`--color-navy`, `--color-gold`, `--color-maroon`, `--color-ink*`, status) — nama warna harfiah, dipakai langsung di halaman publik: `bg-navy`, `text-gold`.
+- **Semantik shadcn** (`--primary`, `--accent`, `--muted`, …) — nama peran, dipakai internal oleh komponen.
+
+Jembatannya di `:root`: `--primary: var(--color-navy)`, `--ring: var(--color-gold)`, `--destructive: var(--color-danger)`.
+**Alasan.** `--accent` milik shadcn berarti "warna hover netral", bukan aksen brand. Kalau ditimpa dengan emas, setiap hover state di seluruh aplikasi berubah jadi emas. Memisahkan nama membuat komponen shadcn tetap ikut brand (tombol primer jadi navy, focus ring jadi emas) tanpa merusak skala netralnya.
+**Konsekuensi.** Di kode pakai `bg-navy`/`text-gold`, **bukan** `bg-primary`/`text-accent`.
+
+### ADR-012 — Komponen shadcn kini berbasis Base UI: pakai `render`, bukan `asChild`
+**Konteks.** shadcn versi terbaru membangun komponennya di atas `@base-ui/react`, bukan Radix.
+**Keputusan.** Untuk merender komponen sebagai elemen lain (misal `Button` sebagai `Link`), pakai prop `render`: `<Button render={<Link href="/lapor" />}>Lapor</Button>`.
+**Alasan.** `asChild` adalah API Radix dan tidak ada di Base UI. Contoh shadcn yang beredar di internet umumnya masih memakai `asChild` — itu akan gagal typecheck di proyek ini.
 
 ---
 

@@ -163,8 +163,8 @@ Cara baca:
 | ID | Task | Tipe | Est | Dep | Story |
 |---|---|---|---|---|---|
 | T-08-01 | ✅ Design system: token warna & tipografi di **`app/globals.css` blok `@theme`** (Tailwind v4 tidak lagi pakai `tailwind.config.ts`), font Inter via `next/font` | FE | 3 | T-01-03 | §7 arsitektur |
-| T-08-02 | `components/ui/` dasar: Button, Input, Textarea, Select, Badge status, Card, Dialog, Toast, Skeleton | FE | 6 | T-08-01 | — |
-| T-08-03 | `components/layout/Navbar.tsx` (dark bar + pill gold aktif) dari konstanta `NAV_MENU`, versi mobile (drawer) | FE | 4 | T-08-02 | §7.3 |
+| T-08-02 | ✅ `components/ui/` dasar via shadcn: Button, Input, Textarea, Select, Card, Dialog, Badge, Skeleton, Label, Toast (sonner). Plus `components/domain/report/status-badge.tsx` + `lib/types/report.types.ts` | FE | 6 | T-08-01 | — |
+| T-08-03 | ✅ `components/layout/navbar.tsx` (dark bar + pill gold aktif) dari konstanta `NAV_MENU`, versi mobile (drawer), route group `app/(public)/` | FE | 4 | T-08-02 | §7.3 |
 | T-08-04 | Landing `/` — hero navy+gold, timeline PEMIRA (dari `app_settings`), CTA lapor | FE | 5 | T-08-03 | US-801 |
 | T-08-05 | `/kandidat` grid + `/kandidat/[id]` detail visi/misi/proker (SSR/ISR) | FE | 4 | T-03-02, T-08-03 | US-802 |
 | T-08-06 | `/aturan` — render markdown tata tertib, anchor per pasal, daftar isi | FE | 3 | T-08-03 | US-803 |
