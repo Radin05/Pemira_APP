@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { EvidenceDropzone } from "@/components/domain/report/evidence-dropzone";
 import { reportService, type SubmitReportResult } from "@/lib/api/report.service";
+import { ApiError } from "@/lib/api/client";
 import { reportSchema, type ReportFormValues } from "@/lib/validators/report.schema";
 import { REPORT_CATEGORY, REPORT_CATEGORY_LABEL } from "@/lib/types/report.types";
 import { cn } from "@/lib/utils";
@@ -97,8 +98,15 @@ export function ReportForm() {
     try {
       setResult(await reportService.submit(values, evidence));
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch {
-      setSubmitError("Gagal mengirim laporan. Silakan coba lagi.");
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setSubmitError(err.message);
+      } else {
+        // Kegagalan jaringan / backend mati.
+        setSubmitError(
+          "Tidak dapat menghubungi server. Pastikan koneksi Anda dan coba lagi.",
+        );
+      }
     }
   }
 

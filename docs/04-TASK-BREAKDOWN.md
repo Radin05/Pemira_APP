@@ -75,30 +75,23 @@ Cara baca:
 
 | ID | Task | Tipe | Est | Dep | Story |
 |---|---|---|---|---|---|
-| T-04-01 | Migrasi V4: `reports`, `report_evidences`, `report_status_history` + semua CHECK constraint + trigger append-only | DB | 4 | T-03-01 | — |
-| | └ **Test**: `UPDATE` ke `report_status_history` gagal; checksum non-hex ditolak; `is_anonymous` + `reporter_id` terisi ditolak | | | | |
-| T-04-02 | Enum `ReportStatus`, `ReportCategory`; kelas `ReportStateMachine` (tabel transisi + role yang berwenang) | BE | 4 | T-01-06 | ADR-002 |
-| | └ **Test**: parameterized — semua transisi legal lolos, semua kombinasi ilegal melempar `IllegalStateTransitionException`; `SELESAI` terminal | | | | |
-| T-04-03 | `ReportStatusService.transition(reportId, to, actor, note)` — update ber-guard + insert history dalam satu `@Transactional` | BE | 4 | T-04-02 | Invarian #2 |
-| | └ **Test**: rollback insert history → status ikut batal; guard mencegah update ganda (test konkuren 2 thread) | | | | |
-| T-04-04 | `FileStorageService` (S3/Cloudinary): validasi ukuran, magic-byte lewat Tika, hitung SHA-256 streaming, nama file UUID | BE | 6 | T-01-05 | US-402 |
-| | └ **Test**: `.jpg` yang isinya PHP ditolak; file 11 MB ditolak (413); checksum cocok dengan hash yang dihitung manual | | | | |
-| T-04-05 | Generator `ticket_code` `PMR-2025-XXXXX` unik & tidak mudah ditebak | BE | 2 | T-04-01 | US-403 |
-| T-04-06 | `EncryptionService` AES-256-GCM + `ReporterIdentityService` (dekripsi menulis audit log) | BE | 5 | T-04-01 | US-405, ADR-006 |
-| | └ **Test**: enkripsi→dekripsi round-trip; ciphertext beda tiap kali (IV acak); dekripsi menulis 1 baris audit | | | | |
-| T-04-07 | `POST /reports` — validasi, enkripsi identitas bila anonim, status awal `DITERIMA`, tulis history, kirim notifikasi ke role | BE | 5 | T-04-03, T-04-05, T-04-06 | US-401 |
-| | └ **Test**: happy path; kronologi < 50 char → 400; kandidat tidak dikenal → 400 | | | | |
-| T-04-08 | `POST /reports/{id}/evidences` multipart, maks 5 file, hanya pemilik & hanya saat status `DITERIMA` | BE | 4 | T-04-04, T-04-07 | US-402 |
-| | └ **Test**: file ke-6 ditolak; user lain → 403; status `DIVERIFIKASI` → 409 | | | | |
-| T-04-09 | Rate limit: `RateLimitService` Redis (3/NPM/24 j) + verifikasi ulang `count(*)` ke Postgres bila Redis mati | BE | 4 | T-04-07 | US-406 |
-| | └ **Test**: laporan ke-4 dalam 24 jam → 429; Redis down → tetap terbatas lewat Postgres | | | | |
-| T-04-10 | `GET /reports/track` — hanya status + timeline, tanpa isi laporan (ADR-007); `GET /reports/mine` | BE | 3 | T-04-07 | US-404 |
-| | └ **Test**: response tidak mengandung `description`, `findings`, atau identitas | | | | |
-| T-04-11 | 🟡 FE: halaman `/lapor` — react-hook-form + zod, field bertahap, dropzone bukti (validasi tipe/ukuran/jumlah). **UI selesai**; submit masih mode preview (`report.service.ts` PREVIEW_MODE), belum POST ke API. Dependensi diubah dari T-02-12 → mandiri (belum butuh auth) | FE | 8 | — | US-401/402 |
-| T-04-12 | 🟡 FE: panel sukses (kode tiket + salin) + halaman `/status` (input tiket+NPM → timeline). **UI selesai**; masih mode preview, belum GET ke API | FE | 5 | — | US-403/404 |
-| T-04-13 | FE: `report.service.ts`, `report.types.ts`, `report.schema.ts` (zod), hook `useSubmitReport`, `useTrackReport` | FE | 3 | T-02-11 | — |
+| T-04-01 | ✅ Migrasi **V1** (bukan V4 — modul laporan dibangun lebih dulu): `reports`, `report_evidences`, `report_status_history` + CHECK constraint + trigger append-only. Penyimpangan: FK ke users/candidates ditunda (tabel belum ada); `reported_candidate_text` menggantikan FK; `reporter_npm_hash` untuk lookup | DB | 4 | — | — |
+| | └ **Test**: ✅ diverifikasi manual (UPDATE/DELETE history & evidence ditolak trigger). Test JUnit belum ditulis | | | | |
+| T-04-02 | ✅ Enum `ReportStatus`, `ReportCategory`; kelas `ReportStateMachine` (tabel transisi + role) | BE | 4 | T-01-06 | ADR-002 |
+| | └ **Test**: parameterized state machine — *belum ditulis* (butuh Testcontainers utk yg DB) | | | | |
+| T-04-03 | 🟡 Pembuatan awal + baris history pertama (null→DITERIMA) dalam satu `@Transactional` sudah ada di submit. **Belum**: `ReportStatusService.transition()` ber-guard untuk perubahan status berikutnya (claim/verdict/approve) — dikerjakan saat EPIC-05/06 | BE | 4 | T-04-02 | Invarian #2 |
+| T-04-04 | 🟡 `FileStorageService`: validasi ukuran+tipe, SHA-256 streaming server-side, nama UUID, cegah path traversal. **Ditunda**: magic-byte via Tika + storage S3/Cloudinary (kini disk lokal `./storage/evidence`) | BE | 6 | T-01-05 | US-402 |
+| T-04-05 | ✅ Generator `ticket_code` `PMR-2025-XXXXX` (5 digit acak SecureRandom, cek unik ke DB) | BE | 2 | T-04-01 | US-403 |
+| T-04-06 | 🟡 `EncryptionService` AES-256-GCM (IV acak per enkripsi) — identitas pelapor terenkripsi at-rest. **Belum**: `ReporterIdentityService` (dekripsi + tulis audit) — butuh tabel audit (EPIC-09) | BE | 5 | T-04-01 | US-405, ADR-006 |
+| T-04-07 | ✅ `POST /api/v1/reports` (multipart: payload JSON + bukti) — validasi Bean Validation, enkripsi identitas, status awal DITERIMA, tulis history + simpan bukti atomik. **Sementara publik** (TODO: kunci ke MAHASISWA saat auth ada). Notifikasi role belum | BE | 5 | T-04-03, T-04-05, T-04-06 | US-401 |
+| T-04-08 | Bukti diunggah bersama submit (bagian multipart yang sama), bukan endpoint terpisah — cukup untuk alur mahasiswa | BE | 4 | T-04-04, T-04-07 | US-402 |
+| T-04-09 | Rate limit Redis (3/NPM/24 j). Belum — kolom `reporter_npm_hash` sudah disiapkan untuk ini | BE | 4 | T-04-07 | US-406 |
+| T-04-10 | ✅ `GET /api/v1/reports/track?ticket=&npm=` — hanya status + timeline (ADR-007). Verifikasi kepemilikan lewat hash NPM; tiket tak ada / NPM salah → 404 seragam (cegah probing) | BE | 3 | T-04-07 | US-404 |
+| T-04-11 | ✅ FE `/lapor` — react-hook-form + zod, dropzone bukti, **tersambung ke API nyata** (bukan lagi preview) | FE | 8 | T-04-07 | US-401/402 |
+| T-04-12 | ✅ FE panel sukses + `/status` — **tersambung ke API nyata** (`GET /reports/track`) | FE | 5 | T-04-10 | US-403/404 |
+| T-04-13 | ✅ `lib/api/client.ts` (fetch + ApiError), `report.service.ts`, `report.schema.ts`, `report.types.ts` | FE | 3 | — | — |
 
-**Exit criteria:** Mahasiswa submit laporan + 3 bukti → dapat kode tiket → cek status di `/status` → laporan muncul di antrean investigator.
+**Exit criteria:** ✅ Mahasiswa submit laporan (+ bukti) lewat `/lapor` → dapat kode tiket → data tersimpan di `pemira_app` (reports + history + evidence) → lacak di `/status`. Diverifikasi end-to-end. Belum: rate limit, notifikasi, lock role MAHASISWA.
 
 ---
 

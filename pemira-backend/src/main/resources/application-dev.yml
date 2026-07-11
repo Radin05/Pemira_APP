@@ -19,6 +19,14 @@ spring:
         # Tampilkan SQL saat dev untuk memudahkan debug. Matikan di prod.
         show_sql: false
 
+app:
+  # Kunci dev, HANYA untuk lokal. Wajib override lewat env di produksi. Tepat 32 byte.
+  encryption:
+    key: ${APP_ENCRYPTION_KEY:dev-insecure-key-exactly-32bytes}
+  storage:
+    # Bukti disimpan di disk lokal saat dev. Produksi: S3/Cloudinary (T-04-04 lanjutan).
+    local-dir: ${APP_STORAGE_DIR:./storage/evidence}
+
 logging:
   level:
     org.springframework.security: INFO

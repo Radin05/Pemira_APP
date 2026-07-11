@@ -46,6 +46,12 @@ public class SecurityConfig {
             auth ->
                 auth.requestMatchers(HttpMethod.GET, "/api/v1/public/**")
                     .permitAll()
+                    // TODO(EPIC-02): kunci ke role MAHASISWA setelah auth ada.
+                    // Sementara dibuka supaya form /lapor & /status berfungsi tanpa login.
+                    .requestMatchers(HttpMethod.POST, "/api/v1/reports")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/reports/track")
+                    .permitAll()
                     .requestMatchers(PUBLIC_PATHS)
                     .permitAll()
                     .anyRequest()

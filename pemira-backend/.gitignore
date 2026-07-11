@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Bukti tersimpan lokal saat dev (produksi: S3/Cloudinary)
+storage/

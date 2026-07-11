@@ -374,12 +374,27 @@ CREATE INDEX idx_audit_entity ON audit_logs (entity_type, entity_id, created_at 
 
 ## 5. Rencana Migrasi Flyway
 
+> ⚠️ **Urutan aktual berbeda dari rencana awal.** Modul laporan dibangun lebih dulu
+> (permintaan user), jadi migrasi pertama yang benar-benar dibuat adalah
+> `V1__create_reports.sql`, bukan users. Karena `reporter_id`/`assignee_id` belum
+> punya FK ke `users` (dan `reported_candidate_text` menggantikan FK ke `candidates`),
+> urutan ini aman. FK ditambahkan di migrasi berikutnya saat tabel tujuannya lahir.
+> Tabel rencana di bawah adalah target akhir, bukan urutan penomoran yang terjadi.
+
+**Sudah dibuat:**
+
 | Versi | File | Isi |
 |---|---|---|
-| V1 | `V1__create_users_and_roles.sql` | `users`, `roles`, `user_roles`, `refresh_tokens`, `otp_codes` |
-| V2 | `V2__seed_roles.sql` | 5 baris role |
-| V3 | `V3__create_candidates.sql` | `candidates` |
-| V4 | `V4__create_reports.sql` | `reports`, `report_evidences`, `report_status_history` + constraint |
+| V1 | ✅ `V1__create_reports.sql` | `reports`, `report_evidences`, `report_status_history` + CHECK + trigger append-only |
+
+**Rencana berikutnya** (penomoran menyesuaikan, FK ditambahkan saat tabel tujuan ada):
+
+| Versi | File | Isi |
+|---|---|---|
+| Vn | `create_users_and_roles.sql` | `users`, `roles`, `user_roles`, `refresh_tokens`, `otp_codes` + FK `reports.reporter_id` |
+| Vn | `seed_roles.sql` | 5 baris role |
+| Vn | `create_candidates.sql` | `candidates` + resolusi `reported_candidate_text` → FK |
+| Vn | `(reports sudah dibuat di V1)` | — |
 | V5 | `V5__create_investigations.sql` | `investigations`, `investigation_attachments`, `violation_rules`, `investigation_rules` |
 | V6 | `V6__create_approvals_publications.sql` | `approvals`, `publications` |
 | V7 | `V7__create_notifications_audit.sql` | `notifications`, `audit_logs` + trigger append-only |
