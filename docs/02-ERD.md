@@ -390,13 +390,13 @@ CREATE INDEX idx_audit_entity ON audit_logs (entity_type, entity_id, created_at 
 | V3 | ✅ `V3__create_investigations.sql` | `investigations` (1:1 dgn reports) |
 | V4 | ✅ `V4__create_approvals.sql` | `approvals` (+ CHECK reject wajib alasan) |
 | V5 | ✅ `V5__investigation_stages.sql` | `investigations.stage` + `stages_completed_at`; tabel `investigation_stages` (4 tahap, append-only). Lihat [ADR-015](03-ARCHITECTURE.md) |
+| V6 | ✅ `V6__create_publications.sql` | `publications` (1:1 dgn report, unique slug, status DRAFT/PUBLISHED/WITHDRAWN) |
 
 **Rencana berikutnya:**
 
 | Versi | File | Isi |
 |---|---|---|
 | Vn | `create_candidates.sql` | `candidates` + resolusi `reported_candidate_text` → FK |
-| Vn | `create_publications.sql` | `publications` (EPIC-07) |
 | Vn | `create_notifications_audit.sql` | `notifications`, `audit_logs`, `outbox_messages` (EPIC-09) |
 | V5 | `V5__create_investigations.sql` | `investigations`, `investigation_attachments`, `violation_rules`, `investigation_rules` |
 | V6 | `V6__create_approvals_publications.sql` | `approvals`, `publications` |

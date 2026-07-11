@@ -15,6 +15,10 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
   boolean existsByTicketCode(String ticketCode);
 
+  long countByStatus(ReportStatus status);
+
+  java.util.List<Report> findByStatusOrderBySubmittedAtDesc(ReportStatus status);
+
   /** Untuk rate limit US-406: hitung laporan per NPM dalam rentang waktu. */
   @Query(
       "SELECT count(r) FROM Report r "

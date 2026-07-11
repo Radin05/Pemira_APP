@@ -129,17 +129,16 @@ Cara baca:
 
 | ID | Task | Tipe | Est | Dep | Story |
 |---|---|---|---|---|---|
-| T-07-01 | Migrasi V6 bagian `publications` (+ unique slug) | DB | 2 | T-06-01 | — |
-| T-07-02 | Modul `publication`: entity, repo, service, mapper | BE | 3 | T-07-01 | — |
-| T-07-03 | `GET /publications/ready` — `DISETUJUI` & belum punya publikasi | BE | 2 | T-06-03 | US-701 |
-| T-07-04 | `POST /publications` + `PUT /publications/{id}` (draft), generator slug unik dari judul | BE | 4 | T-07-02 | US-702 |
-| | └ **Test**: dua judul sama → slug berbeda (`-2`); edit publikasi yang sudah `PUBLISHED` → 409 | | | | |
-| T-07-05 | Upload banner publikasi (reuse `FileStorageService`) | BE | 2 | T-04-04 | US-702 |
-| T-07-06 | `POST /publications/{id}/publish` → `DIPUBLIKASI`; `/withdraw` (alasan wajib) → `DITARIK` | BE | 4 | T-04-03, T-07-04 | US-703/705 |
-| | └ **Test**: publish dari investigasi belum disetujui→409; withdraw menghilangkan dari feed publik | | | | |
-| T-07-07 | Validasi `instagram_url` (harus host instagram.com) | BE | 1 | T-07-04 | US-704 |
-| T-07-08 | FE: dashboard `/pdd` — daftar siap-publish + daftar draft | FE | 4 | T-02-13, T-07-03 | US-701 |
-| T-07-09 | FE: `/pdd/[publicationId]` — editor draft (judul, ringkasan, konten, upload banner, URL IG), preview kartu, tombol Publish/Withdraw | FE | 6 | T-07-06 | US-702–705 |
+| T-07-01 | ✅ Migrasi **V6** `publications` (unique slug + CHECK published_at bila PUBLISHED) | DB | 2 | — | — |
+| T-07-02 | ✅ Modul `publication`: entity, repo, `PublicationService` (slugify + unik) | BE | 3 | T-07-01 | — |
+| T-07-03 | ✅ `GET /publications/ready` — laporan DISETUJUI (+ kesimpulan/sanksi/temuan dari investigasi) | BE | 2 | — | US-701 |
+| T-07-04 | ✅ `POST /publications/report/{reportId}` (create/update draft, opsional publish langsung), slug unik otomatis | BE | 4 | T-07-02 | US-702 |
+| T-07-05 | Upload banner publikasi (reuse `FileStorageService`) — belum (kolom `banner_url` disiapkan) | BE | 2 | T-04-04 | US-702 |
+| T-07-06 | ✅ `POST /publications/{id}/publish` → DIPUBLIKASI; `/withdraw` (alasan ≥20) → DITARIK. Transisi ber-guard | BE | 4 | — | US-703/705 |
+| T-07-07 | Validasi `instagram_url` (host instagram.com) — belum (disimpan apa adanya) | BE | 1 | T-07-04 | US-704 |
+| T-07-08 | ✅ FE `/pdd` — daftar siap-publish + daftar publikasi (draft/terbit/ditarik) | FE | 4 | T-07-03 | US-701 |
+| T-07-09 | ✅ FE `/pdd/[reportId]` — form susun (judul, ringkasan, konten, URL IG) + Terbitkan/Draft + Tarik | FE | 6 | T-07-06 | US-702–705 |
+| T-07-10 | ✅ **Publik**: `GET /public/publications` (feed), `/{slug}` (detail), `/stats`. Halaman `/publikasi` & `/publikasi/[slug]` kini baca data NYATA dari DB (bukan placeholder) | BE+FE | 4 | T-07-06 | US-804 |
 
 ---
 
