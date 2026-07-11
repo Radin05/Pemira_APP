@@ -20,6 +20,51 @@ Pengunjung ──HTTPS──▶ Vercel (Next.js frontend)
 
 ---
 
+## 0. CARA TERCEPAT LIVE — satu VPS, satu domain (Docker Compose)
+
+Ini jalur paling cepat untuk membuka aplikasi di **satu domain** (mis.
+`https://kppemirapoltekkesbandung.ac.id`). Frontend, API, database, dan HTTPS
+otomatis semua dalam satu `docker compose`. Frontend & API berbagi origin,
+jadi tidak ada masalah CORS/cookie.
+
+**Yang HANYA bisa kamu lakukan (butuh akun/akses milikmu):**
+1. **Punya domain** — daftar/pakai domain (mis. subdomain di bawah domain kampus).
+2. **Punya VPS** — server Linux (mis. 2 vCPU / 2–4 GB RAM: Contabo, Hetzner, DigitalOcean, Biznet).
+3. **Arahkan DNS** — buat **A record** domain → **IP publik VPS**. Buka port **80** & **443**.
+
+**Langkah di VPS (sekali jalan):**
+```bash
+# 1. Pasang Docker
+curl -fsSL https://get.docker.com | sh
+
+# 2. Ambil kode (git clone repo ini)
+git clone <URL-REPO> pemira && cd pemira
+
+# 3. Siapkan konfigurasi rahasia
+cp .env.deploy.example .env
+nano .env        # isi DOMAIN, password DB, APP_JWT_SECRET, APP_ENCRYPTION_KEY, admin awal
+#   generate rahasia: openssl rand -base64 48   (untuk JWT)
+#   APP_ENCRYPTION_KEY harus TEPAT 32 karakter
+
+# 4. Nyalakan semuanya (build + jalan)
+docker compose up -d --build
+
+# 5. Pantau sampai backend siap (~1–2 menit build pertama)
+docker compose logs -f backend      # tunggu "Started PemiraBackendApplication"
+```
+
+Setelah itu buka `https://DOMAIN` di browser — HTTPS terbit otomatis oleh Caddy.
+Login staf pakai email/password ADMIN yang kamu set di `.env`
+(`BOOTSTRAP_ADMIN_*`), lalu buat akun staf lain dari `/admin/users`.
+
+**Update aplikasi nanti:** `git pull && docker compose up -d --build`.
+
+**Catatan penting jalur ini:**
+- Bukti disimpan di volume Docker `evidence` (disk VPS) — cukup untuk satu server. Backup volume ini + database secara rutin.
+- Semua di satu server; kalau VPS mati, aplikasi mati. Untuk keandalan lebih tinggi pakai jalur Vercel + Postgres cloud di bawah.
+
+---
+
 ## 1. Database — Postgres cloud (Neon / Supabase)
 
 1. Buat project Postgres baru (Neon free tier cukup untuk skala ini).

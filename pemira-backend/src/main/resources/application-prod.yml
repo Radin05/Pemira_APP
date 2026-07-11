@@ -37,9 +37,12 @@ app:
     # Domain frontend Vercel, dipisah koma bila lebih dari satu.
     allowed-origins: ${APP_CORS_ORIGINS}
   storage:
-    # Diisi saat storage cloud aktif (R2/S3). Lihat FileStorageService.
-    provider: ${APP_STORAGE_PROVIDER:s3}
     local-dir: ${APP_STORAGE_DIR:/var/pemira/evidence}
+  bootstrap:
+    # Admin awal dibuat sekali saat boot pertama bila belum ada admin.
+    admin:
+      email: ${BOOTSTRAP_ADMIN_EMAIL:}
+      password: ${BOOTSTRAP_ADMIN_PASSWORD:}
 
 logging:
   level:

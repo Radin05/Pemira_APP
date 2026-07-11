@@ -1,0 +1,79 @@
+# Deployment all-in-one satu VPS, satu domain (frontend + API + DB + reverse
+# proxy). Caddy mengurus HTTPS otomatis. Frontend & API berbagi origin sehingga
+# tidak ada masalah CORS/cookie lintas-origin.
+#
+# Cara pakai (di VPS):
+#   1. cp .env.deploy.example .env    lalu isi nilainya
+#   2. Arahkan domain ke IP VPS (A record), buka port 80 & 443
+#   3. docker compose up -d --build
+#
+# Lihat docs/06-DEPLOYMENT.md untuk detail.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./pemira-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      APP_JWT_SECRET: ${APP_JWT_SECRET}
+      APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY}
+      APP_CORS_ORIGINS: https://${DOMAIN}
+      APP_STORAGE_DIR: /data/evidence
+      # Admin awal (boot pertama). Boleh dikosongkan setelah admin terbuat.
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+    volumes:
+      - evidence:/data/evidence
+
+  frontend:
+    build:
+      context: ./pemira-frontend
+      args:
+        # Relatif → same-origin lewat Caddy. Jangan diisi domain penuh.
+        NEXT_PUBLIC_API_BASE: /api/v1
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  db-data:
+  evidence:
+  caddy-data:
+  caddy-config:

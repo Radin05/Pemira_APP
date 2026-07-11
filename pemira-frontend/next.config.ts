@@ -2,6 +2,8 @@ import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Build mandiri untuk Docker: menghasilkan .next/standalone berisi server minimal.
+  output: "standalone",
   devIndicators: false,
   turbopack: {
     // Repo ini monorepo: ada package.json di root (skrip delegator) dan di sini.
