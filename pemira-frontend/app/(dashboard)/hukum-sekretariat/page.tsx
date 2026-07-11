@@ -73,7 +73,7 @@ export default function HukumSekretariatPage() {
 
   if (!allowed) {
     return (
-      <div className="rounded-2xl border border-black/10 bg-white p-8 text-center">
+      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Akses ditolak</p>
         <p className="mt-2 text-sm text-ink-muted">
           Halaman ini khusus divisi Hukum &amp; Sekretariat.
@@ -97,8 +97,8 @@ export default function HukumSekretariatPage() {
             className={cn(
               "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
               activeFilter === i
-                ? "bg-primary text-ink-inverse"
-                : "bg-black/5 text-ink-muted hover:bg-black/10",
+                ? "bg-primary text-ink-inverse shadow-sm"
+                : "border border-canvas-line bg-white text-ink-muted hover:border-primary/40 hover:text-primary",
             )}
           >
             {f.label}
@@ -112,15 +112,20 @@ export default function HukumSekretariatPage() {
         </p>
       )}
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-black/10 bg-white">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-canvas-line bg-white shadow-sm">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="size-7 animate-spin text-primary" aria-hidden />
           </div>
         ) : reports.length === 0 ? (
           <div className="flex flex-col items-center py-20 text-center">
-            <Inbox className="size-10 text-ink-muted/50" aria-hidden />
-            <p className="mt-3 text-sm text-ink-muted">Tidak ada laporan pada kategori ini.</p>
+            <span className="flex size-14 items-center justify-center rounded-full bg-canvas">
+              <Inbox className="size-7 text-primary/50" aria-hidden />
+            </span>
+            <p className="mt-4 font-medium text-ink">Tidak ada laporan</p>
+            <p className="mt-1 text-sm text-ink-muted">
+              Belum ada laporan pada kategori ini.
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto">

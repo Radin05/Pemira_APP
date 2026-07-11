@@ -61,7 +61,7 @@ export default function DashboardPage() {
             <li key={m.role}>
               <Link
                 href={m.href}
-                className="block h-full rounded-2xl border border-black/10 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+                className="block h-full rounded-2xl border border-canvas-line bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
               >
                 <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary">
                   <m.icon className="size-5 text-ink-inverse" aria-hidden />
@@ -76,7 +76,7 @@ export default function DashboardPage() {
           ))}
         </ul>
       ) : (
-        <div className="mt-10 rounded-2xl border border-black/10 bg-white p-8 text-center">
+        <div className="mt-10 rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
           <p className="text-ink-muted">
             Akun mahasiswa. Gunakan menu publik untuk melapor dan melacak laporan Anda.
           </p>

@@ -37,6 +37,11 @@
 
   --color-surface-dark: #0d0d0d;
 
+  /* Kanvas dashboard — abu kebiruan lembut. Kartu putih di atasnya jadi kontras,
+     bukan putih-di-atas-putih yang datar. */
+  --color-canvas: #eef1f7;
+  --color-canvas-line: #dfe4ee;
+
   --color-ink: #1a1a1a;
   --color-ink-muted: #5c5c5c;
   --color-ink-inverse: #ffffff;

@@ -107,7 +107,7 @@ export default function ReportDetailPage({
   }
   if (notFound || !report) {
     return (
-      <div className="rounded-2xl border border-black/10 bg-white p-8 text-center">
+      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Laporan tidak ditemukan</p>
         <Link href="/hukum-sekretariat" className="mt-3 inline-block text-sm text-primary hover:underline">
           ← Kembali ke antrean
@@ -137,7 +137,7 @@ export default function ReportDetailPage({
       </div>
 
       {/* Info laporan */}
-      <div className="mt-8 rounded-2xl border border-black/10 bg-white p-6">
+      <div className="mt-8 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
         <dl className="space-y-4">
           <InfoRow label="Kategori">{REPORT_CATEGORY_LABEL[report.category]}</InfoRow>
           <InfoRow label="Tanggal kejadian">
@@ -171,7 +171,7 @@ export default function ReportDetailPage({
       </div>
 
       {/* Bukti */}
-      <div className="mt-6 rounded-2xl border border-black/10 bg-white p-6">
+      <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
         <p className="text-sm font-semibold text-ink">Bukti Lampiran ({report.evidences.length})</p>
         {report.evidences.length === 0 ? (
           <p className="mt-3 text-sm text-ink-muted">Tidak ada bukti dilampirkan.</p>
@@ -222,7 +222,7 @@ export default function ReportDetailPage({
 
       {/* Form verdict */}
       {canVerdict && !report.investigation?.verdict && (
-        <div className="mt-6 rounded-2xl border border-black/10 bg-white p-6">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
           <p className="text-sm font-semibold text-ink">Tetapkan Hasil Cross-check</p>
           <p className="mt-1 text-xs text-ink-muted">
             Keputusan tercatat permanen di riwayat laporan.
@@ -294,7 +294,7 @@ export default function ReportDetailPage({
       )}
 
       {/* Riwayat status */}
-      <div className="mt-6 rounded-2xl border border-black/10 bg-white p-6">
+      <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
         <p className="text-sm font-semibold text-ink">Riwayat Status</p>
         <ol className="mt-4 space-y-4">
           {report.history.map((h, i) => (

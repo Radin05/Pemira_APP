@@ -26,7 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${inter.variable} h-full`}>
-      <body className="flex min-h-full flex-col antialiased">{children}</body>
+      {/* suppressHydrationWarning: ekstensi browser (Gemini, dsb.) menyuntik atribut
+          ke <body> sebelum React hydrate. Ini hanya meredam warning untuk atribut
+          body itu sendiri, bukan mismatch nyata di komponen anak. */}
+      <body className="flex min-h-full flex-col antialiased" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
