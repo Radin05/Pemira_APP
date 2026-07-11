@@ -32,6 +32,14 @@ public class SecurityConfig {
 
   private final JwtAuthFilter jwtAuthFilter;
 
+  /**
+   * Origin frontend yang diizinkan CORS. Env-driven: satu atau lebih URL dipisah koma.
+   * Dev default localhost:3000; produksi diisi domain Vercel lewat env APP_CORS_ORIGINS.
+   */
+  @org.springframework.beans.factory.annotation.Value(
+      "${app.cors.allowed-origins:http://localhost:3000}")
+  private java.util.List<String> allowedOrigins;
+
   private static final String[] PUBLIC_PATHS = {
     "/api/v1/auth/**",
     "/api/v1/public/**",
@@ -82,11 +90,12 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    // TODO(deploy): pindahkan origin ke properti per-lingkungan.
-    config.setAllowedOrigins(List.of("http://localhost:3000"));
+    config.setAllowedOrigins(allowedOrigins);
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
+    config.setExposedHeaders(List.of("X-Request-Id"));
     config.setAllowCredentials(true);
+    config.setMaxAge(3600L);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", config);
     return source;

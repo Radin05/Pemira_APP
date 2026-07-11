@@ -1,6 +1,6 @@
 # Profil PROD — SEMUA nilai sensitif wajib lewat env var, tidak ada default.
-# Aplikasi sengaja gagal start kalau env var tidak diset, daripada diam-diam
-# menyambung ke database yang salah.
+# Aplikasi sengaja GAGAL START kalau env var tidak diset, daripada diam-diam
+# memakai nilai dev yang tidak aman. Lihat DEPLOYMENT.md untuk daftar lengkap.
 spring:
   datasource:
     url: ${DB_URL}
@@ -13,6 +13,33 @@ server:
   error:
     include-message: never
     include-stacktrace: never
+  # Backend di belakang reverse proxy (Nginx/Caddy) yang terminasi TLS.
+  forward-headers-strategy: framework
+
+# Swagger dimatikan di produksi (jangan ekspos peta API ke publik).
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+app:
+  # Wajib diisi env — tidak ada default. Minimal 32 byte masing-masing.
+  encryption:
+    key: ${APP_ENCRYPTION_KEY}
+  jwt:
+    secret: ${APP_JWT_SECRET}
+    access-ttl-seconds: ${APP_JWT_TTL:900}
+  cookie:
+    # Produksi WAJIB HTTPS → cookie refresh Secure.
+    secure: true
+  cors:
+    # Domain frontend Vercel, dipisah koma bila lebih dari satu.
+    allowed-origins: ${APP_CORS_ORIGINS}
+  storage:
+    # Diisi saat storage cloud aktif (R2/S3). Lihat FileStorageService.
+    provider: ${APP_STORAGE_PROVIDER:s3}
+    local-dir: ${APP_STORAGE_DIR:/var/pemira/evidence}
 
 logging:
   level:
