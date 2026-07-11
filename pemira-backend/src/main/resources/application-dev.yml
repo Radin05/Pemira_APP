@@ -26,6 +26,13 @@ app:
   storage:
     # Bukti disimpan di disk lokal saat dev. Produksi: S3/Cloudinary (T-04-04 lanjutan).
     local-dir: ${APP_STORAGE_DIR:./storage/evidence}
+  jwt:
+    # Secret dev untuk tanda tangan JWT, minimal 32 byte. Override di produksi.
+    secret: ${APP_JWT_SECRET:dev-insecure-jwt-secret-change-me-32b}
+    access-ttl-seconds: 900
+  cookie:
+    # Dev jalan di http, jadi cookie tidak boleh Secure. Produksi: true (wajib HTTPS).
+    secure: false
 
 logging:
   level:

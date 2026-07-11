@@ -34,25 +34,22 @@ Cara baca:
 
 | ID | Task | Tipe | Est | Dep | Story |
 |---|---|---|---|---|---|
-| T-02-01 | Migrasi V1: `users`, `roles`, `user_roles`, `refresh_tokens`, `otp_codes` | DB | 3 | T-01-05 | — |
-| T-02-02 | Migrasi V2: seed 5 role | DB | 1 | T-02-01 | — |
-| T-02-03 | Entity `User`, `Role`, `RefreshToken`, `OtpCode` + `UserRepository`, `RoleRepository`, `RefreshTokenRepository` | BE | 3 | T-02-01 | — |
-| T-02-04 | `JwtTokenProvider` (sign/verify HS256, claim `sub`, `roles`, `jti`, `exp`) | BE | 3 | T-02-03 | US-203 |
-| | └ **Test**: token valid ter-parse; token kadaluarsa ditolak; signature dimodifikasi ditolak | | | | |
-| T-02-05 | `JwtAuthFilter` + `CustomUserDetailsService` + `SecurityConfig` (stateless, CORS, matcher publik vs terlindungi) | BE | 5 | T-02-04 | US-205 |
-| T-02-06 | `POST /auth/login` staf: BCrypt cost 12, hitung `failed_login_count`, kunci 15 menit setelah 5× gagal | BE | 4 | T-02-05 | US-202 |
-| | └ **Test**: sukses; password salah; akun terkunci; akun nonaktif | | | | |
-| T-02-07 | `POST /auth/otp/request` + `POST /auth/otp/verify`: kode 6 digit di-hash, TTL 10 menit, maks 5 percobaan, respons seragam untuk email tak terdaftar | BE | 5 | T-02-05 | US-201 |
-| | └ **Test**: OTP benar; OTP salah; kadaluarsa; percobaan ke-6 ditolak; OTP dipakai ulang ditolak | | | | |
-| T-02-08 | `POST /auth/refresh` dengan rotasi + deteksi reuse (token lama dipakai → revoke seluruh chain) | BE | 4 | T-02-04 | US-203 |
-| | └ **Test**: rotasi normal; reuse token lama me-revoke keluarga token | | | | |
-| T-02-09 | `POST /auth/logout` + `GET /auth/me` | BE | 2 | T-02-08 | US-204 |
-| T-02-10 | `@PreAuthorize` di semua controller; integration test matriks role × endpoint | BE | 3 | T-02-05 | US-205 |
-| T-02-11 | FE: `apiClient` (axios) + interceptor 401 → auto-refresh → retry, dengan antrean supaya refresh hanya sekali walau banyak request paralel | FE | 5 | T-01-03 | US-203 |
-| T-02-12 | FE: `auth.store.ts` (Zustand, access token di memori), `useAuth`, halaman `/login`, halaman OTP | FE | 6 | T-02-11 | US-201/202 |
-| T-02-13 | FE: **`proxy.ts`** role guard di edge (Next 16 mengganti nama `middleware.ts` → `proxy.ts`) + guard kedua di `layout.tsx` dashboard. Docs Next eksplisit: proxy hanya untuk *optimistic check*, otorisasi sebenarnya tetap di server | FE | 3 | T-02-12 | US-205 |
+| T-02-01 | ✅ Migrasi **V2** (users setelah reports): `users`, `roles`, `user_roles`, `refresh_tokens`, `otp_codes` + FK `reports.reporter_id`→users | DB | 3 | — | — |
+| T-02-02 | ✅ Seed 5 role di V2. Akun staf uji lewat `DevDataSeeder` (profil dev, password `Test@1234`) | DB | 1 | T-02-01 | — |
+| T-02-03 | ✅ Entity `User` (ManyToMany roles), `Role`, `RefreshToken`, `OtpCode` + repository | BE | 3 | T-02-01 | — |
+| T-02-04 | ✅ `JwtService` (jjwt HS256, claim `sub`, `roles`, `email`, `exp`, TTL 15 mnt) | BE | 3 | T-02-03 | US-203 |
+| | └ **Test**: JUnit belum ditulis (diverifikasi manual: token valid parse, kadaluarsa/tanda tangan rusak → anonim) | | | | |
+| T-02-05 | ✅ `JwtAuthFilter` + `UserPrincipal` + `SecurityConfig` (stateless, CORS, entry point 401, matcher publik vs terlindungi) | BE | 5 | T-02-04 | US-205 |
+| T-02-06 | ✅ `POST /auth/login` staf: BCrypt cost 12, `failed_login_count`, kunci 15 menit setelah 5× gagal, pesan seragam | BE | 4 | T-02-05 | US-202 |
+| T-02-07 | ✅ `POST /auth/otp/request` + `/otp/verify`: kode 6 digit di-hash, TTL 10 mnt, maks 5 percobaan, respons seragam. **OTP dicetak ke log dev** (SMTP belum ada — T-09-03/04) | BE | 5 | T-02-05 | US-201 |
+| T-02-08 | ✅ `POST /auth/refresh` rotasi + deteksi reuse (token revoked dipakai lagi → revoke seluruh chain) | BE | 4 | T-02-04 | US-203 |
+| T-02-09 | ✅ `POST /auth/logout` (revoke + clear cookie) + `GET /auth/me` | BE | 2 | T-02-08 | US-204 |
+| T-02-10 | 🟡 `@EnableMethodSecurity` aktif; endpoint terlindungi butuh token (401 tanpa). `@PreAuthorize` per-role & matriks test belum (menyusul saat endpoint role-spesifik EPIC-05/06/07) | BE | 3 | T-02-05 | US-205 |
+| T-02-11 | ✅ FE `lib/api/client.ts` (fetch + Bearer + 401 → auto-refresh → retry + credentials cookie) | FE | 5 | — | US-203 |
+| T-02-12 | ✅ FE `store/auth.store.ts` (Zustand, token di memori, bootstrap silent-refresh), `auth.service.ts`, halaman `/login` (staf) + `/masuk` (OTP mahasiswa) + shell `/dashboard` dengan filter role | FE | 6 | T-02-11 | US-201/202 |
+| T-02-13 | 🔵 **`proxy.ts` guard edge DITUNDA** — di dev, frontend (`:3000`) & backend (`:8080`) beda origin, cookie refresh httpOnly milik backend tak terlihat oleh middleware Next. Guard nyata: **sisi klien di `(dashboard)/layout.tsx`** (redirect ke `/login` bila tak ada sesi) + `@PreAuthorize` backend. Sesuai ADR-010 (proxy hanya optimistic) | FE | 3 | T-02-12 | US-205 |
 
-**Exit criteria:** Staf bisa login → akses dashboard sesuai role. Mahasiswa bisa verifikasi OTP. Akses lintas role dijawab 403. Token kadaluarsa di-refresh tanpa user sadar.
+**Exit criteria:** ✅ Staf login (email+password) → dashboard sesuai role; mahasiswa OTP → dashboard; `/dashboard` tanpa sesi → redirect `/login`; token kadaluarsa auto-refresh; endpoint terlindungi 401 tanpa token. Diverifikasi end-to-end (Playwright + curl). Belum: `@PreAuthorize` per-role granular, JUnit, SMTP OTP.
 
 ---
 

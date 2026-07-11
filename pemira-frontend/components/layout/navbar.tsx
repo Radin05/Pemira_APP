@@ -75,16 +75,24 @@ export function Navbar() {
           })}
         </ul>
 
-        <button
-          type="button"
-          onClick={() => setIsOpen((v) => !v)}
-          aria-expanded={isOpen}
-          aria-controls="menu-mobile"
-          aria-label={isOpen ? "Tutup menu" : "Buka menu"}
-          className="rounded-md p-2 text-ink-inverse hover:bg-gold/15 xl:hidden"
-        >
-          {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/login"
+            className="hidden rounded-full border border-gold/40 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/10 xl:inline-block"
+          >
+            Masuk
+          </Link>
+          <button
+            type="button"
+            onClick={() => setIsOpen((v) => !v)}
+            aria-expanded={isOpen}
+            aria-controls="menu-mobile"
+            aria-label={isOpen ? "Tutup menu" : "Buka menu"}
+            className="rounded-md p-2 text-ink-inverse hover:bg-gold/15 xl:hidden"
+          >
+            {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+          </button>
+        </div>
       </nav>
 
       {isOpen && (
@@ -109,6 +117,15 @@ export function Navbar() {
               </li>
             );
           })}
+          <li>
+            <Link
+              href="/login"
+              onClick={() => setIsOpen(false)}
+              className="mt-2 block rounded-full border border-gold/40 px-4 py-2.5 text-sm font-semibold text-gold"
+            >
+              Masuk
+            </Link>
+          </li>
         </ul>
       )}
     </header>
