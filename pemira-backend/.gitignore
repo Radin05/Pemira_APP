@@ -32,5 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
-# Bukti tersimpan lokal saat dev (produksi: S3/Cloudinary)
-storage/
+# Bukti tersimpan lokal saat dev (produksi: S3/Cloudinary).
+# Pakai slash depan agar hanya folder pemira-backend/storage yang di-ignore,
+# bukan package source seperti src/main/java/.../common/storage.
+/storage/
