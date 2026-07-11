@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Copy, Loader2 } from "lucide-react";
+import { CheckCircle2, Copy, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -108,13 +108,20 @@ export function ReportForm() {
     formState: { errors, isSubmitting },
   } = useForm<ReportFormValues>({
     resolver: zodResolver(reportSchema),
-    defaultValues: { isAnonymous: false },
+    defaultValues: { submissionMode: "DIRECT", isAnonymous: false },
   });
 
   const isAnonymous = watch("isAnonymous");
+  const submissionMode = watch("submissionMode");
+  const isTemplateMode = submissionMode === "TEMPLATE";
 
   async function onSubmit(values: ReportFormValues) {
     setSubmitError(null);
+    if (values.submissionMode === "TEMPLATE" && evidence.length === 0) {
+      setSubmitError("Unggah formulir yang sudah diisi untuk menggunakan opsi upload template.");
+      return;
+    }
+
     try {
       const submitResult = await reportService.submit(values, evidence);
       setSubmittedNpm(values.reporterNpm);
@@ -136,7 +143,45 @@ export function ReportForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8" noValidate>
+      {/* ── Opsi pelaporan ─────────────────────────────── */}
+      <fieldset className="space-y-4" disabled={isSubmitting}>
+        <legend className="mb-2 text-xs font-bold tracking-[0.2em] text-gold uppercase">
+          Opsi Pelaporan
+        </legend>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label
+            className={cn(
+              "cursor-pointer rounded-2xl border p-4 transition-colors",
+              !isTemplateMode
+                ? "border-gold bg-gold/10"
+                : "border-white/10 bg-white/[0.03] hover:border-gold/40",
+            )}
+          >
+            <input type="radio" value="DIRECT" {...register("submissionMode")} className="sr-only" />
+            <span className="font-semibold text-ink-inverse">Isi langsung</span>
+            <span className="mt-1 block text-xs leading-relaxed text-ink-inverse/60">
+              Isi detail pelanggaran lewat formulir website seperti biasa.
+            </span>
+          </label>
+          <label
+            className={cn(
+              "cursor-pointer rounded-2xl border p-4 transition-colors",
+              isTemplateMode
+                ? "border-gold bg-gold/10"
+                : "border-white/10 bg-white/[0.03] hover:border-gold/40",
+            )}
+          >
+            <input type="radio" value="TEMPLATE" {...register("submissionMode")} className="sr-only" />
+            <span className="font-semibold text-ink-inverse">Upload formulir</span>
+            <span className="mt-1 block text-xs leading-relaxed text-ink-inverse/60">
+              Unduh template, isi, lalu upload hasilnya sebagai laporan.
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
       {/* ── Detail pelanggaran ─────────────────────────── */}
+      {!isTemplateMode && (
       <fieldset className="space-y-5" disabled={isSubmitting}>
         <legend className="mb-2 text-xs font-bold tracking-[0.2em] text-gold uppercase">
           Detail Pelanggaran
@@ -235,12 +280,32 @@ export function ReportForm() {
           <FieldError message={errors.description?.message} />
         </div>
       </fieldset>
+      )}
 
-      {/* ── Bukti ──────────────────────────────────────── */}
+      {/* ── Bukti / Formulir ──────────────────────────── */}
       <fieldset disabled={isSubmitting}>
         <legend className="mb-4 text-xs font-bold tracking-[0.2em] text-gold uppercase">
-          Lampiran Bukti <span className="text-ink-inverse/40 normal-case">(opsional)</span>
+          {isTemplateMode ? "Upload Formulir" : "Lampiran Bukti"}{" "}
+          <span className="text-ink-inverse/40 normal-case">
+            {isTemplateMode ? "(wajib)" : "(opsional)"}
+          </span>
         </legend>
+        {isTemplateMode && (
+          <div className="mb-4 rounded-2xl border border-gold/20 bg-gold/10 p-4">
+            <p className="text-sm leading-relaxed text-ink-inverse/75">
+              Unduh template formulir, isi data laporan, lalu upload kembali hasilnya
+              dalam format PDF atau gambar.
+            </p>
+            <Button
+              nativeButton={false}
+              variant="outline"
+              render={<Link href="/templates/formulir-laporan-a1.txt" download />}
+              className="mt-3 h-10 rounded-full border-gold/40 bg-transparent px-4 text-sm font-semibold text-gold hover:bg-gold/15 hover:text-gold"
+            >
+              <Download className="mr-2 size-4" /> Unduh Template
+            </Button>
+          </div>
+        )}
         <EvidenceDropzone files={evidence} onChange={setEvidence} disabled={isSubmitting} />
       </fieldset>
 
@@ -297,13 +362,13 @@ export function ReportForm() {
 
         <div>
           <Label htmlFor="reporterEmail" className={labelClass}>
-            Email kampus
+            Email aktif
           </Label>
           <Input
             id="reporterEmail"
             type="email"
             {...register("reporterEmail")}
-            placeholder="nama@poltekkesbandung.ac.id"
+            placeholder="nama@email.com"
             className={cn("mt-1.5", inputClass)}
           />
           <FieldError message={errors.reporterEmail?.message} />

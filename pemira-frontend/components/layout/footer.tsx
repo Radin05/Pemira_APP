@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, Mail, ShieldCheck } from "lucide-react";
+import { Camera, Clock, Mail, ShieldCheck } from "lucide-react";
 import { SITE } from "@/lib/constant/site";
 
 const NAVIGATION_LINKS = [
@@ -93,6 +93,17 @@ export function Footer() {
                   className="text-sm break-all text-ink-inverse/70 transition-colors hover:text-gold"
                 >
                   {SITE.email}
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Camera className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
+                <a
+                  href={SITE.instagram.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm break-all text-ink-inverse/70 transition-colors hover:text-gold"
+                >
+                  {SITE.instagram.handle}
                 </a>
               </li>
               <li className="flex items-start gap-3">

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -48,6 +49,15 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<ApiResponse<Void>> handleAccessDenied(AccessDeniedException ex) {
     return build(HttpStatus.FORBIDDEN, ApiResponse.error("Anda tidak berwenang mengakses sumber daya ini"));
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ApiResponse<Void>> handleDataIntegrity(DataIntegrityViolationException ex) {
+    // Pelanggaran unique/FK di DB (mis. nomor urut kandidat duplikat, email ganda).
+    log.warn("Pelanggaran integritas data: {}", ex.getMostSpecificCause().getMessage());
+    return build(
+        HttpStatus.CONFLICT,
+        ApiResponse.error("Data melanggar aturan keunikan atau relasi (mungkin duplikat)."));
   }
 
   @ExceptionHandler(Exception.class)

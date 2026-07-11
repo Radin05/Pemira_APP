@@ -11,6 +11,10 @@ export const SITE = {
 
   // TODO(konfirmasi KP): alamat & jam operasional resmi belum divalidasi.
   email: "kp.pemira@poltekkesbandung.ac.id",
+  instagram: {
+    handle: "@kppemirapoltekkesbdg2",
+    url: "https://www.instagram.com/kppemirapoltekkesbdg2/",
+  },
   operationalHours: "07.00 – 17.00 WIB",
   responseTime: "Rata-rata respons < 8 jam",
 

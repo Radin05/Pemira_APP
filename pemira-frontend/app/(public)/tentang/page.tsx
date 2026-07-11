@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Gavel, Megaphone, ScrollText } from "lucide-react";
+import { Camera, Gavel, MapPinned, Megaphone, ScrollText, UsersRound, Wallet } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { SITE } from "@/lib/constant/site";
 
@@ -11,25 +11,46 @@ export const metadata: Metadata = {
 
 const DIVISIONS = [
   {
-    icon: ScrollText,
-    name: "Hukum & Sekretariat",
-    role: "Menerima dan menginvestigasi laporan",
+    icon: UsersRound,
+    name: "Inti dan Penanggung Jawab",
+    role: "Koordinasi utama dan pengambilan arahan strategis",
     detail:
-      "Memeriksa setiap laporan yang masuk, melakukan cross-check terhadap bukti, dan menetapkan apakah laporan terbukti atau tidak. Menyusun laporan investigasi resmi untuk diajukan ke Ketua.",
+      "Mengawal arah kerja Komite Pengawasan, memastikan koordinasi lintas divisi berjalan, serta menjadi penanggung jawab utama dalam pelaksanaan pengawasan PEMIRA.",
+  },
+  {
+    icon: ScrollText,
+    name: "Divisi Kesekretariatan",
+    role: "Administrasi, surat-menyurat, dan arsip kelembagaan",
+    detail:
+      "Mengelola dokumen resmi, notulensi, arsip laporan, surat keputusan, serta kebutuhan administrasi agar setiap proses memiliki jejak tertulis yang rapi.",
   },
   {
     icon: Gavel,
-    name: "Ketua Komite Pengawasan",
-    role: "Memutuskan hasil investigasi",
+    name: "Divisi Hukum",
+    role: "Kajian aturan dan penanganan dugaan pelanggaran",
     detail:
-      "Menyetujui atau menolak laporan investigasi. Penolakan wajib disertai alasan tertulis, dan laporan dapat direvisi lalu diajukan kembali.",
+      "Menelaah laporan berdasarkan tata tertib PEMIRA, memeriksa kesesuaian bukti, dan menyusun rekomendasi hukum untuk proses tindak lanjut.",
+  },
+  {
+    icon: Wallet,
+    name: "Divisi Keuangan",
+    role: "Pengelolaan anggaran dan pertanggungjawaban dana",
+    detail:
+      "Mencatat pemasukan dan pengeluaran kegiatan, menyiapkan kebutuhan pendanaan, serta memastikan laporan keuangan transparan dan dapat dipertanggungjawabkan.",
+  },
+  {
+    icon: MapPinned,
+    name: "Divisi Koordinator Lapangan",
+    role: "Pengawasan teknis dan koordinasi kegiatan di lapangan",
+    detail:
+      "Mengatur kebutuhan teknis pengawasan, berkoordinasi dengan petugas lapangan, dan memastikan pelaksanaan kegiatan sesuai arahan serta jadwal.",
   },
   {
     icon: Megaphone,
-    name: "Publikasi, Dokumentasi & Desain",
-    role: "Mempublikasikan putusan",
+    name: "Divisi Pubdekdok",
+    role: "Publikasi, dokumentasi, dan desain informasi",
     detail:
-      "Menyusun dan menerbitkan hasil putusan yang telah disetujui ke halaman Transparansi serta kanal media sosial resmi.",
+      "Mengelola konten publikasi, dokumentasi kegiatan, desain informasi, serta kanal media sosial resmi Komite Pengawasan.",
   },
 ];
 
@@ -89,7 +110,7 @@ export default function TentangPage() {
           </h2>
           <span aria-hidden className="mx-auto mt-4 block h-1 w-20 rounded-full bg-gold" />
 
-          <ul className="mt-14 grid gap-6 md:grid-cols-3">
+          <ul className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {DIVISIONS.map((division) => (
               <li
                 key={division.name}
@@ -137,16 +158,31 @@ export default function TentangPage() {
             ))}
           </ol>
 
-          <p className="mt-10 text-sm leading-relaxed text-ink-inverse/50">
-            Punya pertanyaan? Hubungi kami di{" "}
-            <a
-              href={`mailto:${SITE.email}`}
-              className="text-gold transition-colors hover:text-gold-light"
-            >
-              {SITE.email}
-            </a>
-            , operasional {SITE.operationalHours}.
-          </p>
+          <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <p className="text-sm leading-relaxed text-ink-inverse/60">
+              Punya pertanyaan? Hubungi kami lewat email atau kanal Instagram resmi.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a
+                href={`mailto:${SITE.email}`}
+                className="rounded-full border border-gold/30 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/10"
+              >
+                {SITE.email}
+              </a>
+              <a
+                href={SITE.instagram.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-gold/30 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/10"
+              >
+                <Camera className="size-4" aria-hidden />
+                {SITE.instagram.handle}
+              </a>
+            </div>
+            <p className="mt-3 text-xs text-ink-inverse/45">
+              Operasional {SITE.operationalHours}.
+            </p>
+          </div>
         </div>
       </section>
     </main>

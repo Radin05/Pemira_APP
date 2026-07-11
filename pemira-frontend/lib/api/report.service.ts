@@ -26,12 +26,13 @@ export type TrackResult = {
 /** Bentuk payload yang dikirim ke backend (field `anonymous`, bukan `isAnonymous`). */
 function toPayload(v: ReportFormValues) {
   return {
-    category: v.category,
-    title: v.title,
-    incidentDate: v.incidentDate,
-    incidentLocation: v.incidentLocation,
+    submissionMode: v.submissionMode,
+    category: v.category ?? null,
+    title: v.title ?? null,
+    incidentDate: v.incidentDate || null,
+    incidentLocation: v.incidentLocation ?? null,
     reportedCandidate: v.reportedCandidate || null,
-    description: v.description,
+    description: v.description ?? null,
     anonymous: v.isAnonymous,
     reporterName: v.isAnonymous ? null : v.reporterName,
     reporterNpm: v.reporterNpm,

@@ -104,6 +104,15 @@ export const apiPostJson = <T>(path: string, json: unknown, auth = false) =>
 export const apiPostForm = <T>(path: string, form: FormData, auth = false) =>
   request<T>(path, { method: "POST", body: form, auth });
 
+export const apiPatchJson = <T>(path: string, json: unknown, auth = false) =>
+  request<T>(path, { method: "PATCH", json, auth });
+
+export const apiPut = <T>(path: string, json: unknown, auth = false) =>
+  request<T>(path, { method: "PUT", json, auth });
+
+export const apiDelete = <T>(path: string, auth = false) =>
+  request<T>(path, { method: "DELETE", auth });
+
 /** Panggilan auth tanpa retry (login/refresh sendiri tidak boleh memicu refresh). */
 export const authPost = <T>(path: string, json?: unknown) =>
   request<T>(path, { method: "POST", json, auth: false, retryOn401: false });

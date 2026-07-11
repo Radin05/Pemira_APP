@@ -14,6 +14,7 @@ import id.kppoltekkesbdg.pemira.report.dto.ReportSubmitRequest;
 import id.kppoltekkesbdg.pemira.report.dto.ReportSubmitResponse;
 import id.kppoltekkesbdg.pemira.report.dto.ReportSummaryResponse;
 import id.kppoltekkesbdg.pemira.report.dto.ReportTrackResponse;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -48,14 +49,22 @@ public class ReportServiceImpl implements ReportService {
     if (files.size() > MAX_EVIDENCE) {
       throw new BadRequestException("Maksimal " + MAX_EVIDENCE + " berkas bukti");
     }
+    if (req.isTemplateSubmission() && files.isEmpty()) {
+      throw new BadRequestException("Formulir yang sudah diisi wajib diunggah");
+    }
 
     Report report = new Report();
     report.setTicketCode(ticketCodeGenerator.generate());
-    report.setCategory(req.category());
-    report.setTitle(req.title());
-    report.setDescription(req.description());
-    report.setIncidentDate(req.incidentDate());
-    report.setIncidentLocation(req.incidentLocation());
+    report.setCategory(req.isTemplateSubmission() ? ReportCategory.LAINNYA : req.category());
+    report.setTitle(
+        req.isTemplateSubmission() ? "Laporan melalui unggahan formulir" : req.title());
+    report.setDescription(
+        req.isTemplateSubmission()
+            ? "Detail laporan tercantum pada formulir yang diunggah oleh pelapor."
+            : req.description());
+    report.setIncidentDate(req.isTemplateSubmission() ? LocalDate.now() : req.incidentDate());
+    report.setIncidentLocation(
+        req.isTemplateSubmission() ? "Tercantum pada formulir unggahan" : req.incidentLocation());
     report.setReportedCandidateText(emptyToNull(req.reportedCandidate()));
     report.setAnonymous(req.anonymous());
 
