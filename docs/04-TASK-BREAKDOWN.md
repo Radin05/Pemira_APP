@@ -57,14 +57,14 @@ Cara baca:
 
 | ID | Task | Tipe | Est | Dep | Story |
 |---|---|---|---|---|---|
-| T-03-01 | Migrasi V3: `candidates` | DB | 1 | T-02-01 | — |
-| T-03-02 | Modul `candidate`: entity, repo, service (+impl), controller CRUD, DTO, MapStruct mapper | BE | 5 | T-03-01 | US-802 |
-| | └ **Test**: CRUD; hanya `ADMIN` yang bisa tulis; publik bisa baca | | | | |
-| T-03-03 | Upload foto kandidat ke storage (reuse `FileStorageService` dari T-04-04) | BE | 2 | T-04-04 | US-802 |
-| T-03-04 | Modul `user` admin: list/create/update, aktif-nonaktif, assign & revoke role | BE | 5 | T-02-03 | — |
-| | └ **Test**: admin tidak bisa mencabut role `ADMIN` terakhir (jangan sampai terkunci di luar sistem) | | | | |
-| T-03-05 | FE: dashboard admin — tabel user, dialog assign role | FE | 5 | T-02-13, T-03-04 | — |
-| T-03-06 | FE: dashboard admin — CRUD kandidat + upload foto + editor visi/misi/proker | FE | 4 | T-03-02 | — |
+| T-03-01 | ✅ Migrasi **V7** `candidates` (unique nomor urut per jenis, election_type BEM/BPM) | DB | 1 | — | — |
+| T-03-02 | ✅ Modul `candidate`: entity, repo, service, CRUD controller (ADMIN) + `PublicCandidateController` (baca publik) | BE | 5 | T-03-01 | US-802 |
+| | └ **Test**: ✅ CRUD; nomor duplikat → 409 (`DataIntegrityViolation` kini ditangani handler); non-ADMIN → 403; publik baca aktif saja | | | | |
+| T-03-03 | Upload foto kandidat ke storage — belum (kolom `photo_url` disiapkan, sementara URL manual) | BE | 2 | T-04-04 | US-802 |
+| T-03-04 | ✅ `UserAdminService` + `UserController` (ADMIN): list, create (BCrypt), updateRoles, setActive. Guard: tak bisa cabut/nonaktifkan ADMIN terakhir, tak bisa nonaktifkan diri sendiri | BE | 5 | — | — |
+| T-03-05 | ✅ FE `/admin/users` — tabel + dialog tambah pengguna + dialog edit peran + toggle aktif | FE | 5 | T-03-04 | — |
+| T-03-06 | 🟡 FE `/admin/kandidat` — CRUD kandidat + editor visi/misi/proker. Upload foto belum (isi URL) | FE | 4 | T-03-02 | — |
+| T-03-07 | ✅ FE `/admin` landing (kelola pengguna + kandidat) | FE | 1 | — | — |
 
 ---
 
