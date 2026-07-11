@@ -21,35 +21,54 @@ function FieldError({ message }: { message?: string }) {
   return <p className="mt-1.5 text-xs text-danger">{message}</p>;
 }
 
-function SuccessPanel({ result }: { result: SubmitReportResult }) {
+function SuccessPanel({
+  result,
+  reporterNpm,
+}: {
+  result: SubmitReportResult;
+  reporterNpm: string;
+}) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="rounded-2xl border border-success/40 bg-success/10 p-8 text-center">
       <CheckCircle2 className="mx-auto size-14 text-success" aria-hidden />
       <h2 className="mt-5 text-2xl font-bold text-ink-inverse">Laporan Terkirim</h2>
       <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-inverse/70">
-        Simpan kode tiket di bawah ini. Gunakan untuk melacak perkembangan laporan Anda
-        di halaman Status Laporan. Kode juga dikirim ke email Anda.
+        Simpan kode tiket dan NPM di bawah ini. Keduanya diperlukan untuk melacak
+        perkembangan laporan di halaman Status Laporan.
       </p>
 
-      <div className="mx-auto mt-6 flex max-w-xs items-center gap-3 rounded-xl border border-white/15 bg-navy-dark p-4">
-        <span className="flex-1 text-xl font-bold tracking-wider text-gold">
-          {result.ticketCode}
-        </span>
-        <button
-          type="button"
-          onClick={() => {
-            navigator.clipboard.writeText(result.ticketCode);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-          }}
-          className="rounded-md p-2 text-ink-inverse/70 hover:bg-white/10 hover:text-gold"
-          aria-label="Salin kode tiket"
-        >
-          <Copy className="size-4" />
-        </button>
+      <div className="mx-auto mt-6 max-w-md rounded-2xl border border-white/15 bg-navy-dark p-4 text-left">
+        <div className="flex items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold tracking-wide text-ink-inverse/45 uppercase">
+              Kode tiket
+            </p>
+            <p className="mt-1 break-all text-xl font-bold tracking-wider text-gold">
+              {result.ticketCode}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText(result.ticketCode);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            }}
+            className="rounded-md p-2 text-ink-inverse/70 hover:bg-white/10 hover:text-gold"
+            aria-label="Salin kode tiket"
+          >
+            <Copy className="size-4" />
+          </button>
+        </div>
+        <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+          <p className="text-xs font-semibold tracking-wide text-ink-inverse/45 uppercase">
+            NPM verifikasi
+          </p>
+          <p className="mt-1 font-semibold text-ink-inverse">{reporterNpm}</p>
+        </div>
       </div>
-      {copied && <p className="mt-2 text-xs text-success">Kode disalin</p>}
+      {copied && <p className="mt-2 text-xs text-success">Kode tiket disalin</p>}
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Button
@@ -79,6 +98,7 @@ const labelClass = "text-sm font-medium text-ink-inverse";
 export function ReportForm() {
   const [evidence, setEvidence] = useState<File[]>([]);
   const [result, setResult] = useState<SubmitReportResult | null>(null);
+  const [submittedNpm, setSubmittedNpm] = useState("");
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
@@ -96,7 +116,9 @@ export function ReportForm() {
   async function onSubmit(values: ReportFormValues) {
     setSubmitError(null);
     try {
-      setResult(await reportService.submit(values, evidence));
+      const submitResult = await reportService.submit(values, evidence);
+      setSubmittedNpm(values.reporterNpm);
+      setResult(submitResult);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       if (err instanceof ApiError) {
@@ -110,7 +132,7 @@ export function ReportForm() {
     }
   }
 
-  if (result) return <SuccessPanel result={result} />;
+  if (result) return <SuccessPanel result={result} reporterNpm={submittedNpm} />;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8" noValidate>

@@ -52,13 +52,38 @@ export type ReportDetail = {
     createdAt: string;
   }[];
   investigation: {
+    stage: InvestigationStage | null;
+    stagesCompleted: boolean;
+    stageLog: { stage: InvestigationStage; note: string; createdAt: string }[];
     verdict: "VALID" | "HOAX" | null;
-    crossCheckNote: string | null;
     findings: string | null;
     recommendedSanction: string | null;
     verdictAt: string | null;
     submittedToChiefAt: string | null;
   } | null;
+};
+
+export const INVESTIGATION_STAGES = [
+  "VERIFIKASI",
+  "PENYELIDIKAN",
+  "PENYIDIKAN",
+  "GELAR_PERKARA",
+] as const;
+
+export type InvestigationStage = (typeof INVESTIGATION_STAGES)[number];
+
+export const STAGE_LABEL: Record<InvestigationStage, string> = {
+  VERIFIKASI: "Verifikasi",
+  PENYELIDIKAN: "Penyelidikan",
+  PENYIDIKAN: "Penyidikan",
+  GELAR_PERKARA: "Gelar Perkara",
+};
+
+export const STAGE_HINT: Record<InvestigationStage, string> = {
+  VERIFIKASI: "Periksa kelengkapan dan keaslian laporan.",
+  PENYELIDIKAN: "Kumpulkan indikasi awal adanya pelanggaran.",
+  PENYIDIKAN: "Dalami bukti dan keterangan saksi.",
+  GELAR_PERKARA: "Putuskan berkas siap diajukan ke Ketua.",
 };
 
 export const SANCTION_OPTIONS = [
@@ -85,11 +110,20 @@ export const investigationService = {
 
   claim: (id: number) => apiPostJson<null>(`/reports/${id}/claim`, {}, true),
 
-  setVerdict: (id: number, verdict: "VALID" | "HOAX", crossCheckNote: string) =>
-    apiPostJson<null>(`/reports/${id}/verdict`, { verdict, crossCheckNote }, true),
+  advanceStage: (id: number, note: string) =>
+    apiPostJson<null>(`/reports/${id}/advance-stage`, { note }, true),
 
-  submitToChief: (id: number, findings: string, recommendedSanction: string) =>
-    apiPostJson<null>(`/reports/${id}/submit-to-chief`, { findings, recommendedSanction }, true),
+  submitToChief: (
+    id: number,
+    findings: string,
+    conclusion: "VALID" | "HOAX",
+    recommendedSanction: string,
+  ) =>
+    apiPostJson<null>(
+      `/reports/${id}/submit-to-chief`,
+      { findings, conclusion, recommendedSanction },
+      true,
+    ),
 };
 
 /** Aksi Ketua KP (EPIC-06). */

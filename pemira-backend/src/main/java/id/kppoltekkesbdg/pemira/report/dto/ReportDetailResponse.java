@@ -40,10 +40,14 @@ public record ReportDetailResponse(
       ReportStatus fromStatus, ReportStatus toStatus, String note, OffsetDateTime createdAt) {}
 
   public record InvestigationSummary(
+      String stage,
+      boolean stagesCompleted,
+      List<StageEntry> stageLog,
       String verdict,
-      String crossCheckNote,
       String findings,
       String recommendedSanction,
       OffsetDateTime verdictAt,
       OffsetDateTime submittedToChiefAt) {}
+
+  public record StageEntry(String stage, String note, OffsetDateTime createdAt) {}
 }

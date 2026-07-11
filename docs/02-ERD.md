@@ -386,15 +386,18 @@ CREATE INDEX idx_audit_entity ON audit_logs (entity_type, entity_id, created_at 
 | Versi | File | Isi |
 |---|---|---|
 | V1 | ✅ `V1__create_reports.sql` | `reports`, `report_evidences`, `report_status_history` + CHECK + trigger append-only |
+| V2 | ✅ `V2__create_auth.sql` | `users`, `roles`, `user_roles`, `refresh_tokens`, `otp_codes` + seed 5 role + FK `reports.reporter_id` |
+| V3 | ✅ `V3__create_investigations.sql` | `investigations` (1:1 dgn reports) |
+| V4 | ✅ `V4__create_approvals.sql` | `approvals` (+ CHECK reject wajib alasan) |
+| V5 | ✅ `V5__investigation_stages.sql` | `investigations.stage` + `stages_completed_at`; tabel `investigation_stages` (4 tahap, append-only). Lihat [ADR-015](03-ARCHITECTURE.md) |
 
-**Rencana berikutnya** (penomoran menyesuaikan, FK ditambahkan saat tabel tujuan ada):
+**Rencana berikutnya:**
 
 | Versi | File | Isi |
 |---|---|---|
-| Vn | `create_users_and_roles.sql` | `users`, `roles`, `user_roles`, `refresh_tokens`, `otp_codes` + FK `reports.reporter_id` |
-| Vn | `seed_roles.sql` | 5 baris role |
 | Vn | `create_candidates.sql` | `candidates` + resolusi `reported_candidate_text` → FK |
-| Vn | `(reports sudah dibuat di V1)` | — |
+| Vn | `create_publications.sql` | `publications` (EPIC-07) |
+| Vn | `create_notifications_audit.sql` | `notifications`, `audit_logs`, `outbox_messages` (EPIC-09) |
 | V5 | `V5__create_investigations.sql` | `investigations`, `investigation_attachments`, `violation_rules`, `investigation_rules` |
 | V6 | `V6__create_approvals_publications.sql` | `approvals`, `publications` |
 | V7 | `V7__create_notifications_audit.sql` | `notifications`, `audit_logs` + trigger append-only |

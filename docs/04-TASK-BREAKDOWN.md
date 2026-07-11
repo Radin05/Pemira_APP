@@ -102,7 +102,7 @@ Cara baca:
 | T-05-04 | ✅ `GET /reports` (`@PreAuthorize HUKUM_SEKRETARIAT`) — filter status/kategori, pagination. Identitas pelapor TIDAK disertakan (aman default) | BE | 4 | T-04-07 | US-501 |
 | T-05-05 | ✅ `POST /reports/{id}/claim` — `DITERIMA→DIVERIFIKASI` + assignee, guard anti-dobel-claim (409). `ReportStatusService.transition` ber-guard dibangun di sini (T-04-03) | BE | 3 | — | US-502 |
 | T-05-06 | ✅ `GET /reports/{id}` detail: kronologi + bukti (metadata + checksum) + riwayat + hasil investigasi. Pre-signed URL unduh bukti belum | BE | 4 | — | US-503 |
-| T-05-07 | 🟡 `POST /reports/{id}/verdict` — VALID/HOAX + catatan ≥50 char, hanya oleh assignee. VALID→VALID, HOAX→HOAX. Lanjutan `HOAX→DICATAT_HOAX→SELESAI` & guard "sudah punya verdict" belum | BE | 5 | — | US-504 |
+| T-05-07 | ✅ **Diganti** (ADR-015): alih-alih verdict satu-klik, kini `POST /reports/{id}/advance-stage` — 4 tahap internal (VERIFIKASI→PENYELIDIKAN→PENYIDIKAN→GELAR_PERKARA), tiap tahap dicatat (append-only), hanya assignee. Kesimpulan VALID/HOAX jadi bagian template laporan | BE | 5 | — | US-504 |
 | T-05-08 | Laporan resmi ke Ketua (findings, pasal, rekomendasi) + submit → MENUNGGU_PERSETUJUAN_KETUA. Belum (EPIC-06) | BE | 5 | T-05-07 | US-505 |
 | T-05-09 | Revisi laporan ditolak. Belum (EPIC-06) | BE | 3 | T-06-03 | US-506 |
 | T-05-10 | ✅ FE `/hukum-sekretariat` — tabel antrean (filter status, badge, tombol Ambil). Pakai tabel HTML biasa, bukan TanStack | FE | 7 | T-02-12, T-05-04 | US-501/502 |

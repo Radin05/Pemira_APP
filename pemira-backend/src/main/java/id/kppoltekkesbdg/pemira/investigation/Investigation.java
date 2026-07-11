@@ -30,6 +30,15 @@ public class Investigation {
   @Column(name = "investigator_id", nullable = false)
   private Long investigatorId;
 
+  /** Tahap investigasi saat ini (di dalam status DIVERIFIKASI). */
+  @Enumerated(EnumType.STRING)
+  @Column(length = 20)
+  private Stage stage;
+
+  @Column(name = "stages_completed_at")
+  private OffsetDateTime stagesCompletedAt;
+
+  /** Kesimpulan Hukum di template laporan: VALID (terbukti) / HOAX (tidak terbukti). */
   @Enumerated(EnumType.STRING)
   @Column(length = 10)
   private Verdict verdict;

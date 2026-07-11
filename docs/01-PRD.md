@@ -151,19 +151,28 @@ Prioritas: **P0** = wajib rilis, **P1** = sangat diinginkan, **P2** = nice-to-ha
 
 ### 4.3 State Machine Laporan (kontrak resmi)
 
+> **Revisi (permintaan KP):** verifikasi kini bukan satu langkah, melainkan **4 tahap
+> internal** di dalam status `DIVERIFIKASI` (dilacak di `investigations.stage`, bukan status
+> laporan). Setelah gelar perkara selesai, Hukum mengisi **template laporan resmi** (temuan +
+> kesimpulan terbukti/tidak + rekomendasi sanksi) lalu mengajukannya ke Ketua. Karena itu
+> status `VALID`/`HOAX`/`DICATAT_HOAX`/`DIBUAT_LAPORAN_INVESTIGASI` **tidak lagi dipakai**
+> sebagai status laporan (kesimpulan terbukti/hoax kini jadi field `verdict` di template).
+> Lihat [ADR-015](03-ARCHITECTURE.md).
+
+**Tahapan internal DIVERIFIKASI** (`investigations.stage`, berurutan, tiap tahap dicatat):
+```
+VERIFIKASI → PENYELIDIKAN → PENYIDIKAN → GELAR_PERKARA → (tahap selesai)
+```
+
+**Status laporan (state machine):**
 ```mermaid
 stateDiagram-v2
     [*] --> DITERIMA : mahasiswa submit
-    DITERIMA --> DIVERIFIKASI : investigator claim & mulai cross-check
-    DIVERIFIKASI --> VALID : hasil cross-check terbukti
-    DIVERIFIKASI --> HOAX : hasil cross-check tidak terbukti
-    HOAX --> DICATAT_HOAX : investigator catat alasan
-    DICATAT_HOAX --> SELESAI : arsip
-    VALID --> DIBUAT_LAPORAN_INVESTIGASI : investigator susun laporan resmi
-    DIBUAT_LAPORAN_INVESTIGASI --> MENUNGGU_PERSETUJUAN_KETUA : submit ke ketua
-    MENUNGGU_PERSETUJUAN_KETUA --> DISETUJUI : ketua approve
-    MENUNGGU_PERSETUJUAN_KETUA --> DITOLAK : ketua reject + alasan
-    DITOLAK --> DIBUAT_LAPORAN_INVESTIGASI : investigator revisi (US-506)
+    DITERIMA --> DIVERIFIKASI : investigator claim (mulai 4 tahap)
+    DIVERIFIKASI --> MENUNGGU_PERSETUJUAN_KETUA : tahap selesai + template diajukan
+    MENUNGGU_PERSETUJUAN_KETUA --> DISETUJUI : ketua approve (laporan benar)
+    MENUNGGU_PERSETUJUAN_KETUA --> DITOLAK : ketua reject + alasan (palsu/hoax)
+    DITOLAK --> DIVERIFIKASI : investigator revisi (US-506)
     DITOLAK --> SELESAI : tidak dilanjutkan
     DISETUJUI --> DIPUBLIKASI : PDD publish
     DIPUBLIKASI --> DITARIK : PDD unpublish (US-705)

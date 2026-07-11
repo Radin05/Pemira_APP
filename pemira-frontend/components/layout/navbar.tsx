@@ -20,20 +20,20 @@ function isActive(pathname: string, href: string): boolean {
 
 function Brand() {
   return (
-    <Link href="/" className="flex shrink-0 items-center gap-3">
+    <Link href="/" className="flex shrink-0 items-center gap-4">
       <Image
         src={SITE.logo.src}
         alt={SITE.logo.alt}
         width={SITE.logo.width}
         height={SITE.logo.height}
         priority
-        className="size-13 shrink-0"
+        className="size-16 shrink-0 sm:size-18"
       />
       <span className="flex flex-col leading-none">
-        <span className="text-lg font-extrabold tracking-tight text-ink-inverse sm:text-xl">
+        <span className="text-xl font-extrabold tracking-tight text-ink-inverse sm:text-2xl">
           {SITE.orgName}
         </span>
-        <span className="mt-1 text-[0.65rem] font-semibold tracking-[0.18em] text-gold uppercase">
+        <span className="mt-1.5 text-xs font-semibold tracking-[0.2em] text-gold uppercase">
           {SITE.tagline}
         </span>
       </span>

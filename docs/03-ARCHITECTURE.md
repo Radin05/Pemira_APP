@@ -108,6 +108,17 @@ Jembatannya di `:root`: `--primary: var(--color-navy)`, `--ring: var(--color-gol
 **Catatan teknis.** Versi artifact Maven adalah `3.5.16` — **tanpa** suffix `.RELEASE`. ID di metadata start.spring.io menampilkan `3.5.16.RELEASE`, tapi itu bukan koordinat Maven yang valid (build gagal resolve). Suffix `.RELEASE` sudah ditinggalkan sejak Spring Boot 2.x.
 **Konsekuensi.** Kalau suatu saat naik ke 4.x, yang berubah terutama: nama starter, konfigurasi Spring Security (lambda DSL sudah dipakai, jadi relatif aman), dan beberapa default. Bukan pekerjaan sepele — jadwalkan terpisah, bukan disisipkan.
 
+### ADR-015 — Investigasi 4 tahap internal + template laporan resmi, bukan verdict satu-klik
+**Konteks.** Permintaan KP: proses investigasi Hukum harus mengikuti tahapan hukum acara — verifikasi, penyelidikan, penyidikan, gelar perkara — bukan sekadar satu tombol "valid/hoax". Dan sebelum ke Ketua harus ada template laporan resmi yang diisi atas nama Hukum.
+**Keputusan.**
+- **4 tahap internal di dalam status `DIVERIFIKASI`**, dilacak di kolom `investigations.stage` (bukan status laporan). Urutan wajib: `VERIFIKASI → PENYELIDIKAN → PENYIDIKAN → GELAR_PERKARA`. Tiap tahap dicatat notanya di tabel append-only `investigation_stages`.
+- Setelah gelar perkara selesai (`stages_completed_at` terisi), Hukum mengisi **template laporan resmi**: temuan/dasar hukum, kesimpulan (`verdict`: VALID=terbukti / HOAX=tidak terbukti), rekomendasi sanksi. Baru lalu diajukan ke Ketua.
+- Ketua **approve** bila laporan benar, **reject** (+ alasan) bila palsu/hoax.
+**Konsekuensi.**
+- State machine laporan disederhanakan: `DIVERIFIKASI → MENUNGGU_PERSETUJUAN_KETUA` langsung. Status `VALID`, `HOAX`, `DICATAT_HOAX`, `DIBUAT_LAPORAN_INVESTIGASI` **tidak lagi dipakai** untuk laporan (tetap ada di enum/CHECK demi kompatibilitas). Kesimpulan terbukti/hoax kini field di template, bukan status laporan.
+- Endpoint `POST /reports/{id}/verdict` (lama) **dihapus**, diganti `POST /reports/{id}/advance-stage` + `POST /reports/{id}/submit-to-chief` (kini juga membawa `conclusion`).
+- Migrasi V5 menambah `investigations.stage` + `stages_completed_at` dan tabel `investigation_stages`.
+
 ---
 
 ## 3. Kontrak API

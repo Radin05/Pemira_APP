@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { CircleDot, Loader2, SearchX } from "lucide-react";
+import { CheckCircle2, CircleDot, Loader2, SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { StatusBadge } from "@/components/domain/report/status-badge";
 import { reportService, type TrackResult } from "@/lib/api/report.service";
 import { REPORT_STATUS_LABEL } from "@/lib/types/report.types";
 import { cn } from "@/lib/utils";
@@ -100,55 +99,83 @@ export function StatusTracker() {
       )}
 
       {result && (
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5">
+        <section className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] shadow-2xl shadow-black/10">
+          <div className="flex flex-col gap-5 border-b border-white/10 bg-white/[0.025] p-6 sm:flex-row sm:items-start sm:justify-between sm:p-8">
             <div>
-              <p className="text-xs tracking-wide text-ink-inverse/50 uppercase">Kode tiket</p>
-              <p className="mt-1 text-lg font-bold tracking-wider text-gold">
+              <p className="text-xs font-semibold tracking-[0.2em] text-ink-inverse/45 uppercase">
+                Kode tiket
+              </p>
+              <p className="mt-2 break-all text-2xl font-extrabold tracking-wider text-gold sm:text-3xl">
                 {result.ticketCode}
               </p>
+              <p className="mt-2 text-sm text-ink-inverse/55">
+                Simpan kode ini bersama NPM yang digunakan saat mengirim laporan.
+              </p>
             </div>
-            <StatusBadge status={result.currentStatus} />
+            <div className="flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-sm font-semibold text-gold">
+              <CheckCircle2 className="size-4" aria-hidden />
+              {REPORT_STATUS_LABEL[result.currentStatus]}
+            </div>
           </div>
 
-          <ol className="relative mt-6">
-            {result.timeline.map((entry, index) => {
-              const isLast = index === result.timeline.length - 1;
-              return (
-                <li key={index} className="relative flex gap-5 pb-8 last:pb-0">
-                  {!isLast && (
-                    <span
-                      aria-hidden
-                      className="absolute top-6 bottom-0 left-[0.6875rem] w-px bg-white/15"
-                    />
-                  )}
-                  <span className="relative z-10 mt-0.5 shrink-0 rounded-full bg-white/[0.03]">
-                    <CircleDot
-                      className={cn("size-6", isLast ? "text-gold" : "text-success")}
-                      aria-hidden
-                    />
-                  </span>
-                  <div>
-                    <p className="font-semibold text-ink-inverse">
-                      {REPORT_STATUS_LABEL[entry.status]}
-                    </p>
-                    <p className="mt-1 text-xs text-ink-inverse/50">
-                      {formatDateTime(entry.at)}
-                    </p>
-                    {entry.note && (
-                      <p className="mt-2 text-sm text-ink-inverse/65">{entry.note}</p>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
+          <div className="p-6 sm:p-8">
+            <div className="mb-5">
+              <h3 className="text-sm font-bold tracking-wide text-ink-inverse uppercase">
+                Riwayat penanganan
+              </h3>
+            </div>
 
-          <p className="mt-4 border-t border-white/10 pt-5 text-xs leading-relaxed text-ink-inverse/50">
-            Demi menjaga proses, hanya status dan tanggal yang ditampilkan. Isi laporan dan
-            hasil investigasi tidak dibuka ke publik sebelum diputuskan dan dipublikasikan.
-          </p>
-        </div>
+            <ol className="space-y-4">
+              {result.timeline.map((entry, index) => {
+                const isLast = index === result.timeline.length - 1;
+                return (
+                  <li
+                    key={index}
+                    className={cn(
+                      "rounded-2xl border p-4",
+                      isLast
+                        ? "border-gold/30 bg-gold/[0.08]"
+                        : "border-white/10 bg-white/[0.025]",
+                    )}
+                  >
+                    <div className="flex gap-4">
+                      <span
+                        className={cn(
+                          "mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full border",
+                          isLast
+                            ? "border-gold/40 bg-gold/10 text-gold"
+                            : "border-success/30 bg-success/10 text-success",
+                        )}
+                      >
+                        <CircleDot className="size-5" aria-hidden />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                          <p className="font-semibold text-ink-inverse">
+                            {REPORT_STATUS_LABEL[entry.status]}
+                          </p>
+                          <p className="text-xs font-medium text-ink-inverse/45">
+                            {formatDateTime(entry.at)}
+                          </p>
+                        </div>
+                        {entry.note && (
+                          <p className="mt-2 text-sm leading-relaxed text-ink-inverse/70">
+                            {entry.note}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+
+            <p className="mt-6 rounded-2xl border border-white/10 bg-navy-dark/40 p-4 text-sm leading-relaxed text-ink-inverse/60">
+              Demi menjaga proses, hanya status dan tanggal yang ditampilkan. Isi laporan dan
+              hasil investigasi tidak dibuka ke publik sebelum diputuskan dan dipublikasikan.
+            </p>
+          </div>
+        </section>
       )}
     </div>
   );

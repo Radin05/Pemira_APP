@@ -25,27 +25,26 @@ public class ReportStateMachine {
   private final Map<ReportStatus, Set<Transition>> transitions = new EnumMap<>(ReportStatus.class);
 
   public ReportStateMachine() {
+    // Klaim laporan untuk investigasi.
     allow(ReportStatus.DITERIMA, ReportStatus.DIVERIFIKASI, RoleName.HUKUM_SEKRETARIAT);
 
-    allow(ReportStatus.DIVERIFIKASI, ReportStatus.VALID, RoleName.HUKUM_SEKRETARIAT);
-    allow(ReportStatus.DIVERIFIKASI, ReportStatus.HOAX, RoleName.HUKUM_SEKRETARIAT);
-
-    allow(ReportStatus.HOAX, ReportStatus.DICATAT_HOAX, RoleName.HUKUM_SEKRETARIAT);
-    allow(ReportStatus.DICATAT_HOAX, ReportStatus.SELESAI, RoleName.HUKUM_SEKRETARIAT);
-
-    allow(ReportStatus.VALID, ReportStatus.DIBUAT_LAPORAN_INVESTIGASI, RoleName.HUKUM_SEKRETARIAT);
+    // DIVERIFIKASI berisi 4 tahap internal (verifikasi → penyelidikan → penyidikan
+    // → gelar perkara) yang dilacak di investigations.stage — bukan status laporan.
+    // Setelah tahap selesai & template laporan diisi, langsung diajukan ke Ketua.
     allow(
-        ReportStatus.DIBUAT_LAPORAN_INVESTIGASI,
+        ReportStatus.DIVERIFIKASI,
         ReportStatus.MENUNGGU_PERSETUJUAN_KETUA,
         RoleName.HUKUM_SEKRETARIAT);
 
+    // Keputusan Ketua.
     allow(ReportStatus.MENUNGGU_PERSETUJUAN_KETUA, ReportStatus.DISETUJUI, RoleName.KETUA_KP);
     allow(ReportStatus.MENUNGGU_PERSETUJUAN_KETUA, ReportStatus.DITOLAK, RoleName.KETUA_KP);
 
-    // Laporan yang ditolak boleh direvisi atau diarsipkan (US-506).
-    allow(ReportStatus.DITOLAK, ReportStatus.DIBUAT_LAPORAN_INVESTIGASI, RoleName.HUKUM_SEKRETARIAT);
+    // Ditolak → revisi (kembali investigasi) atau diarsipkan (US-506).
+    allow(ReportStatus.DITOLAK, ReportStatus.DIVERIFIKASI, RoleName.HUKUM_SEKRETARIAT);
     allow(ReportStatus.DITOLAK, ReportStatus.SELESAI, RoleName.HUKUM_SEKRETARIAT);
 
+    // Publikasi oleh PDD.
     allow(ReportStatus.DISETUJUI, ReportStatus.DIPUBLIKASI, RoleName.PDD);
     allow(ReportStatus.DIPUBLIKASI, ReportStatus.DITARIK, RoleName.PDD);
     allow(ReportStatus.DITARIK, ReportStatus.DIPUBLIKASI, RoleName.PDD);

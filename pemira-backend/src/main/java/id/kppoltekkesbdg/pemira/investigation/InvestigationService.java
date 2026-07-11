@@ -1,6 +1,7 @@
 package id.kppoltekkesbdg.pemira.investigation;
 
 import id.kppoltekkesbdg.pemira.common.constant.RoleName;
+import id.kppoltekkesbdg.pemira.common.exception.BadRequestException;
 import id.kppoltekkesbdg.pemira.common.exception.ForbiddenException;
 import id.kppoltekkesbdg.pemira.common.exception.IllegalStateTransitionException;
 import id.kppoltekkesbdg.pemira.common.exception.ResourceNotFoundException;
@@ -17,7 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Alur divisi Hukum & Sekretariat: claim laporan dan tetapkan verdict. */
+/**
+ * Alur divisi Hukum & Sekretariat. Investigasi berjalan lewat 4 tahap internal
+ * (VERIFIKASI → PENYELIDIKAN → PENYIDIKAN → GELAR_PERKARA) selama status laporan
+ * DIVERIFIKASI. Setelah tahap tuntas, Hukum mengisi template laporan resmi lalu
+ * mengajukannya ke Ketua.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,8 +33,9 @@ public class InvestigationService {
   private final ReportStatusHistoryRepository historyRepository;
   private final ReportStatusService reportStatusService;
   private final InvestigationRepository investigationRepository;
+  private final InvestigationStageRepository stageRepository;
 
-  /** Ambil laporan: DITERIMA → DIVERIFIKASI, set assignee. 409 bila sudah di-claim. */
+  /** Ambil laporan: DITERIMA → DIVERIFIKASI, mulai tahap VERIFIKASI. 409 bila sudah di-claim. */
   @Transactional
   public void claim(Long reportId, Long investigatorId) {
     Report report =
@@ -50,41 +57,6 @@ public class InvestigationService {
             investigatorId,
             "Laporan diambil untuk investigasi"));
 
-    // Siapkan berkas investigasi bila belum ada.
-    if (investigationRepository.findByReportId(reportId).isEmpty()) {
-      Investigation inv = new Investigation();
-      inv.setReportId(reportId);
-      inv.setInvestigatorId(investigatorId);
-      investigationRepository.save(inv);
-    }
-    log.info("Laporan {} di-claim oleh user {}", report.getTicketCode(), investigatorId);
-  }
-
-  /**
-   * Tetapkan hasil cross-check. VALID → status VALID; HOAX → status HOAX. Hanya
-   * investigator yang meng-claim (assignee) yang boleh menetapkan verdict.
-   */
-  @Transactional
-  public void setVerdict(Long reportId, Long investigatorId, Verdict verdict, String note) {
-    Report report =
-        reportRepository
-            .findById(reportId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Laporan", reportId));
-
-    if (report.getAssigneeId() == null || !report.getAssigneeId().equals(investigatorId)) {
-      throw new ForbiddenException("Hanya investigator yang menangani laporan ini yang boleh menetapkan hasil.");
-    }
-
-    ReportStatus target = verdict == Verdict.VALID ? ReportStatus.VALID : ReportStatus.HOAX;
-    // Transisi ber-guard DIVERIFIKASI → VALID/HOAX (409 bila status sudah berubah).
-    reportStatusService.transition(
-        reportId,
-        ReportStatus.DIVERIFIKASI,
-        target,
-        RoleName.HUKUM_SEKRETARIAT,
-        investigatorId,
-        "Hasil cross-check: " + verdict);
-
     Investigation inv =
         investigationRepository
             .findByReportId(reportId)
@@ -95,51 +67,97 @@ public class InvestigationService {
                   i.setInvestigatorId(investigatorId);
                   return i;
                 });
-    inv.setVerdict(verdict);
-    inv.setCrossCheckNote(note);
-    inv.setVerdictAt(OffsetDateTime.now());
+    inv.setStage(Stage.VERIFIKASI);
+    inv.setStagesCompletedAt(null);
+    investigationRepository.save(inv);
+
+    log.info("Laporan {} di-claim oleh user {}", report.getTicketCode(), investigatorId);
+  }
+
+  /**
+   * Selesaikan tahap saat ini (catat notanya) lalu maju ke tahap berikutnya.
+   * Pada tahap terakhir (GELAR_PERKARA), menandai seluruh tahap selesai sehingga
+   * template laporan bisa diisi. Hanya assignee, hanya saat status DIVERIFIKASI.
+   */
+  @Transactional
+  public void advanceStage(Long reportId, Long investigatorId, String note) {
+    Report report = requireAssigned(reportId, investigatorId);
+    if (report.getStatus() != ReportStatus.DIVERIFIKASI) {
+      throw new IllegalStateTransitionException("Tahap hanya bisa diisi saat laporan diverifikasi.");
+    }
+
+    Investigation inv = requireInvestigation(reportId);
+    Stage current = inv.getStage() == null ? Stage.VERIFIKASI : inv.getStage();
+    if (inv.getStagesCompletedAt() != null) {
+      throw new BadRequestException("Seluruh tahap sudah selesai.");
+    }
+
+    InvestigationStage log = new InvestigationStage();
+    log.setInvestigationId(inv.getId());
+    log.setStage(current);
+    log.setNote(note);
+    log.setInvestigatorId(investigatorId);
+    stageRepository.save(log);
+
+    if (current.isLast()) {
+      inv.setStagesCompletedAt(OffsetDateTime.now());
+    } else {
+      inv.setStage(current.next());
+    }
     investigationRepository.save(inv);
   }
 
   /**
-   * Susun & kirim laporan resmi ke Ketua (US-505). Hanya untuk laporan berstatus
-   * VALID, oleh assignee. Melewati dua transisi berurutan sesuai state machine:
-   * VALID → DIBUAT_LAPORAN_INVESTIGASI → MENUNGGU_PERSETUJUAN_KETUA.
+   * Isi template laporan resmi & ajukan ke Ketua (US-505). Syarat: seluruh tahap
+   * investigasi sudah selesai (stagesCompletedAt terisi). Transisi DIVERIFIKASI →
+   * MENUNGGU_PERSETUJUAN_KETUA.
    */
   @Transactional
   public void submitToChief(
-      Long reportId, Long investigatorId, String findings, String recommendedSanction) {
-    Report report =
-        reportRepository
-            .findById(reportId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Laporan", reportId));
+      Long reportId,
+      Long investigatorId,
+      String findings,
+      Verdict conclusion,
+      String recommendedSanction) {
+    requireAssigned(reportId, investigatorId);
 
-    if (report.getAssigneeId() == null || !report.getAssigneeId().equals(investigatorId)) {
-      throw new ForbiddenException("Hanya investigator yang menangani laporan ini yang boleh menyusun laporan.");
+    Investigation inv = requireInvestigation(reportId);
+    if (inv.getStagesCompletedAt() == null) {
+      throw new BadRequestException(
+          "Selesaikan seluruh tahap investigasi (hingga gelar perkara) sebelum menyusun laporan.");
     }
 
-    Investigation inv =
-        investigationRepository
-            .findByReportId(reportId)
-            .orElseThrow(() -> ResourceNotFoundException.of("Investigasi laporan", reportId));
     inv.setFindings(findings);
+    inv.setVerdict(conclusion);
+    inv.setVerdictAt(OffsetDateTime.now());
     inv.setRecommendedSanction(recommendedSanction);
     inv.setSubmittedToChiefAt(OffsetDateTime.now());
     investigationRepository.save(inv);
 
     reportStatusService.transition(
         reportId,
-        ReportStatus.VALID,
-        ReportStatus.DIBUAT_LAPORAN_INVESTIGASI,
-        RoleName.HUKUM_SEKRETARIAT,
-        investigatorId,
-        "Menyusun laporan resmi");
-    reportStatusService.transition(
-        reportId,
-        ReportStatus.DIBUAT_LAPORAN_INVESTIGASI,
+        ReportStatus.DIVERIFIKASI,
         ReportStatus.MENUNGGU_PERSETUJUAN_KETUA,
         RoleName.HUKUM_SEKRETARIAT,
         investigatorId,
-        "Laporan diajukan ke Ketua");
+        "Laporan resmi diajukan ke Ketua (kesimpulan: " + conclusion + ")");
+  }
+
+  private Report requireAssigned(Long reportId, Long investigatorId) {
+    Report report =
+        reportRepository
+            .findById(reportId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Laporan", reportId));
+    if (report.getAssigneeId() == null || !report.getAssigneeId().equals(investigatorId)) {
+      throw new ForbiddenException(
+          "Hanya investigator yang menangani laporan ini yang berwenang.");
+    }
+    return report;
+  }
+
+  private Investigation requireInvestigation(Long reportId) {
+    return investigationRepository
+        .findByReportId(reportId)
+        .orElseThrow(() -> ResourceNotFoundException.of("Investigasi laporan", reportId));
   }
 }

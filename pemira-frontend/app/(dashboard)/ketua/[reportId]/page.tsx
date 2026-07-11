@@ -11,6 +11,7 @@ import {
   investigationService,
   ApiError,
   SANCTION_LABEL,
+  STAGE_LABEL,
   type ReportDetail,
 } from "@/lib/api/investigation.service";
 import { REPORT_CATEGORY_LABEL } from "@/lib/types/report.types";
@@ -150,22 +151,43 @@ export default function KetuaDetailPage({
         </div>
       </div>
 
-      {/* Laporan investigasi */}
+      {/* Tahapan investigasi yang telah dilalui */}
+      {inv && inv.stageLog.length > 0 && (
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+          <p className="text-sm font-semibold text-ink">Tahapan Investigasi</p>
+          <ol className="mt-4 space-y-3">
+            {inv.stageLog.map((s, i) => (
+              <li key={i} className="flex gap-3">
+                <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-success/10 text-xs font-bold text-success">
+                  {i + 1}
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-ink">{STAGE_LABEL[s.stage]}</p>
+                  <p className="mt-0.5 text-sm text-ink-muted">{s.note}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
+      {/* Laporan investigasi resmi */}
       {inv?.findings && (
         <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
           <p className="flex items-center gap-2 text-sm font-semibold text-ink">
             <FileText className="size-4 text-primary" /> Laporan Investigasi
           </p>
-          {inv.crossCheckNote && (
-            <div className="mt-4">
-              <p className="text-xs font-semibold tracking-wide text-ink-muted uppercase">
-                Hasil cross-check
-              </p>
-              <p className="mt-1.5 text-sm leading-relaxed whitespace-pre-line text-ink">
-                {inv.crossCheckNote}
-              </p>
-            </div>
-          )}
+          <div className="mt-3">
+            {inv.verdict === "VALID" ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
+                <CheckCircle2 className="size-3.5" /> Kesimpulan Hukum: Terbukti
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-3 py-1 text-xs font-semibold text-danger">
+                <XCircle className="size-3.5" /> Kesimpulan Hukum: Tidak Terbukti
+              </span>
+            )}
+          </div>
           <div className="mt-4">
             <p className="text-xs font-semibold tracking-wide text-ink-muted uppercase">
               Temuan &amp; dasar hukum

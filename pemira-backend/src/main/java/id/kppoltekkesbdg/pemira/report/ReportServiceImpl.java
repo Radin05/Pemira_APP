@@ -8,6 +8,7 @@ import id.kppoltekkesbdg.pemira.common.exception.ResourceNotFoundException;
 import id.kppoltekkesbdg.pemira.common.util.HashUtil;
 import id.kppoltekkesbdg.pemira.investigation.Investigation;
 import id.kppoltekkesbdg.pemira.investigation.InvestigationRepository;
+import id.kppoltekkesbdg.pemira.investigation.InvestigationStageRepository;
 import id.kppoltekkesbdg.pemira.report.dto.ReportDetailResponse;
 import id.kppoltekkesbdg.pemira.report.dto.ReportSubmitRequest;
 import id.kppoltekkesbdg.pemira.report.dto.ReportSubmitResponse;
@@ -35,6 +36,7 @@ public class ReportServiceImpl implements ReportService {
   private final ReportStatusHistoryRepository historyRepository;
   private final ReportEvidenceRepository evidenceRepository;
   private final InvestigationRepository investigationRepository;
+  private final InvestigationStageRepository stageRepository;
   private final TicketCodeGenerator ticketCodeGenerator;
   private final EncryptionService encryptionService;
   private final FileStorageService fileStorageService;
@@ -155,14 +157,24 @@ public class ReportServiceImpl implements ReportService {
         investigationRepository
             .findByReportId(reportId)
             .map(
-                i ->
-                    new ReportDetailResponse.InvestigationSummary(
-                        i.getVerdict() == null ? null : i.getVerdict().name(),
-                        i.getCrossCheckNote(),
-                        i.getFindings(),
-                        i.getRecommendedSanction(),
-                        i.getVerdictAt(),
-                        i.getSubmittedToChiefAt()))
+                i -> {
+                  List<ReportDetailResponse.StageEntry> stageLog =
+                      stageRepository.findByInvestigationIdOrderByCreatedAtAsc(i.getId()).stream()
+                          .map(
+                              s ->
+                                  new ReportDetailResponse.StageEntry(
+                                      s.getStage().name(), s.getNote(), s.getCreatedAt()))
+                          .toList();
+                  return new ReportDetailResponse.InvestigationSummary(
+                      i.getStage() == null ? null : i.getStage().name(),
+                      i.getStagesCompletedAt() != null,
+                      stageLog,
+                      i.getVerdict() == null ? null : i.getVerdict().name(),
+                      i.getFindings(),
+                      i.getRecommendedSanction(),
+                      i.getVerdictAt(),
+                      i.getSubmittedToChiefAt());
+                })
             .orElse(null);
 
     return new ReportDetailResponse(
