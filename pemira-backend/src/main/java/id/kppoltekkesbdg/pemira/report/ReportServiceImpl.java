@@ -4,15 +4,22 @@ import id.kppoltekkesbdg.pemira.common.exception.BadRequestException;
 import id.kppoltekkesbdg.pemira.common.security.EncryptionService;
 import id.kppoltekkesbdg.pemira.common.storage.FileStorageService;
 import id.kppoltekkesbdg.pemira.common.storage.StoredFile;
+import id.kppoltekkesbdg.pemira.common.exception.ResourceNotFoundException;
 import id.kppoltekkesbdg.pemira.common.util.HashUtil;
+import id.kppoltekkesbdg.pemira.investigation.Investigation;
+import id.kppoltekkesbdg.pemira.investigation.InvestigationRepository;
+import id.kppoltekkesbdg.pemira.report.dto.ReportDetailResponse;
 import id.kppoltekkesbdg.pemira.report.dto.ReportSubmitRequest;
 import id.kppoltekkesbdg.pemira.report.dto.ReportSubmitResponse;
+import id.kppoltekkesbdg.pemira.report.dto.ReportSummaryResponse;
 import id.kppoltekkesbdg.pemira.report.dto.ReportTrackResponse;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +34,7 @@ public class ReportServiceImpl implements ReportService {
   private final ReportRepository reportRepository;
   private final ReportStatusHistoryRepository historyRepository;
   private final ReportEvidenceRepository evidenceRepository;
+  private final InvestigationRepository investigationRepository;
   private final TicketCodeGenerator ticketCodeGenerator;
   private final EncryptionService encryptionService;
   private final FileStorageService fileStorageService;
@@ -105,6 +113,86 @@ public class ReportServiceImpl implements ReportService {
 
     return Optional.of(
         new ReportTrackResponse(report.getTicketCode(), report.getStatus(), timeline));
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<ReportSummaryResponse> listForStaff(
+      ReportStatus status, ReportCategory category, Pageable pageable) {
+    return reportRepository.search(status, category, pageable).map(this::toSummary);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public ReportDetailResponse getDetail(Long reportId) {
+    Report r =
+        reportRepository
+            .findById(reportId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Laporan", reportId));
+
+    List<ReportDetailResponse.Evidence> evidences =
+        evidenceRepository.findByReportId(reportId).stream()
+            .map(
+                e ->
+                    new ReportDetailResponse.Evidence(
+                        e.getId(),
+                        e.getOriginalFilename(),
+                        e.getMimeType(),
+                        e.getSizeBytes(),
+                        e.getChecksumSha256(),
+                        e.getUploadedAt()))
+            .toList();
+
+    List<ReportDetailResponse.History> history =
+        historyRepository.findByReportIdOrderByCreatedAtAsc(reportId).stream()
+            .map(
+                h ->
+                    new ReportDetailResponse.History(
+                        h.getFromStatus(), h.getToStatus(), h.getNote(), h.getCreatedAt()))
+            .toList();
+
+    ReportDetailResponse.InvestigationSummary investigation =
+        investigationRepository
+            .findByReportId(reportId)
+            .map(
+                i ->
+                    new ReportDetailResponse.InvestigationSummary(
+                        i.getVerdict() == null ? null : i.getVerdict().name(),
+                        i.getCrossCheckNote(),
+                        i.getVerdictAt()))
+            .orElse(null);
+
+    return new ReportDetailResponse(
+        r.getId(),
+        r.getTicketCode(),
+        r.getCategory(),
+        r.getStatus(),
+        r.getTitle(),
+        r.getDescription(),
+        r.getIncidentDate(),
+        r.getIncidentLocation(),
+        r.getReportedCandidateText(),
+        r.isAnonymous(),
+        r.getAssigneeId(),
+        r.getSubmittedAt(),
+        evidences,
+        history,
+        investigation);
+  }
+
+  private ReportSummaryResponse toSummary(Report r) {
+    return new ReportSummaryResponse(
+        r.getId(),
+        r.getTicketCode(),
+        r.getCategory(),
+        r.getStatus(),
+        r.getTitle(),
+        r.getIncidentDate(),
+        r.getIncidentLocation(),
+        r.getReportedCandidateText(),
+        r.isAnonymous(),
+        r.getAssigneeId(),
+        r.getSubmittedAt());
   }
 
   private String emptyToNull(String s) {

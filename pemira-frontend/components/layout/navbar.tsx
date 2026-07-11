@@ -53,7 +53,7 @@ export function Navbar() {
       >
         <Brand />
 
-        <ul className="hidden items-center gap-1 xl:flex">
+        <ul className="hidden items-center gap-0.5 lg:flex">
           {NAV_MENU.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -62,7 +62,7 @@ export function Navbar() {
                   href={item.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                    "block rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap transition-colors",
                     active
                       ? "bg-gold text-navy-dark"
                       : "text-ink-inverse/85 hover:bg-gold/15 hover:text-ink-inverse",
@@ -75,28 +75,20 @@ export function Navbar() {
           })}
         </ul>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href="/login"
-            className="hidden rounded-full border border-gold/40 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/10 xl:inline-block"
-          >
-            Masuk
-          </Link>
-          <button
-            type="button"
-            onClick={() => setIsOpen((v) => !v)}
-            aria-expanded={isOpen}
-            aria-controls="menu-mobile"
-            aria-label={isOpen ? "Tutup menu" : "Buka menu"}
-            className="rounded-md p-2 text-ink-inverse hover:bg-gold/15 xl:hidden"
-          >
-            {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setIsOpen((v) => !v)}
+          aria-expanded={isOpen}
+          aria-controls="menu-mobile"
+          aria-label={isOpen ? "Tutup menu" : "Buka menu"}
+          className="rounded-md p-2 text-ink-inverse hover:bg-gold/15 lg:hidden"
+        >
+          {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+        </button>
       </nav>
 
       {isOpen && (
-        <ul id="menu-mobile" className="border-t border-white/10 px-6 pb-5 xl:hidden">
+        <ul id="menu-mobile" className="border-t border-white/10 px-6 pb-5 lg:hidden">
           {NAV_MENU.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -117,15 +109,6 @@ export function Navbar() {
               </li>
             );
           })}
-          <li>
-            <Link
-              href="/login"
-              onClick={() => setIsOpen(false)}
-              className="mt-2 block rounded-full border border-gold/40 px-4 py-2.5 text-sm font-semibold text-gold"
-            >
-              Masuk
-            </Link>
-          </li>
         </ul>
       )}
     </header>

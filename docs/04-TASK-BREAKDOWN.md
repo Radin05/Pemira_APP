@@ -96,23 +96,18 @@ Cara baca:
 
 | ID | Task | Tipe | Est | Dep | Story |
 |---|---|---|---|---|---|
-| T-05-01 | Migrasi V5: `investigations`, `investigation_attachments`, `violation_rules`, `investigation_rules` | DB | 3 | T-04-01 | — |
-| T-05-02 | Migrasi V10: seed `violation_rules` dari tata tertib KP | DB | 2 | T-05-01 | — |
-| T-05-03 | Entity + repository modul `investigation` | BE | 3 | T-05-01 | — |
-| T-05-04 | `GET /reports` — filter status/kategori/rentang tanggal, pagination, sort | BE | 4 | T-04-07 | US-501 |
-| | └ **Test**: filter gabungan; pagination benar; investigator tidak melihat identitas pelapor anonim | | | | |
-| T-05-05 | `POST /reports/{id}/claim` — `DITERIMA → DIVERIFIKASI`, set assignee, guard anti-dobel-claim | BE | 3 | T-04-03 | US-502 |
-| | └ **Test**: claim kedua → 409 (test konkuren) | | | | |
-| T-05-06 | `GET /reports/{id}` detail: bukti + pre-signed URL + checksum + riwayat status | BE | 4 | T-04-08 | US-503 |
-| T-05-07 | `POST /investigations` — verdict `VALID`/`HOAX`, catatan ≥50 char. `HOAX` → `DICATAT_HOAX` → `SELESAI` | BE | 5 | T-04-03, T-05-03 | US-504 |
-| | └ **Test**: VALID→status VALID; HOAX→SELESAI; catatan pendek → 400; laporan sudah punya investigasi → 409 | | | | |
-| T-05-08 | `PUT /investigations/{id}/report` (findings, pasal dilanggar, rekomendasi sanksi) + `POST /investigations/{id}/submit` → `MENUNGGU_PERSETUJUAN_KETUA` | BE | 5 | T-05-07 | US-505 |
-| | └ **Test**: submit tanpa findings → 400; submit laporan berstatus HOAX → 409; investigator lain → 403 | | | | |
-| T-05-09 | Revisi laporan yang ditolak: `DITOLAK → DIBUAT_LAPORAN_INVESTIGASI`, `revision_number++` | BE | 3 | T-06-03 | US-506 |
-| | └ **Test**: `approvals` lama tetap ada setelah revisi | | | | |
-| T-05-10 | FE: dashboard `/hukum-sekretariat` — tabel antrean (TanStack Table), filter, badge status, tombol claim | FE | 7 | T-02-13, T-05-04 | US-501/502 |
-| T-05-11 | FE: `/hukum-sekretariat/[reportId]` — detail, galeri bukti (lightbox gambar, player video, unduh PDF), tampilkan checksum, timeline status | FE | 6 | T-05-06 | US-503 |
-| T-05-12 | FE: form verdict (VALID/HOAX + catatan) & form laporan investigasi (multi-select pasal, rekomendasi sanksi), konfirmasi sebelum submit | FE | 6 | T-05-08 | US-504/505 |
+| T-05-01 | 🟡 Migrasi **V3** `investigations` (kolom lengkap ERD). `investigation_attachments`, `violation_rules`, `investigation_rules` belum (dipakai saat laporan resmi ke Ketua / EPIC-06) | DB | 3 | — | — |
+| T-05-02 | Seed `violation_rules` dari tata tertib KP — belum (pasal masih di `lib/constant/rules.ts` frontend) | DB | 2 | T-05-01 | — |
+| T-05-03 | ✅ Entity `Investigation` + repository | BE | 3 | T-05-01 | — |
+| T-05-04 | ✅ `GET /reports` (`@PreAuthorize HUKUM_SEKRETARIAT`) — filter status/kategori, pagination. Identitas pelapor TIDAK disertakan (aman default) | BE | 4 | T-04-07 | US-501 |
+| T-05-05 | ✅ `POST /reports/{id}/claim` — `DITERIMA→DIVERIFIKASI` + assignee, guard anti-dobel-claim (409). `ReportStatusService.transition` ber-guard dibangun di sini (T-04-03) | BE | 3 | — | US-502 |
+| T-05-06 | ✅ `GET /reports/{id}` detail: kronologi + bukti (metadata + checksum) + riwayat + hasil investigasi. Pre-signed URL unduh bukti belum | BE | 4 | — | US-503 |
+| T-05-07 | 🟡 `POST /reports/{id}/verdict` — VALID/HOAX + catatan ≥50 char, hanya oleh assignee. VALID→VALID, HOAX→HOAX. Lanjutan `HOAX→DICATAT_HOAX→SELESAI` & guard "sudah punya verdict" belum | BE | 5 | — | US-504 |
+| T-05-08 | Laporan resmi ke Ketua (findings, pasal, rekomendasi) + submit → MENUNGGU_PERSETUJUAN_KETUA. Belum (EPIC-06) | BE | 5 | T-05-07 | US-505 |
+| T-05-09 | Revisi laporan ditolak. Belum (EPIC-06) | BE | 3 | T-06-03 | US-506 |
+| T-05-10 | ✅ FE `/hukum-sekretariat` — tabel antrean (filter status, badge, tombol Ambil). Pakai tabel HTML biasa, bukan TanStack | FE | 7 | T-02-12, T-05-04 | US-501/502 |
+| T-05-11 | 🟡 FE `/hukum-sekretariat/[reportId]` — detail, bukti (metadata + checksum), timeline status. Galeri/lightbox/unduh belum (butuh endpoint unduh) | FE | 6 | T-05-06 | US-503 |
+| T-05-12 | 🟡 FE form verdict (VALID/HOAX + catatan, hanya assignee). Form laporan resmi ke Ketua belum (EPIC-06) | FE | 6 | T-05-07 | US-504/505 |
 
 ---
 
