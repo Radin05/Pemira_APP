@@ -54,9 +54,23 @@ export type ReportDetail = {
   investigation: {
     verdict: "VALID" | "HOAX" | null;
     crossCheckNote: string | null;
+    findings: string | null;
+    recommendedSanction: string | null;
     verdictAt: string | null;
+    submittedToChiefAt: string | null;
   } | null;
 };
+
+export const SANCTION_OPTIONS = [
+  { value: "TEGURAN", label: "Teguran Tertulis" },
+  { value: "PENGURANGAN_SUARA", label: "Pengurangan Suara" },
+  { value: "DISKUALIFIKASI", label: "Diskualifikasi" },
+  { value: "TIDAK_ADA", label: "Tanpa Sanksi" },
+] as const;
+
+export const SANCTION_LABEL: Record<string, string> = Object.fromEntries(
+  SANCTION_OPTIONS.map((o) => [o.value, o.label]),
+);
 
 export const investigationService = {
   list: (params: { status?: ReportStatus; category?: ReportCategory; page?: number }) => {
@@ -73,6 +87,16 @@ export const investigationService = {
 
   setVerdict: (id: number, verdict: "VALID" | "HOAX", crossCheckNote: string) =>
     apiPostJson<null>(`/reports/${id}/verdict`, { verdict, crossCheckNote }, true),
+
+  submitToChief: (id: number, findings: string, recommendedSanction: string) =>
+    apiPostJson<null>(`/reports/${id}/submit-to-chief`, { findings, recommendedSanction }, true),
+};
+
+/** Aksi Ketua KP (EPIC-06). */
+export const approvalService = {
+  approve: (id: number) => apiPostJson<null>(`/reports/${id}/approve`, {}, true),
+  reject: (id: number, reason: string) =>
+    apiPostJson<null>(`/reports/${id}/reject`, { reason }, true),
 };
 
 export { ApiError };

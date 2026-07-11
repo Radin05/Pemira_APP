@@ -100,4 +100,46 @@ public class InvestigationService {
     inv.setVerdictAt(OffsetDateTime.now());
     investigationRepository.save(inv);
   }
+
+  /**
+   * Susun & kirim laporan resmi ke Ketua (US-505). Hanya untuk laporan berstatus
+   * VALID, oleh assignee. Melewati dua transisi berurutan sesuai state machine:
+   * VALID → DIBUAT_LAPORAN_INVESTIGASI → MENUNGGU_PERSETUJUAN_KETUA.
+   */
+  @Transactional
+  public void submitToChief(
+      Long reportId, Long investigatorId, String findings, String recommendedSanction) {
+    Report report =
+        reportRepository
+            .findById(reportId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Laporan", reportId));
+
+    if (report.getAssigneeId() == null || !report.getAssigneeId().equals(investigatorId)) {
+      throw new ForbiddenException("Hanya investigator yang menangani laporan ini yang boleh menyusun laporan.");
+    }
+
+    Investigation inv =
+        investigationRepository
+            .findByReportId(reportId)
+            .orElseThrow(() -> ResourceNotFoundException.of("Investigasi laporan", reportId));
+    inv.setFindings(findings);
+    inv.setRecommendedSanction(recommendedSanction);
+    inv.setSubmittedToChiefAt(OffsetDateTime.now());
+    investigationRepository.save(inv);
+
+    reportStatusService.transition(
+        reportId,
+        ReportStatus.VALID,
+        ReportStatus.DIBUAT_LAPORAN_INVESTIGASI,
+        RoleName.HUKUM_SEKRETARIAT,
+        investigatorId,
+        "Menyusun laporan resmi");
+    reportStatusService.transition(
+        reportId,
+        ReportStatus.DIBUAT_LAPORAN_INVESTIGASI,
+        ReportStatus.MENUNGGU_PERSETUJUAN_KETUA,
+        RoleName.HUKUM_SEKRETARIAT,
+        investigatorId,
+        "Laporan diajukan ke Ketua");
+  }
 }

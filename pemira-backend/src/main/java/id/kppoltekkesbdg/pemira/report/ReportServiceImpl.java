@@ -159,7 +159,10 @@ public class ReportServiceImpl implements ReportService {
                     new ReportDetailResponse.InvestigationSummary(
                         i.getVerdict() == null ? null : i.getVerdict().name(),
                         i.getCrossCheckNote(),
-                        i.getVerdictAt()))
+                        i.getFindings(),
+                        i.getRecommendedSanction(),
+                        i.getVerdictAt(),
+                        i.getSubmittedToChiefAt()))
             .orElse(null);
 
     return new ReportDetailResponse(

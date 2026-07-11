@@ -57,7 +57,7 @@ public class ReportController {
 
   // ── Divisi Hukum & Sekretariat ───────────────────────────────────────
   @GetMapping
-  @PreAuthorize("hasRole('HUKUM_SEKRETARIAT')")
+  @PreAuthorize("hasAnyRole('HUKUM_SEKRETARIAT', 'KETUA_KP')")
   public ApiResponse<PagedResponse<ReportSummaryResponse>> list(
       @RequestParam(required = false) ReportStatus status,
       @RequestParam(required = false) ReportCategory category,

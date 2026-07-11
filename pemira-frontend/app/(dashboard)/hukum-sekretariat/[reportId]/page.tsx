@@ -6,7 +6,9 @@ import {
   ArrowLeft,
   CheckCircle2,
   FileText,
+  Gavel,
   Loader2,
+  Send,
   ShieldAlert,
   XCircle,
 } from "lucide-react";
@@ -16,6 +18,8 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   investigationService,
   ApiError,
+  SANCTION_OPTIONS,
+  SANCTION_LABEL,
   type ReportDetail,
 } from "@/lib/api/investigation.service";
 import { REPORT_CATEGORY_LABEL, REPORT_STATUS_LABEL } from "@/lib/types/report.types";
@@ -64,6 +68,11 @@ export default function ReportDetailPage({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Form laporan resmi ke Ketua (untuk laporan VALID).
+  const [findings, setFindings] = useState("");
+  const [sanction, setSanction] = useState("");
+  const [submittingReport, setSubmittingReport] = useState(false);
+
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -95,6 +104,22 @@ export default function ReportDetailPage({
       setError(err instanceof ApiError ? err.message : "Gagal menyimpan hasil.");
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function submitReport() {
+    if (findings.trim().length < 50 || !sanction) return;
+    setSubmittingReport(true);
+    setError(null);
+    try {
+      await investigationService.submitToChief(id, findings, sanction);
+      setFindings("");
+      setSanction("");
+      await load();
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Gagal mengirim laporan.");
+    } finally {
+      setSubmittingReport(false);
     }
   }
 
@@ -217,6 +242,84 @@ export default function ReportDetailPage({
           <p className="mt-3 text-sm leading-relaxed whitespace-pre-line text-ink">
             {report.investigation.crossCheckNote}
           </p>
+        </div>
+      )}
+
+      {/* Laporan resmi ke Ketua (read-only bila sudah disusun) */}
+      {report.investigation?.findings && (
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+          <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+            <Gavel className="size-4 text-primary" /> Laporan Resmi ke Ketua
+          </p>
+          <p className="mt-3 text-sm leading-relaxed whitespace-pre-line text-ink">
+            {report.investigation.findings}
+          </p>
+          <p className="mt-4 text-sm text-ink-muted">
+            Rekomendasi sanksi:{" "}
+            <span className="font-semibold text-primary">
+              {SANCTION_LABEL[report.investigation.recommendedSanction ?? ""] ??
+                report.investigation.recommendedSanction}
+            </span>
+          </p>
+        </div>
+      )}
+
+      {/* Form susun laporan resmi — hanya saat VALID & assignee, belum disusun */}
+      {report.status === "VALID" && isAssignee && !report.investigation?.findings && (
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+          <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+            <Send className="size-4 text-primary" /> Susun Laporan Resmi ke Ketua
+          </p>
+          <p className="mt-1 text-xs text-ink-muted">
+            Laporan ini akan diajukan ke Ketua KP untuk diputuskan.
+          </p>
+
+          <div className="mt-5">
+            <label htmlFor="findings" className="text-sm font-medium text-ink">
+              Temuan &amp; dasar hukum <span className="text-ink-muted">(min. 50 karakter)</span>
+            </label>
+            <Textarea
+              id="findings"
+              rows={5}
+              value={findings}
+              onChange={(e) => setFindings(e.target.value)}
+              placeholder="Uraikan temuan, pasal yang dilanggar, dan bukti pendukung."
+              className="mt-1.5 resize-y border-black/15"
+            />
+            <p className="mt-1 text-xs text-ink-muted">{findings.length} karakter</p>
+          </div>
+
+          <div className="mt-4">
+            <label htmlFor="sanction" className="text-sm font-medium text-ink">
+              Rekomendasi sanksi
+            </label>
+            <select
+              id="sanction"
+              value={sanction}
+              onChange={(e) => setSanction(e.target.value)}
+              className="mt-1.5 h-10 w-full rounded-md border border-black/15 bg-white px-3 text-sm text-ink"
+            >
+              <option value="" disabled>
+                Pilih sanksi…
+              </option>
+              {SANCTION_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {error && <p className="mt-3 text-sm text-danger">{error}</p>}
+
+          <Button
+            onClick={submitReport}
+            disabled={submittingReport || findings.trim().length < 50 || !sanction}
+            className="mt-5 h-11 rounded-full bg-primary px-6 font-semibold text-ink-inverse hover:bg-primary/90 disabled:opacity-60"
+          >
+            {submittingReport && <Loader2 className="mr-2 size-4 animate-spin" />}
+            Ajukan ke Ketua
+          </Button>
         </div>
       )}
 

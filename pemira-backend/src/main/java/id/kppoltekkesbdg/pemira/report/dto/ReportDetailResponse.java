@@ -39,5 +39,11 @@ public record ReportDetailResponse(
   public record History(
       ReportStatus fromStatus, ReportStatus toStatus, String note, OffsetDateTime createdAt) {}
 
-  public record InvestigationSummary(String verdict, String crossCheckNote, OffsetDateTime verdictAt) {}
+  public record InvestigationSummary(
+      String verdict,
+      String crossCheckNote,
+      String findings,
+      String recommendedSanction,
+      OffsetDateTime verdictAt,
+      OffsetDateTime submittedToChiefAt) {}
 }

@@ -115,13 +115,13 @@ Cara baca:
 
 | ID | Task | Tipe | Est | Dep | Story |
 |---|---|---|---|---|---|
-| T-06-01 | Migrasi V6 bagian `approvals` | DB | 2 | T-05-01 | — |
-| T-06-02 | `GET /investigations?status=PENDING` — urut terlama, join data laporan | BE | 3 | T-05-08 | US-601 |
-| T-06-03 | `POST /investigations/{id}/approve` dan `/reject` (alasan ≥30 char), tulis `approvals`, transisi status, notifikasi | BE | 5 | T-04-03, T-06-01 | US-602/603 |
-| | └ **Test**: approve→DISETUJUI + notif PDD; reject tanpa alasan→400; approve dua kali→409; role selain KETUA_KP→403 | | | | |
-| T-06-04 | `GET /approvals/mine` riwayat keputusan | BE | 2 | T-06-03 | US-604 |
-| T-06-05 | FE: dashboard `/ketua` — antrean + badge jumlah pending di sidebar | FE | 4 | T-02-13, T-06-02 | US-601 |
-| T-06-06 | FE: `/ketua/[investigationId]` — ringkasan laporan + bukti + tombol Setujui / Tolak (dialog alasan wajib) | FE | 4 | T-06-03 | US-602/603 |
+| T-06-01 | ✅ Migrasi **V4** `approvals` (+ CHECK reject wajib alasan ≥30 char) | DB | 2 | — | — |
+| T-06-02 | ✅ Antrean Ketua lewat `GET /reports?status=MENUNGGU_PERSETUJUAN_KETUA` (list dibuka utk KETUA_KP juga). Prasyaratnya `POST /reports/{id}/submit-to-chief` (T-05-08) juga dibangun: VALID→DIBUAT_LAPORAN_INVESTIGASI→MENUNGGU dalam satu aksi | BE | 3 | T-05-08 | US-601 |
+| T-06-03 | ✅ `POST /reports/{id}/approve` & `/reject` (alasan ≥30 char) — tulis `approvals`, transisi ber-guard. Notifikasi PDD belum (EPIC-09) | BE | 5 | T-04-03, T-06-01 | US-602/603 |
+| | └ **Test**: ✅ approve→DISETUJUI; reject pendek→400, cukup→DITOLAK; approve dua kali→409; role selain KETUA_KP→403 (diverifikasi curl + Playwright) | | | | |
+| T-06-04 | `GET /approvals/mine` riwayat keputusan Ketua — belum | BE | 2 | T-06-03 | US-604 |
+| T-06-05 | ✅ FE `/ketua` — antrean (filter Menunggu/Disetujui/Ditolak) | FE | 4 | T-06-02 | US-601 |
+| T-06-06 | ✅ FE `/ketua/[reportId]` — ringkasan laporan + laporan investigasi (temuan, sanksi) + tombol Setujui / Tolak (form alasan wajib). Plus form "Susun Laporan Resmi ke Ketua" di sisi investigator (T-05-08/12 FE) | FE | 4 | T-06-03 | US-602/603 |
 
 ---
 
