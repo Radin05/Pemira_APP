@@ -15,7 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Membuat akun staf uji saat dev supaya login bisa dicoba tanpa setup manual.
- * HANYA aktif di profil dev. Password semua akun: {@code Test@1234}.
+ * HANYA aktif di profil dev. Password tiap akun dibuat berbeda agar skenario login
+ * per-role lebih mudah diuji.
  */
 @Slf4j
 @Configuration
@@ -30,27 +31,37 @@ public class DevDataSeeder {
   @Bean
   ApplicationRunner seedStaffUsers() {
     return args -> {
-      seed("hukum@poltekkesbandung.ac.id", "Staf Hukum & Sekretariat", RoleName.HUKUM_SEKRETARIAT);
-      seed("ketua@poltekkesbandung.ac.id", "Ketua Komite Pengawasan", RoleName.KETUA_KP);
-      seed("pdd@poltekkesbandung.ac.id", "Staf PDD", RoleName.PDD);
-      seed("admin@poltekkesbandung.ac.id", "Administrator", RoleName.ADMIN);
+      seed(
+          "hukum@poltekkesbandung.ac.id",
+          "Staf Hukum & Sekretariat",
+          RoleName.HUKUM_SEKRETARIAT,
+          "hukumpemira25");
+      seed("ketua@poltekkesbandung.ac.id", "Ketua Komite Pengawasan", RoleName.KETUA_KP, "ketuano123");
+      seed("pdd@poltekkesbandung.ac.id", "Staf PDD", RoleName.PDD, "pubdekdok25");
+      seed("admin@poltekkesbandung.ac.id", "Administrator", RoleName.ADMIN, "passwordadmin");
     };
   }
 
-  private void seed(String email, String fullName, RoleName roleName) {
-    if (userRepository.findByEmailIgnoreCase(email).isPresent()) return;
-
+  private void seed(String email, String fullName, RoleName roleName, String rawPassword) {
     Role role =
         roleRepository
             .findByName(roleName.name())
             .orElseThrow(() -> new IllegalStateException("Role " + roleName + " belum di-seed"));
 
-    User user = new User();
+    User user = userRepository.findByEmailIgnoreCase(email).orElseGet(User::new);
+    boolean isNew = user.getId() == null;
+
     user.setEmail(email);
     user.setFullName(fullName);
-    user.setPasswordHash(passwordEncoder.encode("Test@1234"));
+    user.setPasswordHash(passwordEncoder.encode(rawPassword));
     user.getRoles().add(role);
     userRepository.save(user);
-    log.info("[DEV-SEED] Akun staf dibuat: {} (role {})", email, roleName);
+
+    log.info(
+        "[DEV-SEED] Akun staf {}: {} (role {}, password: {})",
+        isNew ? "dibuat" : "diperbarui",
+        email,
+        roleName,
+        rawPassword);
   }
 }

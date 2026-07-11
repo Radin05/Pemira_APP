@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,11 +42,8 @@ export default function LoginPage() {
     <div>
       <h1 className="text-2xl font-bold text-ink-inverse">Masuk Staf KP</h1>
       <p className="mt-2 text-sm text-ink-inverse/60">
-        Untuk anggota Komite Pengawasan. Mahasiswa pelapor{" "}
-        <Link href="/masuk" className="text-gold hover:underline">
-          masuk di sini
-        </Link>
-        .
+        Halaman ini khusus untuk staf Komite Pengawasan. Mahasiswa dapat langsung
+        mengirim laporan dan mengecek status tanpa login.
       </p>
 
       <form onSubmit={onSubmit} className="mt-8 space-y-5" noValidate>

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.time.Duration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -49,16 +51,17 @@ public class AuthController {
 
   @PostMapping("/otp/request")
   public ApiResponse<Void> requestOtp(@Valid @RequestBody OtpRequestRequest request) {
-    authService.requestOtp(request);
-    // Selalu sukses walau email tak terdaftar — cegah enumerasi (US-201).
-    return ApiResponse.success("Jika data valid, kode OTP telah dikirim ke email kampus", null);
+    throw new ResponseStatusException(
+        HttpStatus.GONE,
+        "Login mahasiswa dinonaktifkan. Pelapor dapat membuat dan melacak laporan tanpa login.");
   }
 
   @PostMapping("/otp/verify")
   public ResponseEntity<ApiResponse<AuthResponse>> verifyOtp(
       @Valid @RequestBody OtpVerifyRequest request, HttpServletRequest http) {
-    return respondWithSession(
-        authService.verifyOtp(request, http.getHeader("User-Agent"), clientIp(http)));
+    throw new ResponseStatusException(
+        HttpStatus.GONE,
+        "Login mahasiswa dinonaktifkan. Pelapor dapat membuat dan melacak laporan tanpa login.");
   }
 
   @PostMapping("/refresh")
