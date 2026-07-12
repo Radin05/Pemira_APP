@@ -25,10 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${inter.variable} h-full`}>
-      {/* suppressHydrationWarning: ekstensi browser (Gemini, dsb.) menyuntik atribut
-          ke <body> sebelum React hydrate. Ini hanya meredam warning untuk atribut
-          body itu sendiri, bukan mismatch nyata di komponen anak. */}
+    // suppressHydrationWarning: beberapa ekstensi browser (Gemini, Grammarly,
+    // Dark Reader, dsb.) menyuntik atribut ke <html>/<body> sebelum React hydrate.
+    // Ini meredam mismatch atribut di root document tanpa menutupi mismatch nyata
+    // pada komponen anak.
+    <html lang="id" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <body className="flex min-h-full flex-col antialiased" suppressHydrationWarning>
         {children}
       </body>
