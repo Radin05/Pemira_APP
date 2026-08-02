@@ -18,10 +18,10 @@ export default function StatusPage() {
         description="Masukkan kode tiket dan NPM yang Anda gunakan saat melapor untuk melihat perkembangan penanganan laporan."
       />
 
-      <section className="bg-navy-dark py-14 lg:py-20">
+      <section className="bg-ivory py-14 lg:py-20">
         <div className="mx-auto max-w-2xl px-6">
           {/* useSearchParams butuh Suspense boundary di Next 16. */}
-          <Suspense fallback={<div className="h-64 animate-pulse rounded-2xl bg-white/[0.03]" />}>
+          <Suspense fallback={<div className="h-64 animate-pulse rounded-2xl bg-canvas" />}>
             <StatusTracker />
           </Suspense>
         </div>

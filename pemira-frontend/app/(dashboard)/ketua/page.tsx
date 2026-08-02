@@ -57,7 +57,7 @@ export default function KetuaPage() {
 
   if (!allowed) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Akses ditolak</p>
         <p className="mt-2 text-sm text-ink-muted">Halaman ini khusus Ketua Komite Pengawasan.</p>
       </div>
@@ -80,7 +80,7 @@ export default function KetuaPage() {
               "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
               activeFilter === i
                 ? "bg-primary text-ink-inverse shadow-sm"
-                : "border border-canvas-line bg-white text-ink-muted hover:border-primary/40 hover:text-primary",
+                : "border border-canvas-line bg-surface text-ink-muted hover:border-primary/40 hover:text-steel-deep",
             )}
           >
             {f.label}
@@ -94,15 +94,15 @@ export default function KetuaPage() {
         </p>
       )}
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-canvas-line bg-white shadow-sm">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-canvas-line bg-surface shadow-sm">
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="size-7 animate-spin text-primary" aria-hidden />
+            <Loader2 className="size-7 animate-spin text-steel-deep" aria-hidden />
           </div>
         ) : reports.length === 0 ? (
           <div className="flex flex-col items-center py-20 text-center">
             <span className="flex size-14 items-center justify-center rounded-full bg-canvas">
-              <Gavel className="size-7 text-primary/50" aria-hidden />
+              <Gavel className="size-7 text-steel-deep/50" aria-hidden />
             </span>
             <p className="mt-4 font-medium text-ink">Tidak ada laporan</p>
             <p className="mt-1 text-sm text-ink-muted">
@@ -112,7 +112,7 @@ export default function KetuaPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-black/10 bg-black/[0.02] text-xs tracking-wide text-ink-muted uppercase">
+              <thead className="border-b border-ink/10 bg-ink/[0.02] text-xs tracking-wide text-ink-muted uppercase">
                 <tr>
                   <th className="px-5 py-3 font-semibold">Tiket</th>
                   <th className="px-5 py-3 font-semibold">Judul</th>
@@ -121,16 +121,16 @@ export default function KetuaPage() {
                   <th className="px-5 py-3 text-right font-semibold">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/5">
+              <tbody className="divide-y divide-ink/5">
                 {reports.map((r) => (
-                  <tr key={r.id} className="hover:bg-black/[0.015]">
-                    <td className="px-5 py-4 font-mono text-xs font-semibold text-primary">
+                  <tr key={r.id} className="hover:bg-ink/[0.015]">
+                    <td className="px-5 py-4 font-mono text-xs font-semibold text-steel-deep">
                       {r.ticketCode}
                     </td>
                     <td className="max-w-xs px-5 py-4">
                       <Link
                         href={`/ketua/${r.id}`}
-                        className="font-medium text-ink hover:text-primary hover:underline"
+                        className="font-medium text-ink hover:text-steel-deep hover:underline"
                       >
                         {r.title}
                       </Link>
@@ -143,7 +143,7 @@ export default function KetuaPage() {
                       {r.status === "MENUNGGU_PERSETUJUAN_KETUA" ? (
                         <Link
                           href={`/ketua/${r.id}`}
-                          className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-1.5 text-xs font-semibold text-navy-dark hover:bg-gold-light"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-amber px-4 py-1.5 text-xs font-semibold text-on-amber hover:bg-amber-deep"
                         >
                           Tinjau
                         </Link>

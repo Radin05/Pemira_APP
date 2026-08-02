@@ -38,8 +38,8 @@ function RoleChecks({
           className={cn(
             "flex cursor-pointer items-center gap-2 rounded-lg border p-2.5 text-sm transition-colors",
             selected.includes(r.value)
-              ? "border-primary bg-primary/5 text-primary"
-              : "border-black/10 text-ink-muted hover:border-primary/40",
+              ? "border-primary bg-primary/5 text-steel-deep"
+              : "border-ink/10 text-ink-muted hover:border-primary/40",
           )}
         >
           <input
@@ -141,7 +141,7 @@ export default function AdminUsersPage() {
 
   if (!allowed) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Akses ditolak</p>
       </div>
     );
@@ -149,7 +149,7 @@ export default function AdminUsersPage() {
 
   return (
     <div>
-      <Link href="/admin" className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-primary">
+      <Link href="/admin" className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-steel-deep">
         <ArrowLeft className="size-4" /> Administrasi
       </Link>
 
@@ -172,15 +172,15 @@ export default function AdminUsersPage() {
         </p>
       )}
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-canvas-line bg-white shadow-sm">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-canvas-line bg-surface shadow-sm">
         {loading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="size-7 animate-spin text-primary" />
+            <Loader2 className="size-7 animate-spin text-steel-deep" />
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-black/10 bg-black/[0.02] text-xs tracking-wide text-ink-muted uppercase">
+              <thead className="border-b border-ink/10 bg-ink/[0.02] text-xs tracking-wide text-ink-muted uppercase">
                 <tr>
                   <th className="px-5 py-3 font-semibold">Nama</th>
                   <th className="px-5 py-3 font-semibold">Peran</th>
@@ -188,14 +188,14 @@ export default function AdminUsersPage() {
                   <th className="px-5 py-3 text-right font-semibold">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/5">
+              <tbody className="divide-y divide-ink/5">
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-black/[0.015]">
+                  <tr key={u.id} className="hover:bg-ink/[0.015]">
                     <td className="px-5 py-4">
                       <p className="font-medium text-ink">
                         {u.fullName}
                         {u.id === me?.id && (
-                          <span className="ml-2 text-xs text-primary">(Anda)</span>
+                          <span className="ml-2 text-xs text-steel-deep">(Anda)</span>
                         )}
                       </p>
                       <p className="text-xs text-ink-muted">{u.email}</p>
@@ -205,7 +205,7 @@ export default function AdminUsersPage() {
                         {u.roles.map((r) => (
                           <span
                             key={r}
-                            className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
+                            className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-steel-deep"
                           >
                             {ROLE_LABEL[r] ?? r}
                           </span>
@@ -216,7 +216,7 @@ export default function AdminUsersPage() {
                       <span
                         className={cn(
                           "rounded-full px-2.5 py-0.5 text-xs font-semibold",
-                          u.active ? "bg-success/10 text-success" : "bg-black/5 text-ink-muted",
+                          u.active ? "bg-success/10 text-success" : "bg-ink/5 text-ink-muted",
                         )}
                       >
                         {u.active ? "Aktif" : "Nonaktif"}
@@ -230,7 +230,7 @@ export default function AdminUsersPage() {
                             setEditRoles(u.roles);
                           }}
                           disabled={busyId === u.id}
-                          className="text-xs font-semibold text-primary hover:underline disabled:opacity-50"
+                          className="text-xs font-semibold text-steel-deep hover:underline disabled:opacity-50"
                         >
                           Peran
                         </button>
@@ -259,7 +259,7 @@ export default function AdminUsersPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Plus className="size-5 text-primary" /> Tambah Pengguna
+              <Plus className="size-5 text-steel-deep" /> Tambah Pengguna
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
@@ -327,7 +327,7 @@ export default function AdminUsersPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <ShieldCheck className="size-5 text-primary" /> Peran — {editUser?.fullName}
+              <ShieldCheck className="size-5 text-steel-deep" /> Peran — {editUser?.fullName}
             </DialogTitle>
           </DialogHeader>
           <RoleChecks

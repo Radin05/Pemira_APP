@@ -8,48 +8,86 @@
  * ══════════════════════════════════════════════════════════════════════════
  * DUA LAPIS TOKEN — baca ini sebelum menambah warna.
  *
- * 1. TOKEN BRAND (@theme di bawah): --color-navy, --color-gold, dst.
- *    Nama warna harfiah. Dipakai langsung di halaman publik: bg-navy, text-gold.
+ * 1. TOKEN BRAND (@theme di bawah): --color-steel, --color-amber, dst.
+ *    Nama warna harfiah. Dipakai langsung di halaman: bg-ivory, text-steel-deep.
  *
  * 2. TOKEN SEMANTIK shadcn (@theme inline + :root): --primary, --accent, dst.
  *    Nama peran. Dipakai internal oleh komponen shadcn (Button, Dialog, ...).
  *
  * Token brand SENGAJA tidak bernama "primary"/"accent": shadcn sudah memakai
- * nama itu untuk peran lain (--accent miliknya = warna hover netral, bukan gold).
- * Kalau ditimpa, semua hover state komponen berubah jadi emas. Lihat ADR-011.
+ * nama itu untuk peran lain (--accent miliknya = warna hover netral, bukan amber).
+ * Kalau ditimpa, semua hover state komponen berubah jadi kuning. Lihat ADR-011.
  *
- * Jembatannya ada di :root — di sana --primary dipetakan ke navy, --ring ke gold.
- * Jadi Button shadcn otomatis ikut brand tanpa merusak skala netralnya.
+ * Jembatannya ada di :root — di sana --primary dipetakan ke steel-ink, --ring ke
+ * steel-deep. Button shadcn otomatis ikut brand tanpa merusak skala netralnya.
+ *
+ * Aturan yang tidak boleh dilanggar:
+ *   • text-amber / border-amber sebagai penanda di latar TERANG = TERLARANG
+ *     (1.57:1 di ivory). Teks bernuansa amber pakai text-ochre, dan hanya di
+ *     dalam chip bg-amber/1x. Pengecualian: di atas bg-bar yang selalu gelap.
+ *   • text-steel bukan warna teks (3.74:1). Teks biru wajib text-steel-deep.
+ *   • Putih di atas bg-steel = 3.80:1 → hanya untuk teks ≥24px / ikon / objek UI.
+ *     Bar solid yang memuat teks kecil pakai bg-bar.
+ *
+ * TERANG vs GELAP. Blok .dark di bawah menimpa nilai token yang sama, jadi
+ * tidak ada satu pun kelas `dark:` di JSX — komponen tidak tahu tema aktif.
+ * Konsekuensinya satu token tidak boleh dipakai sebagai fill DAN teks sekaligus,
+ * karena keduanya butuh arah balik yang berlawanan. Tiga token ini yang memisah:
+ *   --color-bar       fill gelap yang TETAP gelap di kedua tema (header, overlay)
+ *   --color-on-amber  teks di atas amber, TETAP gelap (amber tidak ikut dibalik)
+ *   --color-surface   permukaan kartu, dibalik (putih → biru tua)
  * ══════════════════════════════════════════════════════════════════════════
  */
 @theme {
-  /* Navy — base halaman publik, hero, section gelap */
-  --color-navy: #1b2a4a;
-  --color-navy-dark: #0f1a30;
+  /* Steel blue — struktur: bar, ikon, blok kontras. Tiga langkah, lihat aturan di atas. */
+  --color-steel: #5e86b1;
+  --color-steel-deep: #2e4560;
+  --color-steel-ink: #1e3047;
 
-  /* Gold — HANYA untuk elemen yang perlu ditonjolkan: CTA, tab aktif, angka penting.
-     Dipakai merata justru terlihat norak, bukan premium. */
-  --color-gold: #d4a72c;
-  --color-gold-light: #e8c158;
+  /* Amber — HANYA fill untuk elemen yang perlu ditonjolkan: CTA, tab aktif, angka
+     penting. Dipakai merata justru terlihat norak, bukan premium. */
+  --color-amber: #f8c630;
+  --color-amber-deep: #e0ae1c; /* hover — di tema terang, hover MENGGELAP */
+  --color-ochre: #7a5a00; /* teks/ikon nuansa amber di atas terang (6.27:1) */
+
+  /* Permukaan */
+  --color-ivory: #fffdf5; /* base halaman publik & hero */
+  --color-surface: #ffffff; /* kartu di atas base */
+  --color-sand: #f7da7c;
+  --color-sky: #a9deec;
+
+  /* Fill yang selalu gelap di kedua tema: header dashboard, tombol primer,
+     overlay dialog. Teks di atasnya selalu ink-inverse. */
+  --color-bar: #1e3047;
+
+  /* Teks di atas amber. Amber tidak ikut dibalik saat gelap, jadi warna ini
+     juga tidak boleh ikut — kalau ikut, label CTA hilang di tema gelap. */
+  --color-on-amber: #1e3047;
 
   /* Merah marun — elemen dekoratif, secukupnya */
   --color-maroon: #7a1f1f;
 
-  --color-surface-dark: #0d0d0d;
-
-  /* Kanvas dashboard — abu kebiruan lembut. Kartu putih di atasnya jadi kontras,
-     bukan putih-di-atas-putih yang datar. */
-  --color-canvas: #eef1f7;
-  --color-canvas-line: #dfe4ee;
+  /* Kanvas dashboard — ivory yang diturunkan sedikit. Kartu putih di atasnya jadi
+     kontras, bukan putih-di-atas-putih yang datar. */
+  --color-canvas: #f7f3e3;
+  --color-canvas-line: #e6dfc9;
 
   --color-ink: #1a1a1a;
   --color-ink-muted: #5c5c5c;
   --color-ink-inverse: #ffffff;
 
-  /* Status laporan. Warning sengaja sama nilainya dengan gold (lihat tabel palet §7.1). */
-  --color-success: #2e7d32;
+  /* Status laporan. Warning SENGAJA tidak ikut amber: tint badge status dibekukan
+     pada nilai lama supaya semantik status tidak ikut bergeser saat rebrand. */
+  --color-success: #236327;
   --color-danger: #b3261e;
   --color-warning: #d4a72c;
+
+  /* Animasi ilustrasi hero. Dipakai di lapisan DALAM, sementara lapisan luar
+     memegang transform parallax — kalau digabung di satu elemen, animasi
+     menimpa transform-nya dan parallax mati. */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-drop: drop 4.5s ease-in-out infinite;
 
   /* Skala tipografi — ARSITEKTUR-PEMIRA.md §7.2 */
   --text-hero: 3.5rem; /* 56px — H1 landing */
@@ -100,36 +138,126 @@
 :root {
   --radius: 0.625rem;
 
-  --background: #ffffff;
+  --background: var(--color-ivory);
   --foreground: var(--color-ink);
-  --card: #ffffff;
+  --card: var(--color-surface);
   --card-foreground: var(--color-ink);
-  --popover: #ffffff;
+  --popover: var(--color-surface);
   --popover-foreground: var(--color-ink);
 
-  /* Jembatan brand → semantik: tombol primer shadcn ikut navy, focus ring ikut gold. */
-  --primary: var(--color-navy);
+  /* Jembatan brand → semantik: tombol primer shadcn ikut bar, ring ikut steel-deep.
+     --primary WAJIB bar, bukan steel: ia membawa --primary-foreground putih dan
+     dipakai pada teks 14px di dashboard. Putih di atas steel cuma 3.80:1. */
+  --primary: var(--color-bar);
   --primary-foreground: var(--color-ink-inverse);
-  --ring: var(--color-gold);
+  --ring: var(--color-steel-deep);
   --destructive: var(--color-danger);
 
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: var(--color-navy);
-  --muted: oklch(0.97 0 0);
+  /* Netral dihangatkan (chroma 0 → ~0.01 di hue 95). Lightness tidak berubah:
+     koreksi hue saja, supaya abu murni tidak terlihat dingin di sebelah ivory. */
+  --secondary: oklch(0.975 0.008 95);
+  --secondary-foreground: var(--color-steel-ink);
+  --muted: oklch(0.975 0.008 95);
   --muted-foreground: var(--color-ink-muted);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: var(--color-navy);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --accent: oklch(0.975 0.008 95);
+  --accent-foreground: var(--color-steel-ink);
+  --border: oklch(0.925 0.01 95);
+  --input: oklch(0.925 0.01 95);
 
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.988 0.006 95);
   --sidebar-foreground: var(--color-ink);
-  --sidebar-primary: var(--color-navy);
+  --sidebar-primary: var(--color-bar);
   --sidebar-primary-foreground: var(--color-ink-inverse);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: var(--color-navy);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: var(--color-gold);
+  --sidebar-accent: oklch(0.975 0.008 95);
+  --sidebar-accent-foreground: var(--color-steel-ink);
+  --sidebar-border: oklch(0.925 0.01 95);
+  --sidebar-ring: var(--color-steel-deep);
+}
+
+/*
+ * Tema gelap. Hanya menimpa NILAI token, bukan namanya — semua utility
+ * (bg-ivory, text-steel-deep, …) ikut otomatis tanpa satu pun kelas `dark:`
+ * di JSX. Arah hover ikut berbalik: di terang amber-deep lebih tua (menggelap),
+ * di gelap lebih muda (menerang).
+ *
+ * Selektornya `:root.dark`, bukan `.dark`: Tailwind mengumpulkan token @theme
+ * ke dalam `:root` yang specificity-nya sama, jadi pemenangnya akan bergantung
+ * pada urutan output. `:root.dark` (0,2,0) menang tanpa bergantung urutan.
+ *
+ * Yang SENGAJA tidak dibalik: --color-amber (kuningnya tetap kuning),
+ * --color-on-amber, --color-bar, --color-ink-inverse.
+ */
+:root.dark {
+  --color-ivory: #0f1a28;
+  --color-surface: #17253a;
+  --color-canvas: #13202f;
+  --color-canvas-line: #2b3d54;
+  --color-sky: #16324a;
+  --color-sand: #3a2f14;
+
+  --color-steel: #7fa5cc;
+  --color-steel-deep: #a8c4e0;
+  --color-steel-ink: #e9eff7;
+
+  --color-amber-deep: #ffd65c;
+  --color-ochre: #f2cb6b;
+
+  --color-maroon: #a33b3b;
+
+  --color-ink: #e8ebef;
+  --color-ink-muted: #a2aebd;
+
+  /* Status dicerahkan supaya tetap lolos AA di atas permukaan gelap. */
+  --color-success: #6fcf7a;
+  --color-danger: #ff8a80;
+  --color-warning: #e8be4a;
+
+  /* Netral shadcn ikut turun. Hue 250 (biru) supaya senada dengan permukaan,
+     bukan abu netral yang terlihat kotor di atas biru tua. */
+  --secondary: oklch(0.29 0.02 250);
+  --muted: oklch(0.29 0.02 250);
+  --accent: oklch(0.29 0.02 250);
+  --border: oklch(0.36 0.02 250);
+  --input: oklch(0.36 0.02 250);
+
+  --sidebar: oklch(0.24 0.02 250);
+  --sidebar-accent: oklch(0.29 0.02 250);
+  --sidebar-border: oklch(0.36 0.02 250);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Surat suara turun ke kotak, lalu balik ke atas — mengulang gestur "melapor". */
+@keyframes drop {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  45% {
+    transform: translateY(16px);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(26px);
+    opacity: 0;
+  }
+  75% {
+    transform: translateY(-14px);
+    opacity: 0;
+  }
+  90% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @layer base {
@@ -149,7 +277,7 @@
   /* Focus ring wajib terlihat — NFR aksesibilitas WCAG 2.1 AA (docs/01-PRD.md §5).
      Jangan dihapus tanpa mengganti dengan indikator fokus lain. */
   :focus-visible {
-    outline: 2px solid var(--color-gold);
+    outline: 2px solid var(--color-steel-deep);
     outline-offset: 2px;
   }
 }

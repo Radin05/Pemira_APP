@@ -32,19 +32,19 @@ function SuccessPanel({
   return (
     <div className="rounded-2xl border border-success/40 bg-success/10 p-8 text-center">
       <CheckCircle2 className="mx-auto size-14 text-success" aria-hidden />
-      <h2 className="mt-5 text-2xl font-bold text-ink-inverse">Laporan Terkirim</h2>
-      <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-inverse/70">
+      <h2 className="mt-5 text-2xl font-bold text-steel-ink">Laporan Terkirim</h2>
+      <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-muted">
         Simpan kode tiket dan NPM di bawah ini. Keduanya diperlukan untuk melacak
         perkembangan laporan di halaman Status Laporan.
       </p>
 
-      <div className="mx-auto mt-6 max-w-md rounded-2xl border border-white/15 bg-navy-dark p-4 text-left">
+      <div className="mx-auto mt-6 max-w-md rounded-2xl border border-steel/20 bg-surface p-4 text-left shadow-sm">
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold tracking-wide text-ink-inverse/45 uppercase">
+            <p className="text-xs font-semibold tracking-wide text-ink-muted uppercase">
               Kode tiket
             </p>
-            <p className="mt-1 break-all text-xl font-bold tracking-wider text-gold">
+            <p className="mt-1 break-all text-xl font-bold tracking-wider text-steel-ink">
               {result.ticketCode}
             </p>
           </div>
@@ -55,17 +55,17 @@ function SuccessPanel({
               setCopied(true);
               setTimeout(() => setCopied(false), 2000);
             }}
-            className="rounded-md p-2 text-ink-inverse/70 hover:bg-white/10 hover:text-gold"
+            className="rounded-md p-2 text-ink-muted hover:bg-amber/15 hover:text-steel-ink"
             aria-label="Salin kode tiket"
           >
             <Copy className="size-4" />
           </button>
         </div>
-        <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <p className="text-xs font-semibold tracking-wide text-ink-inverse/45 uppercase">
+        <div className="mt-4 rounded-xl border border-canvas-line bg-canvas p-3">
+          <p className="text-xs font-semibold tracking-wide text-ink-muted uppercase">
             NPM verifikasi
           </p>
-          <p className="mt-1 font-semibold text-ink-inverse">{reporterNpm}</p>
+          <p className="mt-1 font-semibold text-steel-ink">{reporterNpm}</p>
         </div>
       </div>
       {copied && <p className="mt-2 text-xs text-success">Kode tiket disalin</p>}
@@ -74,7 +74,7 @@ function SuccessPanel({
         <Button
           nativeButton={false}
           render={<Link href={`/status?ticket=${result.ticketCode}`} />}
-          className="h-11 rounded-full bg-gold px-6 font-semibold text-navy-dark hover:bg-gold-light"
+          className="h-11 rounded-full bg-amber px-6 font-semibold text-on-amber hover:bg-amber-deep"
         >
           Lacak Status
         </Button>
@@ -82,7 +82,7 @@ function SuccessPanel({
           nativeButton={false}
           variant="outline"
           render={<Link href="/" />}
-          className="h-11 rounded-full border-ink-inverse/25 bg-transparent px-6 font-semibold text-ink-inverse hover:bg-ink-inverse/10 hover:text-ink-inverse"
+          className="h-11 rounded-full border-steel-deep bg-transparent px-6 font-semibold text-steel-deep hover:bg-steel/10 hover:text-steel-ink"
         >
           Kembali ke Beranda
         </Button>
@@ -92,8 +92,8 @@ function SuccessPanel({
 }
 
 const inputClass =
-  "border-white/15 bg-white/[0.03] text-ink-inverse placeholder:text-ink-inverse/40 focus-visible:border-gold";
-const labelClass = "text-sm font-medium text-ink-inverse";
+  "border-steel/30 bg-surface text-ink placeholder:text-ink-muted focus-visible:border-steel-deep";
+const labelClass = "text-sm font-medium text-steel-ink";
 
 export function ReportForm() {
   const [evidence, setEvidence] = useState<File[]>([]);
@@ -145,7 +145,7 @@ export function ReportForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8" noValidate>
       {/* ── Opsi pelaporan ─────────────────────────────── */}
       <fieldset className="space-y-4" disabled={isSubmitting}>
-        <legend className="mb-2 text-xs font-bold tracking-[0.2em] text-gold uppercase">
+        <legend className="mb-2 text-xs font-bold tracking-[0.2em] text-steel-deep uppercase">
           Opsi Pelaporan
         </legend>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -153,13 +153,13 @@ export function ReportForm() {
             className={cn(
               "cursor-pointer rounded-2xl border p-4 transition-colors",
               !isTemplateMode
-                ? "border-gold bg-gold/10"
-                : "border-white/10 bg-white/[0.03] hover:border-gold/40",
+                ? "border-steel-deep bg-amber/15"
+                : "border-steel/20 bg-surface hover:border-steel/50",
             )}
           >
             <input type="radio" value="DIRECT" {...register("submissionMode")} className="sr-only" />
-            <span className="font-semibold text-ink-inverse">Isi langsung</span>
-            <span className="mt-1 block text-xs leading-relaxed text-ink-inverse/60">
+            <span className="font-semibold text-steel-ink">Isi langsung</span>
+            <span className="mt-1 block text-xs leading-relaxed text-ink-muted">
               Isi detail pelanggaran lewat formulir website seperti biasa.
             </span>
           </label>
@@ -167,13 +167,13 @@ export function ReportForm() {
             className={cn(
               "cursor-pointer rounded-2xl border p-4 transition-colors",
               isTemplateMode
-                ? "border-gold bg-gold/10"
-                : "border-white/10 bg-white/[0.03] hover:border-gold/40",
+                ? "border-steel-deep bg-amber/15"
+                : "border-steel/20 bg-surface hover:border-steel/50",
             )}
           >
             <input type="radio" value="TEMPLATE" {...register("submissionMode")} className="sr-only" />
-            <span className="font-semibold text-ink-inverse">Upload formulir</span>
-            <span className="mt-1 block text-xs leading-relaxed text-ink-inverse/60">
+            <span className="font-semibold text-steel-ink">Upload formulir</span>
+            <span className="mt-1 block text-xs leading-relaxed text-ink-muted">
               Unduh template, isi, lalu upload hasilnya sebagai laporan.
             </span>
           </label>
@@ -183,7 +183,7 @@ export function ReportForm() {
       {/* ── Detail pelanggaran ─────────────────────────── */}
       {!isTemplateMode && (
       <fieldset className="space-y-5" disabled={isSubmitting}>
-        <legend className="mb-2 text-xs font-bold tracking-[0.2em] text-gold uppercase">
+        <legend className="mb-2 text-xs font-bold tracking-[0.2em] text-steel-deep uppercase">
           Detail Pelanggaran
         </legend>
 
@@ -198,7 +198,7 @@ export function ReportForm() {
             className={cn(
               "mt-1.5 h-10 w-full rounded-md border px-3 text-sm",
               inputClass,
-              "[&>option]:bg-navy-dark [&>option]:text-ink-inverse",
+              "[&>option]:bg-surface [&>option]:text-ink",
             )}
           >
             <option value="" disabled>
@@ -255,7 +255,7 @@ export function ReportForm() {
 
         <div>
           <Label htmlFor="reportedCandidate" className={labelClass}>
-            Kandidat terlapor <span className="text-ink-inverse/40">(opsional)</span>
+            Kandidat terlapor <span className="text-ink-muted">(opsional)</span>
           </Label>
           <Input
             id="reportedCandidate"
@@ -284,15 +284,15 @@ export function ReportForm() {
 
       {/* ── Bukti / Formulir ──────────────────────────── */}
       <fieldset disabled={isSubmitting}>
-        <legend className="mb-4 text-xs font-bold tracking-[0.2em] text-gold uppercase">
+        <legend className="mb-4 text-xs font-bold tracking-[0.2em] text-steel-deep uppercase">
           {isTemplateMode ? "Upload Formulir" : "Lampiran Bukti"}{" "}
-          <span className="text-ink-inverse/40 normal-case">
+          <span className="text-ink-muted normal-case">
             {isTemplateMode ? "(wajib)" : "(opsional)"}
           </span>
         </legend>
         {isTemplateMode && (
-          <div className="mb-4 rounded-2xl border border-gold/20 bg-gold/10 p-4">
-            <p className="text-sm leading-relaxed text-ink-inverse/75">
+          <div className="mb-4 rounded-2xl border border-amber/50 bg-amber/10 p-4">
+            <p className="text-sm leading-relaxed text-steel-ink">
               Unduh template formulir, isi data laporan, lalu upload kembali hasilnya
               dalam format PDF atau gambar.
             </p>
@@ -300,7 +300,7 @@ export function ReportForm() {
               nativeButton={false}
               variant="outline"
               render={<Link href="/templates/formulir-laporan-a1.txt" download />}
-              className="mt-3 h-10 rounded-full border-gold/40 bg-transparent px-4 text-sm font-semibold text-gold hover:bg-gold/15 hover:text-gold"
+              className="mt-3 h-10 rounded-full border-steel/40 bg-transparent px-4 text-sm font-semibold text-steel-deep hover:bg-amber/15 hover:text-steel-ink"
             >
               <Download className="mr-2 size-4" /> Unduh Template
             </Button>
@@ -311,21 +311,21 @@ export function ReportForm() {
 
       {/* ── Identitas pelapor ──────────────────────────── */}
       <fieldset className="space-y-5" disabled={isSubmitting}>
-        <legend className="mb-2 text-xs font-bold tracking-[0.2em] text-gold uppercase">
+        <legend className="mb-2 text-xs font-bold tracking-[0.2em] text-steel-deep uppercase">
           Identitas Pelapor
         </legend>
 
-        <label className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+        <label className="flex items-start gap-3 rounded-xl border border-steel/20 bg-surface p-4">
           <input
             type="checkbox"
             {...register("isAnonymous")}
-            className="mt-0.5 size-4 accent-[var(--color-gold)]"
+            className="mt-0.5 size-4 accent-[var(--color-steel-deep)]"
           />
           <span>
-            <span className="text-sm font-medium text-ink-inverse">
+            <span className="text-sm font-medium text-steel-ink">
               Laporkan secara anonim
             </span>
-            <span className="mt-1 block text-xs leading-relaxed text-ink-inverse/60">
+            <span className="mt-1 block text-xs leading-relaxed text-ink-muted">
               Nama Anda disembunyikan dari petugas investigasi. NPM dan email tetap
               diperlukan untuk verifikasi dan pengiriman kode tiket, disimpan terenkripsi.
             </span>
@@ -381,16 +381,16 @@ export function ReportForm() {
         </p>
       )}
 
-      <div className="flex items-center gap-4 border-t border-white/10 pt-6">
+      <div className="flex items-center gap-4 border-t border-canvas-line pt-6">
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="h-12 rounded-full bg-gold px-8 font-semibold text-navy-dark hover:bg-gold-light disabled:opacity-70"
+          className="h-12 rounded-full bg-amber px-8 font-semibold text-on-amber hover:bg-amber-deep disabled:opacity-70"
         >
           {isSubmitting && <Loader2 className="mr-2 size-4 animate-spin" />}
           {isSubmitting ? "Mengirim…" : "Kirim Laporan"}
         </Button>
-        <p className="text-xs text-ink-inverse/50">
+        <p className="text-xs text-ink-muted">
           Dengan mengirim, Anda menyatakan laporan ini benar.
         </p>
       </div>

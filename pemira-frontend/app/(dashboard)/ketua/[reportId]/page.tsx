@@ -91,7 +91,7 @@ export default function KetuaDetailPage({
 
   if (!allowed) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Akses ditolak</p>
         <p className="mt-2 text-sm text-ink-muted">Halaman ini khusus Ketua Komite Pengawasan.</p>
       </div>
@@ -100,15 +100,15 @@ export default function KetuaDetailPage({
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="size-7 animate-spin text-primary" />
+        <Loader2 className="size-7 animate-spin text-steel-deep" />
       </div>
     );
   }
   if (notFound || !report) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Laporan tidak ditemukan</p>
-        <Link href="/ketua" className="mt-3 inline-block text-sm text-primary hover:underline">
+        <Link href="/ketua" className="mt-3 inline-block text-sm text-steel-deep hover:underline">
           ← Kembali
         </Link>
       </div>
@@ -122,28 +122,28 @@ export default function KetuaDetailPage({
     <div className="mx-auto max-w-4xl">
       <Link
         href="/ketua"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-primary"
+        className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-steel-deep"
       >
         <ArrowLeft className="size-4" /> Kembali
       </Link>
 
       <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-sm font-semibold text-primary">{report.ticketCode}</p>
+          <p className="font-mono text-sm font-semibold text-steel-deep">{report.ticketCode}</p>
           <h1 className="mt-1 text-2xl font-bold text-ink">{report.title}</h1>
         </div>
         <StatusBadge status={report.status} />
       </div>
 
       {/* Ringkasan laporan */}
-      <div className="mt-8 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+      <div className="mt-8 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
         <dl className="space-y-4">
           <InfoRow label="Kategori">{REPORT_CATEGORY_LABEL[report.category]}</InfoRow>
           <InfoRow label="Kandidat terlapor">
             {report.reportedCandidate ?? <span className="text-ink-muted">—</span>}
           </InfoRow>
         </dl>
-        <div className="mt-6 border-t border-black/10 pt-6">
+        <div className="mt-6 border-t border-ink/10 pt-6">
           <p className="mb-2 text-sm font-semibold text-ink">Kronologi Laporan</p>
           <p className="text-sm leading-relaxed whitespace-pre-line text-ink">
             {report.description}
@@ -153,7 +153,7 @@ export default function KetuaDetailPage({
 
       {/* Tahapan investigasi yang telah dilalui */}
       {inv && inv.stageLog.length > 0 && (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <p className="text-sm font-semibold text-ink">Tahapan Investigasi</p>
           <ol className="mt-4 space-y-3">
             {inv.stageLog.map((s, i) => (
@@ -173,9 +173,9 @@ export default function KetuaDetailPage({
 
       {/* Laporan investigasi resmi */}
       {inv?.findings && (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <p className="flex items-center gap-2 text-sm font-semibold text-ink">
-            <FileText className="size-4 text-primary" /> Laporan Investigasi
+            <FileText className="size-4 text-steel-deep" /> Laporan Investigasi
           </p>
           <div className="mt-3">
             {inv.verdict === "VALID" ? (
@@ -196,9 +196,9 @@ export default function KetuaDetailPage({
               {inv.findings}
             </p>
           </div>
-          <p className="mt-4 border-t border-black/10 pt-4 text-sm text-ink-muted">
+          <p className="mt-4 border-t border-ink/10 pt-4 text-sm text-ink-muted">
             Rekomendasi sanksi:{" "}
-            <span className="font-semibold text-primary">
+            <span className="font-semibold text-steel-deep">
               {SANCTION_LABEL[inv.recommendedSanction ?? ""] ?? inv.recommendedSanction}
             </span>
           </p>
@@ -207,9 +207,9 @@ export default function KetuaDetailPage({
 
       {/* Keputusan */}
       {canDecide ? (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <p className="flex items-center gap-2 text-sm font-semibold text-ink">
-            <Gavel className="size-4 text-primary" /> Keputusan Ketua
+            <Gavel className="size-4 text-steel-deep" /> Keputusan Ketua
           </p>
           <p className="mt-1 text-xs text-ink-muted">
             Keputusan tercatat permanen dan diteruskan ke divisi Publikasi bila disetujui.
@@ -247,7 +247,7 @@ export default function KetuaDetailPage({
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Jelaskan mengapa laporan ini ditolak agar investigator dapat merevisi."
-                className="mt-1.5 resize-y border-black/15"
+                className="mt-1.5 resize-y border-ink/15"
               />
               <p className="mt-1 text-xs text-ink-muted">{reason.length} karakter</p>
               <div className="mt-4 flex gap-3">
@@ -266,7 +266,7 @@ export default function KetuaDetailPage({
                   }}
                   disabled={busy}
                   variant="outline"
-                  className="h-11 rounded-full border-black/15 bg-transparent px-6 font-semibold text-ink-muted hover:bg-black/5"
+                  className="h-11 rounded-full border-ink/15 bg-transparent px-6 font-semibold text-ink-muted hover:bg-ink/5"
                 >
                   Batal
                 </Button>
@@ -275,7 +275,7 @@ export default function KetuaDetailPage({
           )}
         </div>
       ) : (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 text-sm text-ink-muted shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 text-sm text-ink-muted shadow-sm">
           Laporan ini sudah berstatus{" "}
           <span className="font-semibold text-ink">
             <StatusBadge status={report.status} />

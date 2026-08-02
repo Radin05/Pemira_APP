@@ -109,7 +109,7 @@ export default function AdminKandidatPage() {
 
   if (!allowed) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Akses ditolak</p>
       </div>
     );
@@ -117,7 +117,7 @@ export default function AdminKandidatPage() {
 
   return (
     <div>
-      <Link href="/admin" className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-primary">
+      <Link href="/admin" className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-steel-deep">
         <ArrowLeft className="size-4" /> Administrasi
       </Link>
 
@@ -144,7 +144,7 @@ export default function AdminKandidatPage() {
 
       {/* Form tambah/edit */}
       {editingId !== null && (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <p className="text-sm font-semibold text-ink">
             {editingId === "new" ? "Kandidat Baru" : "Edit Kandidat"}
           </p>
@@ -168,7 +168,7 @@ export default function AdminKandidatPage() {
                 onChange={(e) =>
                   setForm({ ...form, electionType: e.target.value as "BEM" | "BPM" })
                 }
-                className="mt-1.5 h-9 w-full rounded-md border border-black/15 bg-white px-3 text-sm"
+                className="mt-1.5 h-9 w-full rounded-md border border-ink/15 bg-surface px-3 text-sm"
               >
                 <option value="BEM">BEM (Ketua)</option>
                 <option value="BPM">BPM (Anggota)</option>
@@ -242,7 +242,7 @@ export default function AdminKandidatPage() {
             </label>
           </div>
 
-          <div className="mt-5 flex gap-3 border-t border-black/10 pt-5">
+          <div className="mt-5 flex gap-3 border-t border-ink/10 pt-5">
             <Button
               onClick={save}
               disabled={saving}
@@ -254,7 +254,7 @@ export default function AdminKandidatPage() {
             <Button
               onClick={() => setEditingId(null)}
               variant="outline"
-              className="h-10 rounded-full border-black/15 bg-transparent px-6 font-semibold text-ink-muted hover:bg-black/5"
+              className="h-10 rounded-full border-ink/15 bg-transparent px-6 font-semibold text-ink-muted hover:bg-ink/5"
             >
               Batal
             </Button>
@@ -266,10 +266,10 @@ export default function AdminKandidatPage() {
       <div className="mt-6">
         {loading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="size-7 animate-spin text-primary" />
+            <Loader2 className="size-7 animate-spin text-steel-deep" />
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-2xl border border-canvas-line bg-white p-10 text-center shadow-sm">
+          <div className="rounded-2xl border border-canvas-line bg-surface p-10 text-center shadow-sm">
             <UserSquare2 className="mx-auto size-9 text-ink-muted/40" aria-hidden />
             <p className="mt-3 text-sm text-ink-muted">Belum ada kandidat.</p>
           </div>
@@ -278,7 +278,7 @@ export default function AdminKandidatPage() {
             {items.map((c) => (
               <li
                 key={c.id}
-                className="rounded-2xl border border-canvas-line bg-white p-5 shadow-sm"
+                className="rounded-2xl border border-canvas-line bg-surface p-5 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
@@ -294,8 +294,8 @@ export default function AdminKandidatPage() {
                     className={cn(
                       "rounded-full px-2.5 py-0.5 text-xs font-semibold",
                       c.electionType === "BEM"
-                        ? "bg-primary/10 text-primary"
-                        : "bg-gold/15 text-gold",
+                        ? "bg-primary/10 text-steel-deep"
+                        : "bg-amber/15 text-ochre",
                     )}
                   >
                     {c.electionType}
@@ -304,7 +304,7 @@ export default function AdminKandidatPage() {
                 {c.studyProgram && (
                   <p className="mt-3 text-xs text-ink-muted">{c.studyProgram}</p>
                 )}
-                <div className="mt-4 flex items-center justify-between border-t border-black/10 pt-3">
+                <div className="mt-4 flex items-center justify-between border-t border-ink/10 pt-3">
                   <span
                     className={cn(
                       "text-xs font-medium",
@@ -316,7 +316,7 @@ export default function AdminKandidatPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => startEdit(c)}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-steel-deep hover:underline"
                     >
                       <Pencil className="size-3.5" /> Edit
                     </button>

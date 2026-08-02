@@ -10,7 +10,7 @@ const FORM_TEMPLATES = [
   {
     code: "A-1",
     icon: FileText,
-    iconBg: "bg-navy",
+    iconBg: "bg-steel-deep",
     title: "Formulir Laporan",
     description:
       "Dokumen untuk menampung laporan dugaan pelanggaran yang diajukan secara resmi oleh mahasiswa sebagai bentuk pengawasan partisipatif.",
@@ -45,15 +45,15 @@ const PHASE_STYLE: Record<
   },
   berlangsung: {
     icon: CircleDot,
-    dot: "text-gold",
+    dot: "text-ochre",
     label: "Sedang Berlangsung",
-    badge: "bg-warning/15 text-gold border-warning/50",
+    badge: "bg-warning/15 text-steel-ink border-warning/50",
   },
   "akan-datang": {
     icon: Circle,
-    dot: "text-ink-inverse/30",
+    dot: "text-steel/50",
     label: "Akan Datang",
-    badge: "bg-white/5 text-ink-inverse/50 border-white/15",
+    badge: "bg-canvas text-ink-muted border-canvas-line",
   },
 };
 
@@ -66,9 +66,9 @@ export default function InfoPage() {
         description="Jadwal resmi setiap tahapan pemilihan raya, dari pendaftaran bakal calon sampai penetapan hasil akhir."
       />
 
-      <section className="bg-navy-dark py-16 lg:py-24">
+      <section className="bg-ivory py-16 lg:py-24">
         <div className="mx-auto max-w-4xl px-6">
-          <p className="mb-12 rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm leading-relaxed text-ink-inverse/70">
+          <p className="mb-12 rounded-xl border border-steel/20 bg-surface p-5 text-sm leading-relaxed text-ink-muted shadow-sm">
             Laporan pelanggaran hanya diterima untuk kejadian yang terjadi dalam rentang
             tahapan yang sedang atau sudah berjalan. Tanggal di bawah menunggu
             pengesahan resmi Komite Pengawasan.
@@ -86,17 +86,18 @@ export default function InfoPage() {
                   {!isLast && (
                     <span
                       aria-hidden
-                      className="absolute top-8 bottom-0 left-[0.9375rem] w-px bg-white/15"
+                      className="absolute top-8 bottom-0 left-[0.9375rem] w-px bg-steel/35"
                     />
                   )}
 
-                  <span className="relative z-10 mt-0.5 shrink-0 rounded-full bg-navy-dark">
+                  {/* bg WAJIB sama persis dengan bg section, ia yang menutup garis di balik ikon. */}
+                  <span className="relative z-10 mt-0.5 shrink-0 rounded-full bg-ivory">
                     <Icon className={cn("size-8", style.dot)} aria-hidden />
                   </span>
 
                   <div className="flex-1 pb-2">
                     <div className="flex flex-wrap items-center gap-3">
-                      <h2 className="text-lg font-bold text-ink-inverse">{phase.phase}</h2>
+                      <h2 className="text-lg font-bold text-steel-ink">{phase.phase}</h2>
                       <span
                         className={cn(
                           "rounded-full border px-2.5 py-0.5 text-[0.65rem] font-semibold tracking-wide uppercase",
@@ -106,8 +107,8 @@ export default function InfoPage() {
                         {style.label}
                       </span>
                     </div>
-                    <p className="mt-1.5 text-sm font-medium text-gold">{phase.period}</p>
-                    <p className="mt-3 text-sm leading-relaxed text-ink-inverse/65">
+                    <p className="mt-1.5 text-sm font-medium text-steel-deep">{phase.period}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-ink-muted">
                       {phase.description}
                     </p>
                   </div>
@@ -119,28 +120,28 @@ export default function InfoPage() {
       </section>
 
       {/* Instrumen & Formulir — template yang bisa diunduh */}
-      <section id="formulir" className="scroll-mt-24 border-t border-white/10 bg-navy py-16 lg:py-24">
+      <section id="formulir" className="scroll-mt-24 border-t border-canvas-line bg-canvas py-16 lg:py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-col items-center text-center">
-            <h2 className="text-3xl font-extrabold text-ink-inverse sm:text-4xl">
+            <h2 className="text-3xl font-extrabold text-steel-ink sm:text-4xl">
               Instrumen &amp; Formulir
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-ink-inverse/70">
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-ink-muted">
               Formulir standar operasional pengawasan. Unduh, isi, lalu lampirkan saat
               mengirim laporan.
             </p>
-            <span aria-hidden className="mt-5 h-1 w-24 rounded-full bg-gold" />
+            <span aria-hidden className="mt-5 h-1 w-24 rounded-full bg-amber" />
           </div>
 
           <ul className="mt-14 grid gap-6 md:grid-cols-2">
             {FORM_TEMPLATES.map((tpl) => (
               <li
                 key={tpl.code}
-                className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-7"
+                className="relative overflow-hidden rounded-2xl border border-steel/20 bg-surface p-7 shadow-sm"
               >
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute -right-4 bottom-0 text-8xl font-extrabold text-white/[0.04]"
+                  className="pointer-events-none absolute -right-4 bottom-0 text-8xl font-extrabold text-steel/12"
                 >
                   {tpl.code}
                 </span>
@@ -154,19 +155,19 @@ export default function InfoPage() {
                     <tpl.icon className="size-6 text-ink-inverse" aria-hidden />
                   </span>
                   <div>
-                    <span className="rounded-full bg-gold/15 px-3 py-1 text-xs font-semibold tracking-wide text-gold">
+                    <span className="rounded-full bg-amber/15 px-3 py-1 text-xs font-semibold tracking-wide text-ochre">
                       Formulir Model {tpl.code}
                     </span>
-                    <h3 className="mt-3 text-xl font-bold text-ink-inverse">{tpl.title}</h3>
+                    <h3 className="mt-3 text-xl font-bold text-steel-ink">{tpl.title}</h3>
                   </div>
                 </div>
-                <p className="relative mt-4 text-sm leading-relaxed text-ink-inverse/65">
+                <p className="relative mt-4 text-sm leading-relaxed text-ink-muted">
                   {tpl.description}
                 </p>
                 <a
                   href={tpl.href}
                   download
-                  className="relative mt-6 inline-flex items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-sm font-semibold text-gold transition-colors hover:bg-gold/10"
+                  className="relative mt-6 inline-flex items-center gap-2 rounded-full border border-steel/40 px-5 py-2.5 text-sm font-semibold text-steel-deep transition-colors hover:bg-amber/15"
                 >
                   <Download className="size-4" aria-hidden />
                   Unduh Template {tpl.code}

@@ -48,28 +48,28 @@ export default function PublikasiDetailPage({
   }, [slug]);
 
   return (
-    <main className="flex-1 bg-navy">
+    <main className="flex-1 bg-ivory">
       <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
         <Link
           href="/publikasi"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-inverse/60 hover:text-gold"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-steel-deep"
         >
           <ArrowLeft className="size-4" /> Kembali ke Transparansi
         </Link>
 
         {loading ? (
           <div className="mt-16 flex justify-center">
-            <Loader2 className="size-7 animate-spin text-gold" aria-hidden />
+            <Loader2 className="size-7 animate-spin text-steel-deep" aria-hidden />
           </div>
         ) : notFound || !pub ? (
-          <div className="mt-16 rounded-2xl border border-white/10 bg-white/[0.03] p-10 text-center">
-            <p className="font-semibold text-ink-inverse">Publikasi tidak ditemukan</p>
+          <div className="mt-16 rounded-2xl border border-steel/20 bg-surface p-10 text-center shadow-sm">
+            <p className="font-semibold text-steel-ink">Publikasi tidak ditemukan</p>
           </div>
         ) : (
           <article className="mt-8">
             <div className="flex flex-wrap items-center gap-3">
               {pub.category && (
-                <span className="rounded-full bg-gold/15 px-3 py-1 text-xs font-semibold text-gold">
+                <span className="rounded-full bg-amber/15 px-3 py-1 text-xs font-semibold text-ochre">
                   {REPORT_CATEGORY_LABEL[pub.category]}
                 </span>
               )}
@@ -85,33 +85,33 @@ export default function PublikasiDetailPage({
                   {pub.conclusion === "VALID" ? "Terbukti" : "Tidak Terbukti"}
                 </span>
               )}
-              <span className="text-xs text-ink-inverse/50">{formatDate(pub.publishedAt)}</span>
+              <span className="text-xs text-ink-muted">{formatDate(pub.publishedAt)}</span>
             </div>
 
-            <h1 className="mt-5 text-3xl font-extrabold text-ink-inverse sm:text-4xl">
+            <h1 className="mt-5 text-3xl font-extrabold text-steel-ink sm:text-4xl">
               {pub.title}
             </h1>
-            <p className="mt-4 text-lg leading-relaxed text-ink-inverse/75">{pub.summary}</p>
+            <p className="mt-4 text-lg leading-relaxed text-ink-muted">{pub.summary}</p>
 
             {pub.content && (
-              <div className="mt-8 border-t border-white/10 pt-8">
-                <p className="leading-relaxed whitespace-pre-line text-ink-inverse/80">
+              <div className="mt-8 border-t border-canvas-line pt-8">
+                <p className="leading-relaxed whitespace-pre-line text-ink">
                   {pub.content}
                 </p>
               </div>
             )}
 
-            <dl className="mt-8 grid gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:grid-cols-2">
+            <dl className="mt-8 grid gap-4 rounded-2xl border border-steel/20 bg-surface p-6 shadow-sm sm:grid-cols-2">
               {pub.reportedCandidate && (
                 <div>
-                  <dt className="text-xs tracking-wide text-ink-inverse/45 uppercase">Terlapor</dt>
-                  <dd className="mt-1 font-medium text-ink-inverse">{pub.reportedCandidate}</dd>
+                  <dt className="text-xs tracking-wide text-ink-muted uppercase">Terlapor</dt>
+                  <dd className="mt-1 font-medium text-steel-ink">{pub.reportedCandidate}</dd>
                 </div>
               )}
               {pub.recommendedSanction && (
                 <div>
-                  <dt className="text-xs tracking-wide text-ink-inverse/45 uppercase">Sanksi</dt>
-                  <dd className="mt-1 font-medium text-gold">
+                  <dt className="text-xs tracking-wide text-ink-muted uppercase">Sanksi</dt>
+                  <dd className="mt-1 font-medium text-ochre">
                     {SANCTION_LABEL[pub.recommendedSanction] ?? pub.recommendedSanction}
                   </dd>
                 </div>
@@ -123,7 +123,7 @@ export default function PublikasiDetailPage({
                 href={pub.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-sm font-semibold text-gold hover:bg-gold/10"
+                className="mt-6 inline-flex items-center gap-2 rounded-full border border-steel/40 px-5 py-2.5 text-sm font-semibold text-steel-deep hover:bg-amber/15"
               >
                 Lihat di Instagram <ExternalLink className="size-4" aria-hidden />
               </a>

@@ -26,10 +26,10 @@ export default function AturanPage() {
         description="Tata tertib kampanye yang mengikat seluruh kandidat dan tim kampanye. Setiap laporan pelanggaran diperiksa dengan merujuk pasal-pasal di bawah ini."
       />
 
-      <section className="bg-navy-dark py-16 lg:py-20">
+      <section className="bg-ivory py-16 lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[16rem_1fr] lg:gap-16">
           <nav aria-label="Daftar isi" className="lg:sticky lg:top-28 lg:self-start">
-            <h2 className="mb-5 border-b border-gold/30 pb-2 text-xs font-bold tracking-[0.2em] text-gold uppercase">
+            <h2 className="mb-5 border-b border-canvas-line pb-2 text-xs font-bold tracking-[0.2em] text-steel-deep uppercase">
               Daftar Pasal
             </h2>
             <ul className="space-y-3">
@@ -37,7 +37,7 @@ export default function AturanPage() {
                 <li key={rule.code}>
                   <a
                     href={`#${anchorId(rule.code)}`}
-                    className="text-sm text-ink-inverse/70 transition-colors hover:text-gold"
+                    className="text-sm text-ink-muted transition-colors hover:text-steel-deep"
                   >
                     {rule.article} — {rule.title}
                   </a>
@@ -48,8 +48,8 @@ export default function AturanPage() {
 
           <div>
             <div className="mb-10 flex gap-4 rounded-xl border border-warning/40 bg-warning/10 p-5">
-              <AlertTriangle className="mt-0.5 size-5 shrink-0 text-gold" aria-hidden />
-              <p className="text-sm leading-relaxed text-ink-inverse/80">
+              <AlertTriangle className="mt-0.5 size-5 shrink-0 text-ochre" aria-hidden />
+              <p className="text-sm leading-relaxed text-steel-ink">
                 Rumusan pasal di halaman ini masih menunggu pengesahan naskah resmi
                 Komite Pengawasan. Gunakan sebagai rujukan awal, bukan sebagai dasar
                 keberatan formal.
@@ -61,26 +61,26 @@ export default function AturanPage() {
                 <li
                   key={rule.code}
                   id={anchorId(rule.code)}
-                  className="scroll-mt-28 rounded-2xl border border-white/10 bg-white/[0.03] p-7"
+                  className="scroll-mt-28 rounded-2xl border border-steel/20 bg-surface p-7 shadow-sm"
                 >
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="rounded-full bg-gold/15 px-3 py-1 text-xs font-semibold tracking-wide text-gold">
+                    <span className="rounded-full bg-amber/15 px-3 py-1 text-xs font-semibold tracking-wide text-ochre">
                       {rule.article}
                     </span>
-                    <span className="text-xs text-ink-inverse/50">
+                    <span className="text-xs text-ink-muted">
                       Kategori laporan: {REPORT_CATEGORY_LABEL[rule.category]}
                     </span>
                   </div>
 
-                  <h3 className="mt-4 text-xl font-bold text-ink-inverse">{rule.title}</h3>
-                  <p className="mt-3 leading-relaxed text-ink-inverse/70">
+                  <h3 className="mt-4 text-xl font-bold text-steel-ink">{rule.title}</h3>
+                  <p className="mt-3 leading-relaxed text-ink-muted">
                     {rule.description}
                   </p>
 
-                  <p className="mt-5 flex items-start gap-3 border-t border-white/10 pt-5 text-sm text-ink-inverse/60">
-                    <Gavel className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
+                  <p className="mt-5 flex items-start gap-3 border-t border-canvas-line pt-5 text-sm text-ink-muted">
+                    <Gavel className="mt-0.5 size-4 shrink-0 text-steel" aria-hidden />
                     <span>
-                      <span className="font-semibold text-ink-inverse/80">Sanksi:</span>{" "}
+                      <span className="font-semibold text-steel-ink">Sanksi:</span>{" "}
                       {rule.sanction}
                     </span>
                   </p>
@@ -88,18 +88,20 @@ export default function AturanPage() {
               ))}
             </ol>
 
-            <div className="mt-12 rounded-2xl border border-white/10 bg-navy p-8 text-center">
-              <h2 className="text-xl font-bold text-ink-inverse">
+            <div className="mt-12 rounded-2xl border border-steel/25 bg-sand p-8 text-center">
+              <h2 className="text-xl font-bold text-steel-ink">
                 Menemukan pelanggaran?
               </h2>
-              <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-ink-inverse/70">
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-steel-ink/85">
                 Laporkan disertai bukti. Identitas pelapor dilindungi, dan setiap laporan
                 diperiksa sebelum dipublikasikan.
               </p>
               <Button
                 nativeButton={false}
                 render={<Link href="/lapor" />}
-                className="mt-6 h-11 rounded-full bg-gold px-6 font-semibold text-navy-dark hover:bg-gold-light"
+                /* Kartu ini berlatar sand, jadi tombol amber akan menyatu dengan latarnya.
+                   Dibalik jadi isian steel-ink supaya batas tombol tetap terbaca. */
+                className="mt-6 h-11 rounded-full bg-bar px-6 font-semibold text-ink-inverse hover:bg-bar/90"
               >
                 Lapor Pelanggaran
               </Button>

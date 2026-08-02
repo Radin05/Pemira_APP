@@ -131,17 +131,17 @@ export default function ReportDetailPage({
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="size-7 animate-spin text-primary" />
+        <Loader2 className="size-7 animate-spin text-steel-deep" />
       </div>
     );
   }
   if (notFound || !report) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Laporan tidak ditemukan</p>
         <Link
           href="/hukum-sekretariat"
-          className="mt-3 inline-block text-sm text-primary hover:underline"
+          className="mt-3 inline-block text-sm text-steel-deep hover:underline"
         >
           ← Kembali ke antrean
         </Link>
@@ -162,21 +162,21 @@ export default function ReportDetailPage({
     <div className="mx-auto max-w-4xl">
       <Link
         href="/hukum-sekretariat"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-primary"
+        className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-steel-deep"
       >
         <ArrowLeft className="size-4" /> Kembali ke antrean
       </Link>
 
       <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-sm font-semibold text-primary">{report.ticketCode}</p>
+          <p className="font-mono text-sm font-semibold text-steel-deep">{report.ticketCode}</p>
           <h1 className="mt-1 text-2xl font-bold text-ink">{report.title}</h1>
         </div>
         <StatusBadge status={report.status} />
       </div>
 
       {/* Info laporan */}
-      <div className="mt-8 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+      <div className="mt-8 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
         <dl className="space-y-4">
           <InfoRow label="Kategori">{REPORT_CATEGORY_LABEL[report.category]}</InfoRow>
           <InfoRow label="Tanggal kejadian">
@@ -200,7 +200,7 @@ export default function ReportDetailPage({
             )}
           </InfoRow>
         </dl>
-        <div className="mt-6 border-t border-black/10 pt-6">
+        <div className="mt-6 border-t border-ink/10 pt-6">
           <p className="mb-2 text-sm font-semibold text-ink">Kronologi</p>
           <p className="text-sm leading-relaxed whitespace-pre-line text-ink">
             {report.description}
@@ -209,7 +209,7 @@ export default function ReportDetailPage({
       </div>
 
       {/* Bukti */}
-      <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+      <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
         <p className="text-sm font-semibold text-ink">
           Bukti Lampiran ({report.evidences.length})
         </p>
@@ -220,9 +220,9 @@ export default function ReportDetailPage({
             {report.evidences.map((e) => (
               <li
                 key={e.id}
-                className="flex items-center gap-3 rounded-lg border border-black/10 p-3"
+                className="flex items-center gap-3 rounded-lg border border-ink/10 p-3"
               >
-                <FileText className="size-5 shrink-0 text-primary" aria-hidden />
+                <FileText className="size-5 shrink-0 text-steel-deep" aria-hidden />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-ink">{e.originalFilename}</p>
                   <p className="truncate font-mono text-[0.7rem] text-ink-muted">
@@ -238,7 +238,7 @@ export default function ReportDetailPage({
 
       {/* Tahapan investigasi */}
       {inv && (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <p className="text-sm font-semibold text-ink">Tahapan Investigasi</p>
           <p className="mt-1 text-xs text-ink-muted">
             Empat tahap wajib dilalui sebelum menyusun laporan resmi ke Ketua.
@@ -255,7 +255,7 @@ export default function ReportDetailPage({
                     {done ? (
                       <CheckCircle2 className="size-6 text-success" aria-hidden />
                     ) : active ? (
-                      <CircleDot className="size-6 text-gold" aria-hidden />
+                      <CircleDot className="size-6 text-steel-deep" aria-hidden />
                     ) : (
                       <Circle className="size-6 text-ink-muted/30" aria-hidden />
                     )}
@@ -263,7 +263,7 @@ export default function ReportDetailPage({
                       <span
                         className={cn(
                           "mt-1 w-px flex-1",
-                          done ? "bg-success/40" : "bg-black/10",
+                          done ? "bg-success/40" : "bg-ink/10",
                         )}
                       />
                     )}
@@ -272,7 +272,7 @@ export default function ReportDetailPage({
                     <p
                       className={cn(
                         "font-semibold",
-                        done ? "text-ink" : active ? "text-gold" : "text-ink-muted",
+                        done ? "text-ink" : active ? "text-steel-deep" : "text-ink-muted",
                       )}
                     >
                       {i + 1}. {STAGE_LABEL[st]}
@@ -294,7 +294,7 @@ export default function ReportDetailPage({
 
           {/* Form isi tahap aktif */}
           {canAdvance && currentStage && (
-            <div className="mt-5 rounded-xl border border-gold/40 bg-gold/[0.06] p-4">
+            <div className="mt-5 rounded-xl border border-amber/50 bg-amber/10 p-4">
               <label htmlFor="stageNote" className="text-sm font-medium text-ink">
                 Catatan tahap {STAGE_LABEL[currentStage]}{" "}
                 <span className="text-ink-muted">(min. 20 karakter)</span>
@@ -305,7 +305,7 @@ export default function ReportDetailPage({
                 value={stageNote}
                 onChange={(e) => setStageNote(e.target.value)}
                 placeholder={STAGE_HINT[currentStage]}
-                className="mt-1.5 resize-y border-black/15 bg-white"
+                className="mt-1.5 resize-y border-ink/15 bg-surface"
               />
               <Button
                 onClick={advanceStage}
@@ -324,9 +324,9 @@ export default function ReportDetailPage({
 
       {/* Laporan resmi tersusun (read-only) */}
       {inv?.findings && (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <p className="flex items-center gap-2 text-sm font-semibold text-ink">
-            <Gavel className="size-4 text-primary" /> Laporan Resmi ke Ketua
+            <Gavel className="size-4 text-steel-deep" /> Laporan Resmi ke Ketua
           </p>
           <div className="mt-3 flex items-center gap-2">
             {inv.verdict === "VALID" ? (
@@ -344,7 +344,7 @@ export default function ReportDetailPage({
           </p>
           <p className="mt-4 text-sm text-ink-muted">
             Rekomendasi sanksi:{" "}
-            <span className="font-semibold text-primary">
+            <span className="font-semibold text-steel-deep">
               {SANCTION_LABEL[inv.recommendedSanction ?? ""] ?? inv.recommendedSanction}
             </span>
           </p>
@@ -353,9 +353,9 @@ export default function ReportDetailPage({
 
       {/* Form template laporan resmi — setelah tahap selesai */}
       {canSubmitReport && (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <p className="flex items-center gap-2 text-sm font-semibold text-ink">
-            <Send className="size-4 text-primary" /> Susun Laporan Resmi ke Ketua
+            <Send className="size-4 text-steel-deep" /> Susun Laporan Resmi ke Ketua
           </p>
           <p className="mt-1 text-xs text-ink-muted">
             Seluruh tahap investigasi telah selesai. Isi template berikut, lalu ajukan ke Ketua KP.
@@ -371,7 +371,7 @@ export default function ReportDetailPage({
               value={findings}
               onChange={(e) => setFindings(e.target.value)}
               placeholder="Uraikan temuan, pasal yang dilanggar, dan bukti pendukung."
-              className="mt-1.5 resize-y border-black/15"
+              className="mt-1.5 resize-y border-ink/15"
             />
             <p className="mt-1 text-xs text-ink-muted">{findings.length} karakter</p>
           </div>
@@ -386,7 +386,7 @@ export default function ReportDetailPage({
                   "flex-1 rounded-xl border-2 p-3 text-left transition-colors",
                   conclusion === "VALID"
                     ? "border-success bg-success/10"
-                    : "border-black/10 hover:border-success/50",
+                    : "border-ink/10 hover:border-success/50",
                 )}
               >
                 <CheckCircle2 className="size-5 text-success" />
@@ -400,7 +400,7 @@ export default function ReportDetailPage({
                   "flex-1 rounded-xl border-2 p-3 text-left transition-colors",
                   conclusion === "HOAX"
                     ? "border-danger bg-danger/10"
-                    : "border-black/10 hover:border-danger/50",
+                    : "border-ink/10 hover:border-danger/50",
                 )}
               >
                 <XCircle className="size-5 text-danger" />
@@ -418,7 +418,7 @@ export default function ReportDetailPage({
               id="sanction"
               value={sanction}
               onChange={(e) => setSanction(e.target.value)}
-              className="mt-1.5 h-10 w-full rounded-md border border-black/15 bg-white px-3 text-sm text-ink"
+              className="mt-1.5 h-10 w-full rounded-md border border-ink/15 bg-surface px-3 text-sm text-ink"
             >
               <option value="" disabled>
                 Pilih sanksi…
@@ -451,13 +451,13 @@ export default function ReportDetailPage({
       )}
 
       {report.status === "DIVERIFIKASI" && !isAssignee && (
-        <p className="mt-6 rounded-lg border border-canvas-line bg-white p-4 text-sm text-ink-muted shadow-sm">
+        <p className="mt-6 rounded-lg border border-canvas-line bg-surface p-4 text-sm text-ink-muted shadow-sm">
           Laporan ini sedang ditangani investigator lain.
         </p>
       )}
 
       {/* Riwayat status */}
-      <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+      <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
         <p className="text-sm font-semibold text-ink">Riwayat Status</p>
         <ol className="mt-4 space-y-4">
           {report.history.map((h, i) => (

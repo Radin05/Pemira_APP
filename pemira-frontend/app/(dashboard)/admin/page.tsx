@@ -24,7 +24,7 @@ export default function AdminPage() {
 
   if (!allowed) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Akses ditolak</p>
         <p className="mt-2 text-sm text-ink-muted">Halaman ini khusus administrator.</p>
       </div>
@@ -41,14 +41,14 @@ export default function AdminPage() {
           <li key={c.href}>
             <Link
               href={c.href}
-              className="block h-full rounded-2xl border border-canvas-line bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+              className="block h-full rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm transition-shadow hover:shadow-md"
             >
               <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary">
                 <c.icon className="size-5 text-ink-inverse" aria-hidden />
               </span>
               <h2 className="mt-5 text-lg font-bold text-ink">{c.title}</h2>
               <p className="mt-2 text-sm leading-relaxed text-ink-muted">{c.description}</p>
-              <span className="mt-4 inline-block text-sm font-semibold text-primary">
+              <span className="mt-4 inline-block text-sm font-semibold text-steel-deep">
                 Buka →
               </span>
             </Link>

@@ -85,15 +85,15 @@ export function EvidenceDropzone({ files, onChange, disabled }: EvidenceDropzone
         }}
         className={cn(
           "flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors",
-          dragOver ? "border-gold bg-gold/10" : "border-white/20 hover:border-gold/50",
+          dragOver ? "border-steel-deep bg-amber/15" : "border-steel/40 hover:border-steel",
           disabled && "pointer-events-none opacity-50",
         )}
       >
-        <UploadCloud className="size-8 text-gold" aria-hidden />
-        <p className="mt-3 text-sm font-medium text-ink-inverse">
+        <UploadCloud className="size-8 text-steel-deep" aria-hidden />
+        <p className="mt-3 text-sm font-medium text-steel-ink">
           Seret berkas ke sini, atau klik untuk memilih
         </p>
-        <p className="mt-1 text-xs text-ink-inverse/50">
+        <p className="mt-1 text-xs text-ink-muted">
           JPG, PNG, WEBP, MP4, atau PDF · maks {MAX_EVIDENCE_SIZE_MB} MB · hingga{" "}
           {MAX_EVIDENCE_FILES} berkas
         </p>
@@ -127,20 +127,20 @@ export function EvidenceDropzone({ files, onChange, disabled }: EvidenceDropzone
             return (
               <li
                 key={`${file.name}-${index}`}
-                className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.03] p-3"
+                className="flex items-center gap-3 rounded-lg border border-canvas-line bg-canvas p-3"
               >
-                <Icon className="size-5 shrink-0 text-gold" aria-hidden />
-                <span className="min-w-0 flex-1 truncate text-sm text-ink-inverse">
+                <Icon className="size-5 shrink-0 text-steel" aria-hidden />
+                <span className="min-w-0 flex-1 truncate text-sm text-steel-ink">
                   {file.name}
                 </span>
-                <span className="shrink-0 text-xs text-ink-inverse/50">
+                <span className="shrink-0 text-xs text-ink-muted">
                   {formatFileSize(file.size)}
                 </span>
                 <button
                   type="button"
                   onClick={() => removeAt(index)}
                   aria-label={`Hapus ${file.name}`}
-                  className="shrink-0 rounded-md p-1 text-ink-inverse/60 hover:bg-danger/20 hover:text-danger"
+                  className="shrink-0 rounded-md p-1 text-ink-muted hover:bg-danger/15 hover:text-danger"
                 >
                   <X className="size-4" />
                 </button>
@@ -150,7 +150,7 @@ export function EvidenceDropzone({ files, onChange, disabled }: EvidenceDropzone
         </ul>
       )}
 
-      <p className="mt-3 flex items-center gap-2 text-xs text-ink-inverse/50">
+      <p className="mt-3 flex items-center gap-2 text-xs text-ink-muted">
         <Paperclip className="size-3.5" aria-hidden />
         Bukti disimpan dengan checksum sehingga tidak dapat diubah setelah dikirim.
       </p>

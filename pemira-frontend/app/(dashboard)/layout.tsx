@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Loader2, LogOut } from "lucide-react";
 import { SITE } from "@/lib/constant/site";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useAuthStore } from "@/store/auth.store";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +36,7 @@ export default function DashboardLayout({
   if (initializing || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-canvas">
-        <Loader2 className="size-8 animate-spin text-primary" aria-hidden />
+        <Loader2 className="size-8 animate-spin text-steel-deep" aria-hidden />
       </div>
     );
   }
@@ -49,7 +50,7 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
-      <header className="sticky top-0 z-40 border-b border-black/20 bg-primary shadow-sm">
+      <header className="sticky top-0 z-40 border-b border-bar bg-primary shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5">
           <Link href="/dashboard" className="flex items-center gap-3">
             <Image
@@ -61,18 +62,21 @@ export default function DashboardLayout({
             />
             <div className="leading-none">
               <span className="block text-sm font-bold text-ink-inverse">Dashboard KP</span>
-              <span className="mt-0.5 block text-[0.65rem] font-semibold tracking-[0.15em] text-gold uppercase">
+              <span className="mt-0.5 block text-[0.65rem] font-semibold tracking-[0.15em] text-amber uppercase">
                 {SITE.tagline}
               </span>
             </div>
           </Link>
 
           <div className="flex items-center gap-3">
+            {/* Header dashboard selalu berlatar bar yang gelap di kedua tema,
+                jadi warnanya ditimpa jadi terang — bukan steel-deep bawaan. */}
+            <ThemeToggle className="text-ink-inverse/80 hover:bg-ink-inverse/10 hover:text-ink-inverse" />
             <div className="hidden text-right sm:block">
               <p className="text-sm font-medium text-ink-inverse">{user.fullName}</p>
-              <p className="text-xs text-gold">{user.roles.join(", ")}</p>
+              <p className="text-xs text-amber">{user.roles.join(", ")}</p>
             </div>
-            <span className="flex size-9 items-center justify-center rounded-full bg-gold text-sm font-bold text-navy-dark">
+            <span className="flex size-9 items-center justify-center rounded-full bg-amber text-sm font-bold text-on-amber">
               {initials}
             </span>
             <button
@@ -92,12 +96,12 @@ export default function DashboardLayout({
 
       {/* Breadcrumb tipis untuk memberi konteks selain header putih polos */}
       {pathname !== "/dashboard" && (
-        <div className="border-b border-canvas-line bg-white/60">
+        <div className="border-b border-canvas-line bg-surface/60">
           <div className="mx-auto max-w-7xl px-6 py-2.5">
             <Link
               href="/dashboard"
               className={cn(
-                "text-xs font-medium text-ink-muted transition-colors hover:text-primary",
+                "text-xs font-medium text-ink-muted transition-colors hover:text-steel-deep",
               )}
             >
               Dashboard

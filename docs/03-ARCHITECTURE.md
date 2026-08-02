@@ -66,7 +66,7 @@ flowchart LR
 ### ADR-009 — Tema Tailwind di CSS (`@theme`), bukan `tailwind.config.ts`
 **Konteks.** `create-next-app` menghasilkan Next.js 16 + Tailwind v4. Tailwind v4 memindahkan konfigurasi tema dari JavaScript ke CSS.
 **Keputusan.** Semua token warna & tipografi dideklarasikan di `app/globals.css` dalam blok `@theme`. Tidak ada `tailwind.config.ts`.
-**Konsekuensi.** Contoh `tailwind.config.ts` di `ARSITEKTUR-PEMIRA.md` §7.1 sudah usang — token yang berlaku ada di `globals.css`. Lihat juga ADR-011 soal penamaan tokennya.
+**Konsekuensi.** Contoh `tailwind.config.ts` di `ARSITEKTUR-PEMIRA.md` §7.1 sudah usang — token yang berlaku ada di `globals.css`. Lihat juga ADR-011 soal penamaan tokennya dan ADR-013 soal palet yang berlaku sekarang.
 
 ### ADR-010 — Role guard edge ada di `proxy.ts`, dan bukan otorisasi sebenarnya
 **Konteks.** Next.js 16 mengganti nama `middleware.ts` menjadi `proxy.ts`. Dokumentasinya menyatakan tegas: proxy **bukan** solusi manajemen sesi atau otorisasi.
@@ -74,14 +74,44 @@ flowchart LR
 **Alasan.** Token di edge bisa kadaluarsa atau dipalsukan tanpa verifikasi penuh. Kalau proxy dijadikan satu-satunya penjaga, siapa pun yang bisa mengarang cookie bisa membuka dashboard Ketua KP. Backend yang memutuskan, frontend hanya mempercantik.
 
 ### ADR-011 — Token brand dipisah dari token semantik shadcn
-**Konteks.** `shadcn init` menyuntikkan blok `@theme inline` yang mendefinisikan `--color-primary` dan `--color-accent` ke skala abu-abu netralnya. Karena blok itu muncul setelah `@theme` kita, `bg-primary` diam-diam berubah dari navy menjadi abu-abu — build tetap hijau, warnanya saja yang salah.
+**Konteks.** `shadcn init` menyuntikkan blok `@theme inline` yang mendefinisikan `--color-primary` dan `--color-accent` ke skala abu-abu netralnya. Karena blok itu muncul setelah `@theme` kita, `bg-primary` diam-diam berubah dari warna brand menjadi abu-abu — build tetap hijau, warnanya saja yang salah.
 **Keputusan.** Dua lapis token yang namanya tidak bertabrakan:
-- **Brand** (`--color-navy`, `--color-gold`, `--color-maroon`, `--color-ink*`, status) — nama warna harfiah, dipakai langsung di halaman publik: `bg-navy`, `text-gold`.
+- **Brand** (`--color-steel*`, `--color-amber*`, `--color-ochre`, `--color-ivory`, `--color-sand`, `--color-sky`, `--color-maroon`, `--color-ink*`, status) — nama warna harfiah, dipakai langsung di halaman: `bg-ivory`, `text-steel-deep`.
 - **Semantik shadcn** (`--primary`, `--accent`, `--muted`, …) — nama peran, dipakai internal oleh komponen.
 
-Jembatannya di `:root`: `--primary: var(--color-navy)`, `--ring: var(--color-gold)`, `--destructive: var(--color-danger)`.
-**Alasan.** `--accent` milik shadcn berarti "warna hover netral", bukan aksen brand. Kalau ditimpa dengan emas, setiap hover state di seluruh aplikasi berubah jadi emas. Memisahkan nama membuat komponen shadcn tetap ikut brand (tombol primer jadi navy, focus ring jadi emas) tanpa merusak skala netralnya.
-**Konsekuensi.** Di kode pakai `bg-navy`/`text-gold`, **bukan** `bg-primary`/`text-accent`.
+Jembatannya di `:root`: `--primary: var(--color-steel-ink)`, `--ring: var(--color-steel-deep)`, `--destructive: var(--color-danger)`.
+**Alasan.** `--accent` milik shadcn berarti "warna hover netral", bukan aksen brand. Kalau ditimpa dengan amber, setiap hover state di seluruh aplikasi berubah jadi kuning. Memisahkan nama membuat komponen shadcn tetap ikut brand (tombol primer jadi steel-ink, focus ring jadi steel-deep) tanpa merusak skala netralnya.
+**Konsekuensi.** Di kode pakai `bg-ivory`/`text-steel-deep`, **bukan** `bg-primary`/`text-accent`.
+
+### ADR-013 — Rebrand ke palet terang: token di-rename, bukan sekadar diganti nilainya
+**Konteks.** Palet brand berpindah dari navy+gold ke palet terang (amber `#F8C630`, ivory `#FFFDF5`, steel blue `#5E86B1`, sand `#F7DA7C`, sky `#A9DEEC`). Palet baru tidak punya warna gelap sama sekali.
+**Keputusan.** Token lama (`navy`, `navy-dark`, `gold`, `gold-light`, `surface-dark`) **dihapus**, diganti nama baru yang harfiah. Dua warna gelap diturunkan dari steel blue supaya kontras WCAG tetap terpenuhi: `--color-steel-deep #2E4560` (teks/heading) dan `--color-steel-ink #1E3047` (teks di atas amber, bar solid).
+**Alasan.** Mengganti nilai saja tidak mungkin: `bg-navy` selalu dipasangkan `text-ink-inverse`, jadi kalau navy jadi terang teksnya putih-di-atas-terang. Karena kelas di JSX tetap harus disentuh, rename jadi gratis — dan Tailwind v4 tanpa config **membuang utility tak dikenal tanpa error**, sehingga `grep -rn "navy\|gold" app components` = 0 bisa dipakai sebagai gerbang penyelesaian yang keras. Dengan ganti-nilai, yang kelewat tampak masuk akal tapi tak terbaca.
+**Konsekuensi.** Tiga aturan yang tidak boleh dilanggar, tercatat juga di komentar `globals.css`:
+- `text-amber` / `border-amber` sebagai penanda **terlarang** — amber di ivory cuma 1.57:1. Teks bernuansa amber pakai `text-ochre` (`#7A5A00`, 6.27:1), dan hanya di dalam chip `bg-amber/1x`.
+- `text-steel` bukan warna teks (3.74:1). Teks biru wajib `text-steel-deep`.
+- Putih di atas `bg-steel` = 3.80:1 → hanya untuk teks ≥24px, ikon, dan objek UI. Bar solid yang memuat teks kecil pakai `bg-steel-ink` (13.38:1).
+
+`--color-warning` sengaja **tidak** ikut jadi amber: tint badge status dipatok ke nilai lama `#D4A72C` supaya semantik status tidak bergeser hanya karena warna brand berganti. `--color-success` digelapkan ke `#236327` karena `bg-success/15 text-success` hanya 4.13:1 di atas latar terang.
+
+### ADR-014 — Tema gelap lewat penimpaan nilai token, bukan kelas `dark:`
+**Konteks.** Aplikasi butuh toggle terang/gelap. Cara umum di Tailwind adalah menempel `dark:` di tiap utility berwarna — di proyek ini itu berarti menyentuh ratusan kelas di 30+ file, dan setiap komponen baru wajib ingat menambahkannya.
+**Keputusan.** `:root.dark` di `globals.css` menimpa **nilai** token yang sama (`--color-ivory`, `--color-ink`, …). Tidak ada satu pun kelas `dark:` di JSX; komponen tidak tahu tema apa yang aktif.
+
+Selektornya `:root.dark` (0,2,0), bukan `.dark` (0,1,0): Tailwind mengumpulkan token `@theme` ke dalam aturan `:root` yang specificity-nya sama persis, sehingga `.dark` akan kalah atau menang tergantung urutan output — bukan sesuatu yang boleh diandalkan.
+
+**Konsekuensi.** Satu token tidak boleh melayani fill **dan** teks sekaligus, karena keduanya butuh arah balik berlawanan: teks gelap harus jadi terang, sedangkan bar gelap harus tetap gelap. Tiga token memisahkannya:
+- `--color-bar` — fill yang selalu gelap di kedua tema (header dashboard, `--primary`, overlay dialog). Teks di atasnya selalu `ink-inverse`.
+- `--color-on-amber` — teks di atas amber. Amber tidak ikut dibalik, jadi warna teksnya juga tidak boleh; kalau ikut, label CTA hilang di tema gelap.
+- `--color-surface` — permukaan kartu, dibalik (putih → biru tua). Menggantikan `bg-white` yang tidak bisa ikut tema.
+
+Aturan turunannya: **jangan pakai token fill sebagai warna teks.** `text-primary` sempat dipakai untuk kode tiket di dashboard dan langsung hilang di tema gelap — sekarang `text-steel-deep`. Idiom `border-black/10`/`bg-black/[0.02]` juga diganti `ink` supaya garis tetap terlihat saat permukaannya gelap.
+
+Warna maroon menunjukkan batas pendekatan ini: ia dipakai sebagai fill chip (butuh gelap, ikonnya putih) sekaligus teks badge (butuh terang di tema gelap). Tidak ada satu nilai yang memuaskan keduanya, jadi teks badge dilepas ke `steel-ink` dan maroon dibiarkan murni sebagai fill.
+
+**Anti-kedip.** Class `dark` dipasang oleh skrip sinkron di `<head>` (`app/layout.tsx`), bukan `useEffect` — efek baru jalan setelah paint pertama, sehingga halaman berkedip putih sekejap tiap reload di tema gelap. Urutan keputusan: pilihan tersimpan user menang atas `prefers-color-scheme`.
+
+`ThemeToggle` membaca class itu lewat `useSyncExternalStore`, bukan `useEffect` + `setState`: DOM adalah sumber kebenarannya, dan `setState` di dalam efek ditolak `react-hooks/set-state-in-effect`.
 
 ### ADR-012 — Komponen shadcn kini berbasis Base UI: pakai `render`, bukan `asChild`
 **Konteks.** shadcn versi terbaru membangun komponennya di atas `@base-ui/react`, bukan Radix.

@@ -104,7 +104,7 @@ export default function PddComposePage({
 
   if (!allowed) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Akses ditolak</p>
       </div>
     );
@@ -112,15 +112,15 @@ export default function PddComposePage({
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="size-7 animate-spin text-primary" />
+        <Loader2 className="size-7 animate-spin text-steel-deep" />
       </div>
     );
   }
   if (!report) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">{error ?? "Laporan tidak ditemukan"}</p>
-        <Link href="/pdd" className="mt-3 inline-block text-sm text-primary hover:underline">
+        <Link href="/pdd" className="mt-3 inline-block text-sm text-steel-deep hover:underline">
           ← Kembali
         </Link>
       </div>
@@ -131,17 +131,17 @@ export default function PddComposePage({
 
   return (
     <div className="mx-auto max-w-3xl">
-      <Link href="/pdd" className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-primary">
+      <Link href="/pdd" className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-steel-deep">
         <ArrowLeft className="size-4" /> Kembali
       </Link>
 
       <div className="mt-4">
-        <p className="font-mono text-sm font-semibold text-primary">{report.ticketCode}</p>
+        <p className="font-mono text-sm font-semibold text-steel-deep">{report.ticketCode}</p>
         <h1 className="mt-1 text-2xl font-bold text-ink">Susun Publikasi</h1>
       </div>
 
       {/* Konteks laporan */}
-      <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-5 shadow-sm">
+      <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-5 shadow-sm">
         <p className="text-xs font-semibold tracking-wide text-ink-muted uppercase">
           Ringkasan hasil investigasi
         </p>
@@ -169,7 +169,7 @@ export default function PddComposePage({
       )}
 
       {isPublished ? (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <p className="flex items-center gap-2 font-semibold text-success">
             <Megaphone className="size-5" /> Sudah Terbit
           </p>
@@ -181,7 +181,7 @@ export default function PddComposePage({
               href={`/publikasi/${pub?.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 px-5 py-2 text-sm font-semibold text-primary hover:bg-primary/5"
+              className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 px-5 py-2 text-sm font-semibold text-steel-deep hover:bg-primary/5"
             >
               Lihat publik <ExternalLink className="size-3.5" />
             </a>
@@ -206,7 +206,7 @@ export default function PddComposePage({
                 rows={3}
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="mt-1.5 resize-y border-black/15"
+                className="mt-1.5 resize-y border-ink/15"
               />
               <div className="mt-3 flex gap-3">
                 <Button
@@ -220,7 +220,7 @@ export default function PddComposePage({
                 <Button
                   onClick={() => setWithdrawing(false)}
                   variant="outline"
-                  className="h-10 rounded-full border-black/15 bg-transparent px-5 text-sm font-semibold text-ink-muted hover:bg-black/5"
+                  className="h-10 rounded-full border-ink/15 bg-transparent px-5 text-sm font-semibold text-ink-muted hover:bg-ink/5"
                 >
                   Batal
                 </Button>
@@ -229,7 +229,7 @@ export default function PddComposePage({
           )}
         </div>
       ) : (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
           <div className="space-y-5">
             <div>
               <label htmlFor="title" className="text-sm font-medium text-ink">
@@ -239,7 +239,7 @@ export default function PddComposePage({
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1.5 border-black/15"
+                className="mt-1.5 border-ink/15"
               />
             </div>
             <div>
@@ -252,7 +252,7 @@ export default function PddComposePage({
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
                 placeholder="Ringkasan singkat putusan untuk ditampilkan di halaman Transparansi."
-                className="mt-1.5 resize-y border-black/15"
+                className="mt-1.5 resize-y border-ink/15"
               />
             </div>
             <div>
@@ -264,7 +264,7 @@ export default function PddComposePage({
                 rows={6}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="mt-1.5 resize-y border-black/15"
+                className="mt-1.5 resize-y border-ink/15"
               />
             </div>
             <div>
@@ -276,12 +276,12 @@ export default function PddComposePage({
                 value={instagramUrl}
                 onChange={(e) => setInstagramUrl(e.target.value)}
                 placeholder="https://instagram.com/p/…"
-                className="mt-1.5 border-black/15"
+                className="mt-1.5 border-ink/15"
               />
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3 border-t border-black/10 pt-5">
+          <div className="mt-6 flex flex-wrap gap-3 border-t border-ink/10 pt-5">
             <Button
               onClick={() => save(true)}
               disabled={busy}
@@ -296,7 +296,7 @@ export default function PddComposePage({
               onClick={() => save(false)}
               disabled={busy}
               variant="outline"
-              className="h-11 rounded-full border-black/15 bg-transparent px-6 font-semibold text-ink-muted hover:bg-black/5"
+              className="h-11 rounded-full border-ink/15 bg-transparent px-6 font-semibold text-ink-muted hover:bg-ink/5"
             >
               Simpan Draft
             </Button>

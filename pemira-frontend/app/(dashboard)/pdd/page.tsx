@@ -13,7 +13,7 @@ import { useAuthStore } from "@/store/auth.store";
 import { cn } from "@/lib/utils";
 
 const STATUS_STYLE: Record<string, string> = {
-  DRAFT: "bg-black/5 text-ink-muted",
+  DRAFT: "bg-ink/5 text-ink-muted",
   PUBLISHED: "bg-success/10 text-success",
   WITHDRAWN: "bg-danger/10 text-danger",
 };
@@ -50,7 +50,7 @@ export default function PddPage() {
 
   if (!allowed) {
     return (
-      <div className="rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
         <p className="font-semibold text-ink">Akses ditolak</p>
         <p className="mt-2 text-sm text-ink-muted">Halaman ini khusus divisi PDD.</p>
       </div>
@@ -66,7 +66,7 @@ export default function PddPage() {
 
       {loading ? (
         <div className="mt-10 flex justify-center">
-          <Loader2 className="size-7 animate-spin text-primary" aria-hidden />
+          <Loader2 className="size-7 animate-spin text-steel-deep" aria-hidden />
         </div>
       ) : (
         <>
@@ -76,7 +76,7 @@ export default function PddPage() {
               <CheckCircle2 className="size-4 text-success" /> Siap Dipublikasikan ({ready.length})
             </h2>
             {ready.length === 0 ? (
-              <p className="mt-4 rounded-2xl border border-canvas-line bg-white p-6 text-sm text-ink-muted shadow-sm">
+              <p className="mt-4 rounded-2xl border border-canvas-line bg-surface p-6 text-sm text-ink-muted shadow-sm">
                 Belum ada laporan yang disetujui dan menunggu publikasi.
               </p>
             ) : (
@@ -84,10 +84,10 @@ export default function PddPage() {
                 {ready.map((r) => (
                   <li
                     key={r.reportId}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-canvas-line bg-white p-5 shadow-sm"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-canvas-line bg-surface p-5 shadow-sm"
                   >
                     <div>
-                      <p className="font-mono text-xs font-semibold text-primary">
+                      <p className="font-mono text-xs font-semibold text-steel-deep">
                         {r.ticketCode}
                       </p>
                       <p className="mt-1 font-semibold text-ink">{r.reportTitle}</p>
@@ -99,7 +99,7 @@ export default function PddPage() {
                     </div>
                     <Link
                       href={`/pdd/${r.reportId}`}
-                      className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-navy-dark hover:bg-gold-light"
+                      className="rounded-full bg-amber px-5 py-2 text-sm font-semibold text-on-amber hover:bg-amber-deep"
                     >
                       {r.hasDraft ? "Lanjutkan" : "Susun Publikasi"}
                     </Link>
@@ -112,10 +112,10 @@ export default function PddPage() {
           {/* Publikasi tersimpan */}
           <section className="mt-10">
             <h2 className="flex items-center gap-2 text-sm font-bold tracking-wide text-ink-muted uppercase">
-              <Megaphone className="size-4 text-primary" /> Publikasi ({published.length})
+              <Megaphone className="size-4 text-steel-deep" /> Publikasi ({published.length})
             </h2>
             {published.length === 0 ? (
-              <p className="mt-4 rounded-2xl border border-canvas-line bg-white p-6 text-sm text-ink-muted shadow-sm">
+              <p className="mt-4 rounded-2xl border border-canvas-line bg-surface p-6 text-sm text-ink-muted shadow-sm">
                 Belum ada publikasi tersimpan.
               </p>
             ) : (
@@ -123,10 +123,10 @@ export default function PddPage() {
                 {published.map((p) => (
                   <li
                     key={p.id}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-canvas-line bg-white p-5 shadow-sm"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-canvas-line bg-surface p-5 shadow-sm"
                   >
                     <div className="flex items-center gap-3">
-                      <FileText className="size-5 text-primary" aria-hidden />
+                      <FileText className="size-5 text-steel-deep" aria-hidden />
                       <div>
                         <p className="font-semibold text-ink">{p.title}</p>
                         <p className="mt-0.5 font-mono text-xs text-ink-muted">/{p.slug}</p>
@@ -143,7 +143,7 @@ export default function PddPage() {
                       </span>
                       <Link
                         href={`/pdd/${p.reportId}`}
-                        className="text-sm font-semibold text-primary hover:underline"
+                        className="text-sm font-semibold text-steel-deep hover:underline"
                       >
                         Kelola
                       </Link>

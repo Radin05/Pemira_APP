@@ -85,17 +85,17 @@ export default function TentangPage() {
         description={`Badan independen yang mengawasi jalannya pemilihan raya calon BEM dan BPM ${SITE.institutionShort}.`}
       />
 
-      <section className="bg-navy-dark py-16 lg:py-20">
+      <section className="bg-ivory py-16 lg:py-20">
         <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-2xl font-bold text-ink-inverse">Mandat Kami</h2>
-          <span aria-hidden className="mt-4 block h-1 w-20 rounded-full bg-gold" />
-          <p className="mt-8 leading-relaxed text-ink-inverse/70">
+          <h2 className="text-2xl font-bold text-steel-ink">Mandat Kami</h2>
+          <span aria-hidden className="mt-4 block h-1 w-20 rounded-full bg-amber" />
+          <p className="mt-8 leading-relaxed text-ink-muted">
             Komite Pengawasan dibentuk untuk memastikan setiap tahapan pemilihan raya
             berjalan jujur, terbuka, dan berkepastian hukum. Kami tidak menghitung suara
             dan tidak berpihak pada kandidat mana pun. Tugas kami tunggal: menegakkan tata
             tertib kampanye, dan memutus setiap dugaan pelanggaran berdasarkan bukti.
           </p>
-          <p className="mt-5 leading-relaxed text-ink-inverse/70">
+          <p className="mt-5 leading-relaxed text-ink-muted">
             Seluruh laporan yang masuk lewat aplikasi ini terekam permanen. Perubahan
             status laporan, siapa yang memutus, dan kapan keputusan diambil tersimpan
             sebagai jejak audit yang tidak dapat dihapus — termasuk oleh kami sendiri.
@@ -103,27 +103,27 @@ export default function TentangPage() {
         </div>
       </section>
 
-      <section className="border-t border-white/10 bg-navy py-16 lg:py-20">
+      <section className="border-t border-canvas-line bg-canvas py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-6">
-          <h2 className="text-center text-2xl font-bold text-ink-inverse sm:text-3xl">
+          <h2 className="text-center text-2xl font-bold text-steel-ink sm:text-3xl">
             Struktur Divisi
           </h2>
-          <span aria-hidden className="mx-auto mt-4 block h-1 w-20 rounded-full bg-gold" />
+          <span aria-hidden className="mx-auto mt-4 block h-1 w-20 rounded-full bg-amber" />
 
           <ul className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {DIVISIONS.map((division) => (
               <li
                 key={division.name}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-7"
+                className="rounded-2xl border border-steel/20 bg-surface p-7 shadow-sm"
               >
-                <span className="inline-flex size-12 items-center justify-center rounded-xl bg-gold">
-                  <division.icon className="size-6 text-navy-dark" aria-hidden />
+                <span className="inline-flex size-12 items-center justify-center rounded-xl bg-amber">
+                  <division.icon className="size-6 text-on-amber" aria-hidden />
                 </span>
-                <h3 className="mt-6 text-lg font-bold text-ink-inverse">
+                <h3 className="mt-6 text-lg font-bold text-steel-ink">
                   {division.name}
                 </h3>
-                <p className="mt-1.5 text-sm font-medium text-gold">{division.role}</p>
-                <p className="mt-4 text-sm leading-relaxed text-ink-inverse/65">
+                <p className="mt-1.5 text-sm font-medium text-steel-deep">{division.role}</p>
+                <p className="mt-4 text-sm leading-relaxed text-ink-muted">
                   {division.detail}
                 </p>
               </li>
@@ -132,25 +132,25 @@ export default function TentangPage() {
         </div>
       </section>
 
-      <section className="border-t border-white/10 bg-navy-dark py-16 lg:py-20">
+      <section className="border-t border-canvas-line bg-ivory py-16 lg:py-20">
         <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-2xl font-bold text-ink-inverse sm:text-3xl">
+          <h2 className="text-2xl font-bold text-steel-ink sm:text-3xl">
             Alur Penanganan Laporan
           </h2>
-          <span aria-hidden className="mt-4 block h-1 w-20 rounded-full bg-gold" />
+          <span aria-hidden className="mt-4 block h-1 w-20 rounded-full bg-amber" />
 
           <ol className="mt-12 space-y-5">
             {PROCESS_STEPS.map((step, index) => (
               <li
                 key={step.title}
-                className="flex gap-5 rounded-xl border border-white/10 bg-white/[0.03] p-6"
+                className="flex gap-5 rounded-xl border border-steel/20 bg-surface p-6 shadow-sm"
               >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gold text-sm font-bold text-navy-dark">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-amber text-sm font-bold text-on-amber">
                   {index + 1}
                 </span>
                 <div>
-                  <h3 className="font-bold text-ink-inverse">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-inverse/65">
+                  <h3 className="font-bold text-steel-ink">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-muted">
                     {step.detail}
                   </p>
                 </div>
@@ -158,14 +158,14 @@ export default function TentangPage() {
             ))}
           </ol>
 
-          <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <p className="text-sm leading-relaxed text-ink-inverse/60">
+          <div className="mt-10 rounded-2xl border border-steel/20 bg-surface p-5 shadow-sm">
+            <p className="text-sm leading-relaxed text-ink-muted">
               Punya pertanyaan? Hubungi kami lewat email atau kanal Instagram resmi.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <a
                 href={`mailto:${SITE.email}`}
-                className="rounded-full border border-gold/30 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/10"
+                className="rounded-full border border-steel/40 px-4 py-2 text-sm font-semibold text-steel-deep transition-colors hover:bg-amber/15"
               >
                 {SITE.email}
               </a>
@@ -173,13 +173,13 @@ export default function TentangPage() {
                 href={SITE.instagram.url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-gold/30 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/10"
+                className="inline-flex items-center gap-2 rounded-full border border-steel/40 px-4 py-2 text-sm font-semibold text-steel-deep transition-colors hover:bg-amber/15"
               >
                 <Camera className="size-4" aria-hidden />
                 {SITE.instagram.handle}
               </a>
             </div>
-            <p className="mt-3 text-xs text-ink-inverse/45">
+            <p className="mt-3 text-xs text-ink-muted">
               Operasional {SITE.operationalHours}.
             </p>
           </div>

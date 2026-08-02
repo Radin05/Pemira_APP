@@ -460,9 +460,14 @@ Pola ini bikin komponen React tetap bersih (cuma render + panggil hook), semua d
 
 ### 7.1 Palet Warna
 
-Berdasarkan referensi (poster ucapan selamat & landing page), tema utama: **navy blue** sebagai base + **gold/kuning** sebagai aksen, dengan sentuhan merah marun untuk elemen dekoratif dan hitam untuk navigasi.
+> ⚠️ **Seluruh tabel di bawah sudah usang.** Palet navy+gold sudah **diganti** dengan palet
+> terang (ivory / steel blue / amber). Tabel dipertahankan sebagai catatan sejarah saja.
+> Palet yang berlaku ada di blok setelah tabel ini, dan sumber kebenarannya
+> `pemira-frontend/app/globals.css`. Lihat [ADR-013](docs/03-ARCHITECTURE.md).
 
-| Token | Hex | Penggunaan |
+Berdasarkan referensi awal (poster ucapan selamat & landing page), tema lama: **navy blue** sebagai base + **gold/kuning** sebagai aksen, dengan sentuhan merah marun untuk elemen dekoratif dan hitam untuk navigasi.
+
+| Token (usang) | Hex | Penggunaan |
 |---|---|---|
 | `--color-primary` (Navy) | `#1B2A4A` | background utama, header, section gelap |
 | `--color-primary-dark` | `#0F1A30` | background lebih gelap (navbar, footer) |
@@ -477,26 +482,39 @@ Berdasarkan referensi (poster ucapan selamat & landing page), tema utama: **navy
 | `--color-danger` | `#B3261E` | status "Hoax / Ditolak" |
 | `--color-warning` | `#D4A72C` | status "Dalam Proses / Menunggu" (reuse gold) |
 
-> ⚠️ **Usang.** Proyek memakai Tailwind v4 (tema pindah dari `tailwind.config.ts` ke blok `@theme` di CSS),
-> dan token brand **tidak** bernama `primary`/`accent` karena nama itu sudah dipakai shadcn untuk peran lain.
-> Lihat [ADR-009](docs/03-ARCHITECTURE.md) dan [ADR-011](docs/03-ARCHITECTURE.md).
->
-> Token yang berlaku ada di `pemira-frontend/app/globals.css`:
->
-> ```css
-> @theme {
->   --color-navy: #1b2a4a;      /* dipakai sebagai bg-navy   */
->   --color-navy-dark: #0f1a30;
->   --color-gold: #d4a72c;      /* dipakai sebagai text-gold */
->   --color-gold-light: #e8c158;
->   --color-maroon: #7a1f1f;
->   --color-surface-dark: #0d0d0d;
-> }
-> ```
->
-> Di `:root`, semantik shadcn dijembatani ke brand: `--primary: var(--color-navy)`, `--ring: var(--color-gold)`.
+#### Palet yang berlaku (tema terang)
 
-**Aturan pakai:** navy dominan untuk hero/section besar, gold hanya untuk elemen yang perlu ditonjolkan (CTA, status aktif, angka penting) — jangan dipakai merata supaya tetap kelihatan premium, bukan norak. Halaman dashboard internal (Hukum & Sekretariat / Ketua / PDD) sebaiknya pakai versi netral (surface putih + aksen gold tipis) supaya fokus ke data, sementara halaman publik (landing, publikasi) boleh lebih ekspresif dengan navy+gold penuh gaya poster.
+Proyek memakai Tailwind v4 — tema ada di blok `@theme` dalam `pemira-frontend/app/globals.css`, bukan
+`tailwind.config.ts` ([ADR-009](docs/03-ARCHITECTURE.md)) — dan token brand **tidak** bernama
+`primary`/`accent` karena nama itu sudah dipakai shadcn untuk peran lain ([ADR-011](docs/03-ARCHITECTURE.md)).
+
+| Token | Hex | Penggunaan |
+|---|---|---|
+| `--color-ivory` | `#FFFDF5` | base halaman publik & hero |
+| `--color-surface` | `#FFFFFF` | kartu di atas base (dibalik saat tema gelap) |
+| `--color-bar` | `#1E3047` | fill yang **selalu** gelap: header dashboard, `--primary`, overlay |
+| `--color-on-amber` | `#1E3047` | teks di atas amber — tidak ikut dibalik |
+| `--color-sky` | `#A9DEEC` | hero `PageHeader`, wash dingin |
+| `--color-sand` | `#F7DA7C` | panel hangat, aksen di bar gelap |
+| `--color-steel` | `#5E86B1` | garis, ikon, chip — **bukan** warna teks (3.74:1) |
+| `--color-steel-deep` | `#2E4560` | teks & heading di atas terang, focus ring (9.65:1) |
+| `--color-steel-ink` | `#1E3047` | teks di atas amber/sand, bar solid (13.38:1 dgn putih) |
+| `--color-amber` | `#F8C630` | **fill saja**: CTA, tab aktif, angka penting |
+| `--color-amber-deep` | `#E0AE1C` | hover amber — di tema terang, hover menggelap |
+| `--color-ochre` | `#7A5A00` | teks/ikon nuansa amber di latar terang (6.27:1) |
+| `--color-maroon` | `#7A1F1F` | elemen dekoratif, secukupnya |
+| `--color-canvas` / `-line` | `#F7F3E3` / `#E6DFC9` | kanvas dashboard + garisnya |
+| `--color-ink` / `-muted` / `-inverse` | `#1A1A1A` / `#5C5C5C` / `#FFFFFF` | teks |
+| `--color-success` | `#236327` | status "Valid / Disetujui" |
+| `--color-danger` | `#B3261E` | status "Hoax / Ditolak" |
+| `--color-warning` | `#D4A72C` | status "Dalam Proses" — sengaja **tidak** ikut amber |
+
+Di `:root`, semantik shadcn dijembatani ke brand: `--primary: var(--color-steel-ink)`,
+`--ring: var(--color-steel-deep)`, `--destructive: var(--color-danger)`.
+
+**Aturan pakai:** ivory dominan untuk hero/section besar (sky untuk `PageHeader`, canvas untuk section selang-seling), amber hanya untuk elemen yang perlu ditonjolkan (CTA, status aktif, angka penting) — jangan dipakai merata supaya tetap kelihatan premium, bukan norak. Tiga larangan kontras (`text-amber` sebagai penanda, `text-steel` sebagai teks, putih di atas `bg-steel` untuk teks kecil) dijelaskan di [ADR-013](docs/03-ARCHITECTURE.md) dan di komentar `globals.css`.
+
+**Tema gelap** aktif lewat class `dark` di `<html>` — blok `:root.dark` menimpa nilai token yang sama, jadi **tidak ada kelas `dark:` di JSX sama sekali**. Konsekuensinya satu token tidak boleh dipakai sebagai fill sekaligus teks; lihat [ADR-014](docs/03-ARCHITECTURE.md). Togglenya `components/layout/theme-toggle.tsx` (ikon matahari/bulan), terpasang di navbar publik dan header dashboard.
 
 ### 7.2 Tipografi
 

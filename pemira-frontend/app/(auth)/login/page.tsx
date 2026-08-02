@@ -12,7 +12,7 @@ import { useAuthStore } from "@/store/auth.store";
 import { cn } from "@/lib/utils";
 
 const inputClass =
-  "border-white/15 bg-navy-dark text-ink-inverse placeholder:text-ink-inverse/40 focus-visible:border-gold";
+  "border-steel/30 bg-surface text-ink placeholder:text-ink-muted focus-visible:border-steel-deep";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,15 +40,15 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-ink-inverse">Masuk Staf KP</h1>
-      <p className="mt-2 text-sm text-ink-inverse/60">
+      <h1 className="text-2xl font-bold text-steel-ink">Masuk Staf KP</h1>
+      <p className="mt-2 text-sm text-ink-muted">
         Halaman ini khusus untuk staf Komite Pengawasan. Mahasiswa dapat langsung
         mengirim laporan dan mengecek status tanpa login.
       </p>
 
       <form onSubmit={onSubmit} className="mt-8 space-y-5" noValidate>
         <div>
-          <Label htmlFor="email" className="text-sm font-medium text-ink-inverse">
+          <Label htmlFor="email" className="text-sm font-medium text-steel-ink">
             Email
           </Label>
           <Input
@@ -63,7 +63,7 @@ export default function LoginPage() {
           />
         </div>
         <div>
-          <Label htmlFor="password" className="text-sm font-medium text-ink-inverse">
+          <Label htmlFor="password" className="text-sm font-medium text-steel-ink">
             Password
           </Label>
           <Input
@@ -86,7 +86,7 @@ export default function LoginPage() {
         <Button
           type="submit"
           disabled={loading}
-          className="h-11 w-full rounded-full bg-gold font-semibold text-navy-dark hover:bg-gold-light disabled:opacity-70"
+          className="h-11 w-full rounded-full bg-amber font-semibold text-on-amber hover:bg-amber-deep disabled:opacity-70"
         >
           {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
           {loading ? "Memproses…" : "Masuk"}

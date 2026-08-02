@@ -48,11 +48,11 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="flex items-center gap-3">
-        <ShieldCheck className="size-7 text-primary" aria-hidden />
+        <ShieldCheck className="size-7 text-steel-deep" aria-hidden />
         <h1 className="text-page-title text-ink">Selamat datang, {user.fullName}</h1>
       </div>
       <p className="mt-2 text-ink-muted">
-        Anda masuk sebagai <span className="font-semibold text-primary">{user.roles.join(", ")}</span>.
+        Anda masuk sebagai <span className="font-semibold text-steel-deep">{user.roles.join(", ")}</span>.
       </p>
 
       {visible.length > 0 ? (
@@ -61,14 +61,14 @@ export default function DashboardPage() {
             <li key={m.role}>
               <Link
                 href={m.href}
-                className="block h-full rounded-2xl border border-canvas-line bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+                className="block h-full rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm transition-shadow hover:shadow-md"
               >
                 <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary">
                   <m.icon className="size-5 text-ink-inverse" aria-hidden />
                 </span>
                 <h2 className="mt-5 text-lg font-bold text-ink">{m.title}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-ink-muted">{m.description}</p>
-                <span className="mt-4 inline-block text-sm font-semibold text-primary">
+                <span className="mt-4 inline-block text-sm font-semibold text-steel-deep">
                   Buka modul →
                 </span>
               </Link>
@@ -76,13 +76,13 @@ export default function DashboardPage() {
           ))}
         </ul>
       ) : (
-        <div className="mt-10 rounded-2xl border border-canvas-line bg-white p-8 text-center shadow-sm">
+        <div className="mt-10 rounded-2xl border border-canvas-line bg-surface p-8 text-center shadow-sm">
           <p className="text-ink-muted">
             Akun mahasiswa. Gunakan menu publik untuk melapor dan melacak laporan Anda.
           </p>
           <Link
             href="/lapor"
-            className="mt-5 inline-block rounded-full bg-gold px-6 py-2.5 font-semibold text-navy-dark hover:bg-gold-light"
+            className="mt-5 inline-block rounded-full bg-amber px-6 py-2.5 font-semibold text-on-amber hover:bg-amber-deep"
           >
             Lapor Pelanggaran
           </Link>
