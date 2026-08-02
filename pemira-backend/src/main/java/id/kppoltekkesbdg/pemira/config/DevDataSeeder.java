@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Slf4j
 @Configuration
-@Profile("dev")
+@Profile("prod")
 @RequiredArgsConstructor
 public class DevDataSeeder {
 
