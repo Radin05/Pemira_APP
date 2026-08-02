@@ -7,7 +7,7 @@ export const SITE = {
   orgShort: "KP",
   institution: "KM Poltekkes Kemenkes Bandung",
   institutionShort: "Poltekkes Kemenkes Bandung",
-  tagline: "PEMIRA 2025",
+  tagline: "PEMIRA 2026",
 
   // TODO(konfirmasi KP): alamat & jam operasional resmi belum divalidasi.
   email: "kp.pemira@poltekkesbandung.ac.id",

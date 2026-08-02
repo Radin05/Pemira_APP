@@ -20,6 +20,10 @@ spring:
         show_sql: false
 
 app:
+  # Edisi PEMIRA yang sedang berjalan. Dipakai sebagai awalan kode tiket
+  # (PMR-<year>-XXXXX). Ganti sekali di sini saat pindah ke edisi berikutnya.
+  pemira:
+    year: ${APP_PEMIRA_YEAR:2026}
   # Kunci dev, HANYA untuk lokal. Wajib override lewat env di produksi. Tepat 32 byte.
   encryption:
     key: ${APP_ENCRYPTION_KEY:dev-insecure-key-exactly-32bytes}

@@ -60,7 +60,7 @@ export function StatusTracker() {
               id="ticket"
               value={ticket}
               onChange={(e) => setTicket(e.target.value.toUpperCase())}
-              placeholder="PMR-2025-XXXXX"
+              placeholder="PMR-2026-XXXXX"
               className={cn("mt-1.5", inputClass)}
             />
           </div>

@@ -24,6 +24,10 @@ springdoc:
     enabled: false
 
 app:
+  # Edisi PEMIRA yang sedang berjalan. Dipakai sebagai awalan kode tiket
+  # (PMR-<year>-XXXXX). Ganti sekali di sini saat pindah ke edisi berikutnya.
+  pemira:
+    year: ${APP_PEMIRA_YEAR:2026}
   # Wajib diisi env — tidak ada default. Minimal 32 byte masing-masing.
   encryption:
     key: ${APP_ENCRYPTION_KEY}

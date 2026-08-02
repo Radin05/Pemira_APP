@@ -1,4 +1,4 @@
-# Arsitektur Teknis — Aplikasi PEMIRA KM Poltekkes Kemenkes Bandung 2025
+# Arsitektur Teknis — Aplikasi PEMIRA KM Poltekkes Kemenkes Bandung 2026
 
 Stack: **Java Spring Boot (backend)** + **Next.js/React + TypeScript (frontend)**
 

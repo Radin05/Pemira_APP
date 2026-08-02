@@ -1,4 +1,4 @@
-# Task Breakdown — PEMIRA KM Poltekkes Kemenkes Bandung 2025
+# Task Breakdown — PEMIRA KM Poltekkes Kemenkes Bandung 2026
 
 Cara baca:
 - **ID** `T-<epic>-<urut>`. **BE** = backend, **FE** = frontend, **DB** = database, **OPS** = infra/CI.
@@ -78,7 +78,7 @@ Cara baca:
 | | └ **Test**: parameterized state machine — *belum ditulis* (butuh Testcontainers utk yg DB) | | | | |
 | T-04-03 | 🟡 Pembuatan awal + baris history pertama (null→DITERIMA) dalam satu `@Transactional` sudah ada di submit. **Belum**: `ReportStatusService.transition()` ber-guard untuk perubahan status berikutnya (claim/verdict/approve) — dikerjakan saat EPIC-05/06 | BE | 4 | T-04-02 | Invarian #2 |
 | T-04-04 | 🟡 `FileStorageService`: validasi ukuran+tipe, SHA-256 streaming server-side, nama UUID, cegah path traversal. **Ditunda**: magic-byte via Tika + storage S3/Cloudinary (kini disk lokal `./storage/evidence`) | BE | 6 | T-01-05 | US-402 |
-| T-04-05 | ✅ Generator `ticket_code` `PMR-2025-XXXXX` (5 digit acak SecureRandom, cek unik ke DB) | BE | 2 | T-04-01 | US-403 |
+| T-04-05 | ✅ Generator `ticket_code` `PMR-2026-XXXXX` (5 digit acak SecureRandom, cek unik ke DB) | BE | 2 | T-04-01 | US-403 |
 | T-04-06 | 🟡 `EncryptionService` AES-256-GCM (IV acak per enkripsi) — identitas pelapor terenkripsi at-rest. **Belum**: `ReporterIdentityService` (dekripsi + tulis audit) — butuh tabel audit (EPIC-09) | BE | 5 | T-04-01 | US-405, ADR-006 |
 | T-04-07 | ✅ `POST /api/v1/reports` (multipart: payload JSON + bukti) — validasi Bean Validation, enkripsi identitas, status awal DITERIMA, tulis history + simpan bukti atomik. **Sementara publik** (TODO: kunci ke MAHASISWA saat auth ada). Notifikasi role belum | BE | 5 | T-04-03, T-04-05, T-04-06 | US-401 |
 | T-04-08 | Bukti diunggah bersama submit (bagian multipart yang sama), bukan endpoint terpisah — cukup untuk alur mahasiswa | BE | 4 | T-04-04, T-04-07 | US-402 |

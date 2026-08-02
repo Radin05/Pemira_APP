@@ -1,4 +1,4 @@
-# ERD — Sistem Pelaporan Pelanggaran PEMIRA KM Poltekkes Kemenkes Bandung 2025
+# ERD — Sistem Pelaporan Pelanggaran PEMIRA KM Poltekkes Kemenkes Bandung 2026
 
 Database: **PostgreSQL 16**. Migrasi: **Flyway**. Semua tabel `snake_case`, primary key `BIGSERIAL`, timestamp `TIMESTAMPTZ`.
 
@@ -108,7 +108,7 @@ erDiagram
 
     reports {
         bigserial id PK
-        varchar ticket_code UK "PMR-2025-XXXXX"
+        varchar ticket_code UK "PMR-2026-XXXXX"
         bigint reporter_id FK "nullable"
         varchar reporter_name_enc "terenkripsi bila anonim"
         varchar reporter_npm_enc

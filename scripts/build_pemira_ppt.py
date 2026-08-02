@@ -141,7 +141,7 @@ sh += rect(3, "left panel", 0, 0, 4.2, 7.5, NAVY, None)
 sh += rect(4, "gold block", 0.5, 5.95, 2.0, 0.12, GOLD, None)
 sh += image(5, "logo", "rId2", *pos(0.8, 0.85, 1.65, 1.65))
 sh += text(6, "eyebrow", "KOMITE PENGAWASAN", 0.75, 2.75, 3.2, 0.35, 14, GOLD, True)
-sh += text(7, "title", "PEMIRA APP\n2025", 0.72, 3.15, 3.25, 1.4, 40, WHITE, True)
+sh += text(7, "title", "PEMIRA APP\n2026", 0.72, 3.15, 3.25, 1.4, 40, WHITE, True)
 sh += text(8, "main", "Sistem Pelaporan dan Pengawasan\nPelanggaran Pemilihan Raya", 4.85, 1.45, 7.3, 1.5, 34, WHITE, True)
 sh += text(9, "desc", "Platform digital untuk pelaporan dugaan pelanggaran, pelacakan status, investigasi internal, dan publikasi putusan secara transparan.", 4.9, 3.2, 6.8, 1.0, 16, INK_MUTED)
 sh += rect(10, "pill", 4.9, 4.55, 2.55, 0.42, GOLD, None, True)
@@ -149,7 +149,7 @@ sh += text(11, "pill text", "KM Poltekkes Bandung", 5.05, 4.67, 2.2, 0.2, 11, NA
 slides.append({"xml": slide_xml(sh), "rels": [("rId2", logo_target)]})
 
 # Slide 2 - fungsi aplikasi
-sh = header("Fungsi dan Kegunaan Aplikasi", "PEMIRA APP 2025")
+sh = header("Fungsi dan Kegunaan Aplikasi", "PEMIRA APP 2026")
 sh += text(
     20,
     "intro",
@@ -179,7 +179,7 @@ sh += rect(90, "bottom line", 0.9, 6.55, 11.55, 0.04, GOLD, None)
 slides.append({"xml": slide_xml(sh), "rels": []})
 
 # Slide 3 - agenda
-sh = header("Ringkasan Presentasi", "PEMIRA APP 2025")
+sh = header("Ringkasan Presentasi", "PEMIRA APP 2026")
 items = [
     ("01", "Halaman Publik", "Beranda, informasi PEMIRA, aturan main, pelaporan, status laporan, transparansi, dan profil KP."),
     ("02", "Alur Pelaporan", "Mahasiswa melapor tanpa login, mendapatkan kode tiket, lalu melacak status menggunakan NPM."),
@@ -204,7 +204,7 @@ slides.append({"xml": slide_xml(sh), "rels": [("rId2", logo_target)]})
 landing_pages = [
     (
         "Beranda dan Identitas Aplikasi",
-        "Menampilkan identitas Komite Pengawasan PEMIRA 2025, ajakan melapor, serta akses cepat menuju informasi dan kanal pelaporan.",
+        "Menampilkan identitas Komite Pengawasan PEMIRA 2026, ajakan melapor, serta akses cepat menuju informasi dan kanal pelaporan.",
     ),
     (
         "Prinsip Pengawasan dan Ringkasan Sistem",
@@ -304,7 +304,7 @@ sh = rect(2, "bg", 0, 0, 13.333, 7.5, NAVY_DARK, None)
 sh += rect(3, "top", 0, 0, 13.333, 1.05, NAVY, None)
 sh += image(4, "logo", "rId2", *pos(0.75, 0.22, 0.65, 0.65))
 sh += text(5, "brand", "Komite Pengawasan", 1.55, 0.28, 3.5, 0.3, 16, WHITE, True)
-sh += text(6, "tag", "PEMIRA 2025", 1.55, 0.58, 2.2, 0.22, 9, GOLD, True)
+sh += text(6, "tag", "PEMIRA 2026", 1.55, 0.58, 2.2, 0.22, 9, GOLD, True)
 sh += text(7, "thanks", "Terima Kasih", 1.0, 2.0, 11.2, 0.7, 44, WHITE, True, "c")
 sh += text(8, "desc", "PEMIRA APP siap digunakan sebagai kanal pelaporan, pengawasan, dan transparansi proses Pemilihan Raya.", 2.0, 3.0, 9.3, 0.7, 17, INK_MUTED, False, "c")
 sh += rect(9, "ig card", 4.2, 4.25, 4.95, 0.72, NAVY_SOFT, "31496F", True)
@@ -337,10 +337,10 @@ rels_root = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 created = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 core = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>PEMIRA APP 2025</dc:title><dc:creator>Komite Pengawasan</dc:creator><cp:lastModifiedBy>Pi Coding Agent</cp:lastModifiedBy><dcterms:created xsi:type="dcterms:W3CDTF">{created}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">{created}</dcterms:modified></cp:coreProperties>'''
+<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>PEMIRA APP 2026</dc:title><dc:creator>Komite Pengawasan</dc:creator><cp:lastModifiedBy>Pi Coding Agent</cp:lastModifiedBy><dcterms:created xsi:type="dcterms:W3CDTF">{created}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">{created}</dcterms:modified></cp:coreProperties>'''
 
 app = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Microsoft PowerPoint</Application><PresentationFormat>Widescreen</PresentationFormat><Slides>{slide_count}</Slides><Company>Komite Pengawasan PEMIRA 2025</Company></Properties>'''
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Microsoft PowerPoint</Application><PresentationFormat>Widescreen</PresentationFormat><Slides>{slide_count}</Slides><Company>Komite Pengawasan PEMIRA 2026</Company></Properties>'''
 
 sld_ids = ''.join([f'<p:sldId id="{255+i}" r:id="rId{i+1}"/>' for i in range(1, slide_count + 1)])
 pres = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>

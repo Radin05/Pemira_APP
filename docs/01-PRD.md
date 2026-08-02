@@ -1,4 +1,4 @@
-# PRD — Sistem Pelaporan Pelanggaran PEMIRA KM Poltekkes Kemenkes Bandung 2025
+# PRD — Sistem Pelaporan Pelanggaran PEMIRA KM Poltekkes Kemenkes Bandung 2026
 
 | | |
 |---|---|
@@ -97,7 +97,7 @@ Prioritas: **P0** = wajib rilis, **P1** = sangat diinginkan, **P2** = nice-to-ha
 |---|---|---|---|
 | US-401 | Sebagai mahasiswa, saya ingin mengisi form laporan pelanggaran | P0 | Field wajib: kategori, tanggal kejadian, lokasi, kronologi (min 50 char). Opsional: kandidat terlapor, bukti |
 | US-402 | Sebagai mahasiswa, saya ingin unggah bukti (foto/video/dokumen) | P0 | Maks 5 file, tiap file ≤ 10 MB, tipe: jpg/png/webp/mp4/pdf. Checksum SHA-256 dihitung server-side & disimpan |
-| US-403 | Sebagai mahasiswa, saya ingin dapat kode tiket setelah submit | P0 | Format `PMR-2025-XXXXX`, ditampilkan di layar + dikirim ke email |
+| US-403 | Sebagai mahasiswa, saya ingin dapat kode tiket setelah submit | P0 | Format `PMR-2026-XXXXX`, ditampilkan di layar + dikirim ke email |
 | US-404 | Sebagai mahasiswa, saya ingin melacak status laporan pakai kode tiket | P0 | Halaman `/status` — input kode tiket + NPM → tampil timeline status (tanpa membuka isi investigasi internal) |
 | US-405 | Sebagai mahasiswa, saya ingin melapor secara anonim | P1 | Identitas disembunyikan dari UI investigator, tapi tetap tersimpan terenkripsi untuk kebutuhan hukum |
 | US-406 | Sebagai sistem, saya ingin membatasi spam laporan | P0 | Maks 3 laporan / NPM / 24 jam. Kelebihan → HTTP 429 |

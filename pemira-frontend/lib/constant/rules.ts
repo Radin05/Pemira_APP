@@ -84,7 +84,14 @@ export const VIOLATION_RULES: readonly ViolationRule[] = [
   },
 ];
 
-/** Tahapan PEMIRA. TODO(konfirmasi KP): tanggal masih contoh, belum resmi. */
+/**
+ * Tahapan PEMIRA. TODO(konfirmasi KP): tanggal masih contoh, belum resmi —
+ * tahun sudah digeser ke 2026 tapi hari/bulannya masih mewarisi contoh 2025.
+ *
+ * `status` ditulis manual, tidak dihitung dari tanggal. Jadi saat tahapan mulai
+ * berjalan, nilainya harus diperbarui di sini juga — kalau tidak, halaman Info
+ * akan menampilkan "akan datang" untuk tahapan yang sudah lewat.
+ */
 export type TimelinePhase = {
   phase: string;
   period: string;
@@ -95,44 +102,44 @@ export type TimelinePhase = {
 export const PEMIRA_TIMELINE: readonly TimelinePhase[] = [
   {
     phase: "Pendaftaran Bakal Calon",
-    period: "1 – 7 September 2025",
+    period: "1 – 7 September 2026",
     description: "Pengumpulan berkas administratif calon Ketua BEM dan anggota BPM.",
-    status: "selesai",
+    status: "akan-datang",
   },
   {
     phase: "Verifikasi Berkas",
-    period: "8 – 12 September 2025",
+    period: "8 – 12 September 2026",
     description: "Komite Pengawasan memeriksa kelengkapan dan keabsahan berkas.",
-    status: "selesai",
+    status: "akan-datang",
   },
   {
     phase: "Penetapan Nomor Urut",
-    period: "15 September 2025",
+    period: "15 September 2026",
     description: "Pengundian dan penetapan nomor urut pasangan calon.",
-    status: "selesai",
+    status: "akan-datang",
   },
   {
     phase: "Masa Kampanye",
-    period: "16 September – 5 Oktober 2025",
+    period: "16 September – 5 Oktober 2026",
     description:
       "Kandidat menyampaikan visi, misi, dan program kerja. Seluruh pelanggaran pada tahap ini dapat dilaporkan lewat aplikasi.",
-    status: "berlangsung",
+    status: "akan-datang",
   },
   {
     phase: "Masa Tenang",
-    period: "6 – 7 Oktober 2025",
+    period: "6 – 7 Oktober 2026",
     description: "Seluruh kegiatan kampanye dihentikan. Atribut wajib diturunkan.",
     status: "akan-datang",
   },
   {
     phase: "Pemungutan Suara",
-    period: "8 Oktober 2025",
+    period: "8 Oktober 2026",
     description: "Pemilihan dilaksanakan secara daring melalui sistem pemungutan suara terpisah.",
     status: "akan-datang",
   },
   {
     phase: "Rekapitulasi & Penetapan",
-    period: "9 – 10 Oktober 2025",
+    period: "9 – 10 Oktober 2026",
     description: "Penghitungan suara, penyelesaian sengketa, dan penetapan hasil akhir.",
     status: "akan-datang",
   },
