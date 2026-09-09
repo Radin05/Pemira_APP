@@ -21,20 +21,20 @@ function isActive(pathname: string, href: string): boolean {
 
 function Brand() {
   return (
-    <Link href="/" className="flex shrink-0 items-center gap-4">
+    <Link href="/" className="flex min-w-0 shrink items-center gap-2 sm:gap-4">
       <Image
         src={SITE.logo.src}
         alt={SITE.logo.alt}
         width={SITE.logo.width}
         height={SITE.logo.height}
         priority
-        className="size-16 shrink-0 sm:size-18"
+        className="size-10 shrink-0 sm:size-16 lg:size-18"
       />
-      <span className="flex flex-col leading-none">
-        <span className="text-xl font-extrabold tracking-tight text-steel-ink sm:text-2xl">
+      <span className="flex min-w-0 flex-col leading-none">
+        <span className="max-w-[11rem] truncate text-sm font-extrabold tracking-tight text-steel-ink sm:max-w-none sm:text-2xl">
           {SITE.orgName}
         </span>
-        <span className="mt-1.5 text-xs font-semibold tracking-[0.2em] text-steel-deep uppercase">
+        <span className="mt-1 text-[0.6rem] font-semibold tracking-[0.16em] text-steel-deep uppercase sm:mt-1.5 sm:text-xs sm:tracking-[0.2em]">
           {SITE.tagline}
         </span>
       </span>
@@ -50,7 +50,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-steel/20 bg-ivory/85 backdrop-blur-md">
       <nav
         aria-label="Navigasi utama"
-        className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4"
+        className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4"
       >
         <Brand />
 
@@ -76,7 +76,7 @@ export function Navbar() {
           })}
         </ul>
 
-        <div className="flex items-center gap-1">
+        <div className="flex shrink-0 items-center gap-1">
           <ThemeToggle />
 
           <button
@@ -93,7 +93,7 @@ export function Navbar() {
       </nav>
 
       {isOpen && (
-        <ul id="menu-mobile" className="border-t border-canvas-line px-6 pb-5 lg:hidden">
+        <ul id="menu-mobile" className="border-t border-canvas-line px-4 pb-5 sm:px-6 lg:hidden">
           {NAV_MENU.map((item) => {
             const active = isActive(pathname, item.href);
             return (

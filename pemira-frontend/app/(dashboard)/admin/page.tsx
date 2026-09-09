@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Users, UserSquare2 } from "lucide-react";
+import { FileCog, Users, UserSquare2 } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
 
 const CARDS = [
@@ -16,6 +16,12 @@ const CARDS = [
     icon: UserSquare2,
     title: "Kelola Kandidat",
     description: "Kelola data calon Ketua BEM dan anggota BPM beserta visi-misinya.",
+  },
+  {
+    href: "/admin/konten",
+    icon: FileCog,
+    title: "Pengaturan Konten",
+    description: "Ubah jadwal, formulir, aturan main, struktur divisi, dan alur laporan.",
   },
 ];
 
@@ -34,9 +40,9 @@ export default function AdminPage() {
   return (
     <div>
       <h1 className="text-page-title text-ink">Administrasi</h1>
-      <p className="mt-2 text-ink-muted">Kelola pengguna sistem dan data kandidat.</p>
+      <p className="mt-2 text-ink-muted">Kelola pengguna, kandidat, dan konten publik.</p>
 
-      <ul className="mt-8 grid gap-6 sm:grid-cols-2">
+      <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {CARDS.map((c) => (
           <li key={c.href}>
             <Link

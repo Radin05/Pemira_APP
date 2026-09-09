@@ -144,7 +144,7 @@ export default function AdminKandidatPage() {
 
       {/* Form tambah/edit */}
       {editingId !== null && (
-        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-canvas-line bg-surface p-4 shadow-sm sm:p-6">
           <p className="text-sm font-semibold text-ink">
             {editingId === "new" ? "Kandidat Baru" : "Edit Kandidat"}
           </p>
@@ -242,7 +242,7 @@ export default function AdminKandidatPage() {
             </label>
           </div>
 
-          <div className="mt-5 flex gap-3 border-t border-ink/10 pt-5">
+          <div className="mt-5 flex flex-wrap gap-3 border-t border-ink/10 pt-5">
             <Button
               onClick={save}
               disabled={saving}
@@ -281,13 +281,13 @@ export default function AdminKandidatPage() {
                 className="rounded-2xl border border-canvas-line bg-surface p-5 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
+                  <div className="min-w-0 flex items-center gap-3">
                     <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-ink-inverse">
                       {c.candidateNumber}
                     </span>
-                    <div>
-                      <p className="font-bold text-ink">{c.chiefName}</p>
-                      {c.viceName && <p className="text-sm text-ink-muted">& {c.viceName}</p>}
+                    <div className="min-w-0">
+                      <p className="font-bold break-words text-ink">{c.chiefName}</p>
+                      {c.viceName && <p className="text-sm break-words text-ink-muted">& {c.viceName}</p>}
                     </div>
                   </div>
                   <span
@@ -302,9 +302,9 @@ export default function AdminKandidatPage() {
                   </span>
                 </div>
                 {c.studyProgram && (
-                  <p className="mt-3 text-xs text-ink-muted">{c.studyProgram}</p>
+                  <p className="mt-3 text-xs break-words text-ink-muted">{c.studyProgram}</p>
                 )}
-                <div className="mt-4 flex items-center justify-between border-t border-ink/10 pt-3">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-ink/10 pt-3">
                   <span
                     className={cn(
                       "text-xs font-medium",

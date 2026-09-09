@@ -35,7 +35,7 @@ const MODULES = [
     href: "/admin",
     icon: Users,
     title: "Administrasi",
-    description: "Kelola pengguna, peran, dan data kandidat.",
+    description: "Kelola pengguna, kandidat, dan konten publik."
   },
 ];
 

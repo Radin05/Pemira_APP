@@ -51,24 +51,24 @@ export default function DashboardLayout({
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       <header className="sticky top-0 z-40 border-b border-bar bg-primary shadow-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5">
-          <Link href="/dashboard" className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
+          <Link href="/dashboard" className="flex min-w-0 items-center gap-2 sm:gap-3">
             <Image
               src={SITE.logo.src}
               alt={SITE.logo.alt}
               width={SITE.logo.width}
               height={SITE.logo.height}
-              className="size-9"
+              className="size-8 shrink-0 sm:size-9"
             />
-            <div className="leading-none">
-              <span className="block text-sm font-bold text-ink-inverse">Dashboard KP</span>
-              <span className="mt-0.5 block text-[0.65rem] font-semibold tracking-[0.15em] text-amber uppercase">
+            <div className="min-w-0 leading-none">
+              <span className="block truncate text-sm font-bold text-ink-inverse">Dashboard KP</span>
+              <span className="mt-0.5 block truncate text-[0.65rem] font-semibold tracking-[0.15em] text-amber uppercase">
                 {SITE.tagline}
               </span>
             </div>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             {/* Header dashboard selalu berlatar bar yang gelap di kedua tema,
                 jadi warnanya ditimpa jadi terang — bukan steel-deep bawaan. */}
             <ThemeToggle className="text-ink-inverse/80 hover:bg-ink-inverse/10 hover:text-ink-inverse" />
@@ -76,7 +76,7 @@ export default function DashboardLayout({
               <p className="text-sm font-medium text-ink-inverse">{user.fullName}</p>
               <p className="text-xs text-amber">{user.roles.join(", ")}</p>
             </div>
-            <span className="flex size-9 items-center justify-center rounded-full bg-amber text-sm font-bold text-on-amber">
+            <span className="hidden size-9 items-center justify-center rounded-full bg-amber text-sm font-bold text-on-amber min-[380px]:flex">
               {initials}
             </span>
             <button
@@ -97,7 +97,7 @@ export default function DashboardLayout({
       {/* Breadcrumb tipis untuk memberi konteks selain header putih polos */}
       {pathname !== "/dashboard" && (
         <div className="border-b border-canvas-line bg-surface/60">
-          <div className="mx-auto max-w-7xl px-6 py-2.5">
+          <div className="mx-auto max-w-7xl px-4 py-2.5 sm:px-6">
             <Link
               href="/dashboard"
               className={cn(
@@ -110,7 +110,7 @@ export default function DashboardLayout({
         </div>
       )}
 
-      <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">{children}</div>
+      <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</div>
     </div>
   );
 }

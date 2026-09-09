@@ -28,13 +28,13 @@ function Hero() {
         aria-hidden
         className="pointer-events-none absolute -top-40 -right-40 size-[36rem] rounded-full bg-ivory/70 blur-3xl"
       />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-24 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16 lg:py-32">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16 lg:py-32">
         <div>
           <p className="mb-6 text-xs font-semibold tracking-[0.25em] text-steel-deep uppercase">
             {SITE.orgName} · {SITE.institution}
           </p>
 
-          <h1 className="max-w-4xl text-4xl leading-[1.08] font-extrabold text-steel-ink uppercase sm:text-5xl lg:text-6xl">
+          <h1 className="max-w-4xl text-3xl leading-[1.08] font-extrabold text-steel-ink uppercase sm:text-5xl lg:text-6xl">
             Kawal demokrasi
             <br />
             secara <span className="text-ochre">adil &amp; bersih.</span>
@@ -49,7 +49,7 @@ function Hero() {
             </span>
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             {/* nativeButton={false} wajib saat render sebagai <a>: Base UI sebaliknya
               memperingatkan bahwa semantik <button> hilang. */}
             <Button
@@ -70,7 +70,9 @@ function Hero() {
           </div>
         </div>
 
-        <HeroIllustration />
+        <div className="hidden md:block">
+          <HeroIllustration />
+        </div>
       </div>
     </section>
   );
@@ -78,8 +80,8 @@ function Hero() {
 
 function Principles() {
   return (
-    <section className="bg-ivory py-24">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="bg-ivory py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex flex-col items-center text-center">
           <h2 className="text-3xl font-extrabold text-steel-ink sm:text-4xl">
             Prinsip Kerja Kami
@@ -115,8 +117,8 @@ function Principles() {
 
 function Stats() {
   return (
-    <section className="border-t border-canvas-line bg-canvas py-20">
-      <div className="mx-auto grid max-w-5xl gap-12 px-6 text-center sm:grid-cols-3">
+    <section className="border-t border-canvas-line bg-canvas py-16 sm:py-20">
+      <div className="mx-auto grid max-w-5xl gap-10 px-4 text-center sm:grid-cols-3 sm:px-6 sm:gap-12">
         {SITE_STATS.map((stat) => (
           <div key={stat.label}>
             <p className="text-5xl font-extrabold text-steel-deep sm:text-6xl">
