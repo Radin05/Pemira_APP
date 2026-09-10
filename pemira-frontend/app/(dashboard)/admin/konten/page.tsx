@@ -6,12 +6,14 @@ import {
   FileCog,
   FileText,
   Gavel,
+  Loader2,
   Network,
   Plus,
   RotateCcw,
   Save,
   ScrollText,
   Trash2,
+  UploadCloud,
 } from "lucide-react";
 import { adminContent, type ContentKey } from "@/lib/api/content.service";
 import {
@@ -95,6 +97,7 @@ const DIVISION_ICON_OPTIONS: { value: Division["icon"]; label: string }[] = [
 ];
 
 const CATEGORY_OPTIONS = Object.entries(REPORT_CATEGORY_LABEL) as [ReportCategory, string][];
+const TEMPLATE_ACCEPT = ".pdf,.doc,.docx,.xls,.xlsx,.txt,.odt,.rtf";
 
 function patchAt<T>(items: T[], index: number, patch: Partial<T>) {
   return items.map((item, i) => (i === index ? { ...item, ...patch } : item));
@@ -184,6 +187,22 @@ function AddButton({ children, onClick }: { children: React.ReactNode; onClick: 
 }
 
 function InfoEditor({ value, onChange }: { value: InfoContent; onChange: (value: InfoContent) => void }) {
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+
+  async function uploadFormFile(index: number, file?: File) {
+    if (!file) return;
+    setUploadingIndex(index);
+    try {
+      const uploaded = await adminContent.uploadFile(file);
+      onChange({ ...value, forms: patchAt(value.forms, index, { href: uploaded.href }) });
+      toast.success("File formulir diunggah");
+    } catch {
+      toast.error("Gagal upload. Pakai PDF/Word/Excel/TXT maksimal 20 MB.");
+    } finally {
+      setUploadingIndex(null);
+    }
+  }
+
   return (
     <div className="space-y-6">
       <SectionPanel
@@ -281,7 +300,7 @@ function InfoEditor({ value, onChange }: { value: InfoContent; onChange: (value:
       <SectionPanel
         eyebrow="Halaman /info"
         title="Instrumen & Formulir"
-        description="Bagian ini tampil sebagai kartu unduhan formulir. Isi kode, judul, link file, ikon, dan deskripsi."
+        description="Bagian ini tampil sebagai kartu unduhan. Bisa isi link manual atau upload PDF/Word/Excel/TXT."
         icon={FileText}
         count={value.forms.length}
         action={
@@ -331,6 +350,24 @@ function InfoEditor({ value, onChange }: { value: InfoContent; onChange: (value:
                   value={item.href}
                   onChange={(e) => onChange({ ...value, forms: patchAt(value.forms, index, { href: e.target.value }) })}
                 />
+              </Field>
+              <Field label="Upload File Formulir">
+                <label className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-input bg-surface px-3 text-sm font-semibold text-steel-deep hover:bg-amber/15">
+                  {uploadingIndex === index ? (
+                    <Loader2 className="size-4 animate-spin" aria-hidden />
+                  ) : (
+                    <UploadCloud className="size-4" aria-hidden />
+                  )}
+                  {uploadingIndex === index ? "Mengunggah..." : "Pilih PDF / Word"}
+                  <input
+                    type="file"
+                    accept={TEMPLATE_ACCEPT}
+                    disabled={uploadingIndex === index}
+                    onChange={(e) => uploadFormFile(index, e.target.files?.[0])}
+                    className="sr-only"
+                  />
+                </label>
+                <p className="mt-1.5 text-xs text-ink-muted">Link file otomatis terisi setelah upload.</p>
               </Field>
               <Field label="Ikon">
                 <select
