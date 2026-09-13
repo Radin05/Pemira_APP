@@ -124,7 +124,7 @@ export default function AdminKandidatPage() {
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-page-title text-ink">Kelola Kandidat</h1>
-          <p className="mt-2 text-ink-muted">Calon Ketua BEM dan anggota BPM.</p>
+          <p className="mt-2 text-ink-muted">Calon Presiden Mahasiswa dan Wakil Presiden Mahasiswa Serta calon ketua umum BPM.</p>
         </div>
         {editingId === null && (
           <Button
