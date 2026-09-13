@@ -107,10 +107,21 @@ function removeAt<T>(items: T[], index: number) {
   return items.filter((_, i) => i !== index);
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <Label className="text-sm font-semibold text-ink">{label}</Label>
+      <div className="flex flex-wrap items-baseline gap-1.5">
+        <Label className="text-sm font-semibold text-ink">{label}</Label>
+        {hint && <span className="text-xs text-ink-muted">({hint})</span>}
+      </div>
       <div className="mt-1.5">{children}</div>
     </div>
   );
@@ -465,10 +476,21 @@ function AturanEditor({ value, onChange }: { value: AturanContent; onChange: (va
             onRemove={() => onChange({ ...value, rules: removeAt(value.rules, index) })}
           >
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Kode Internal">
+              <Field
+                label="Kode Internal"
+                hint="Wajib format snake_case tanpa spasi (contoh: pasal_28_ayat_3)"
+              >
                 <Input
+                  placeholder="contoh: pasal_28_ayat_3"
                   value={item.code}
-                  onChange={(e) => onChange({ ...value, rules: patchAt(value.rules, index, { code: e.target.value }) })}
+                  onChange={(e) =>
+                    onChange({
+                      ...value,
+                      rules: patchAt(value.rules, index, {
+                        code: e.target.value.toLowerCase().replace(/\s+/g, "_"),
+                      }),
+                    })
+                  }
                 />
               </Field>
               <Field label="Pasal">
