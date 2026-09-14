@@ -17,22 +17,59 @@ type AuthState = {
   logout: () => Promise<void>;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+const STORAGE_KEY = "pemira_auth_session";
+
+function loadSavedSession(): { accessToken: string; user: AuthUser } | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistSession(res: AuthResponse | null) {
+  if (typeof window === "undefined") return;
+  try {
+    if (res) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ accessToken: res.accessToken, user: res.user }));
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch {
+    // Ignore storage quota / privacy mode errors
+  }
+}
+
+export const useAuthStore = create<AuthState>((set, get) => ({
   accessToken: null,
   user: null,
   initializing: true,
 
-  // initializing:false — begitu sesi diset (login/OTP), guard tak perlu menunggu
-  // bootstrap. Tanpa ini, layout dashboard mentok di loader setelah login.
-  setSession: (res) => set({ accessToken: res.accessToken, user: res.user, initializing: false }),
-  clear: () => set({ accessToken: null, user: null }),
+  setSession: (res) => {
+    persistSession(res);
+    set({ accessToken: res.accessToken, user: res.user, initializing: false });
+  },
+  clear: () => {
+    persistSession(null);
+    set({ accessToken: null, user: null });
+  },
 
   bootstrap: async () => {
+    const saved = loadSavedSession();
+    if (saved) {
+      set({ accessToken: saved.accessToken, user: saved.user, initializing: false });
+    }
+
     try {
       const res = await authService.refresh();
+      persistSession(res);
       set({ accessToken: res.accessToken, user: res.user });
     } catch {
-      set({ accessToken: null, user: null });
+      if (!saved) {
+        set({ accessToken: null, user: null });
+      }
     } finally {
       set({ initializing: false });
     }
@@ -44,6 +81,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch {
       // Abaikan; tetap bersihkan sesi lokal.
     }
+    persistSession(null);
     set({ accessToken: null, user: null });
   },
 }));
