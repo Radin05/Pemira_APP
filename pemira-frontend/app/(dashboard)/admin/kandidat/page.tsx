@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   adminCandidates,
   type Candidate,
@@ -38,6 +39,7 @@ export default function AdminKandidatPage() {
   const [editingId, setEditingId] = useState<number | "new" | null>(null);
   const [form, setForm] = useState<CandidatePayload>(EMPTY);
   const [saving, setSaving] = useState(false);
+  const [candidateToDelete, setCandidateToDelete] = useState<Candidate | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -98,7 +100,6 @@ export default function AdminKandidatPage() {
   }
 
   async function remove(id: number) {
-    if (!confirm("Hapus kandidat ini?")) return;
     try {
       await adminCandidates.remove(id);
       await load();
@@ -321,7 +322,7 @@ export default function AdminKandidatPage() {
                       <Pencil className="size-3.5" /> Edit
                     </button>
                     <button
-                      onClick={() => remove(c.id)}
+                      onClick={() => setCandidateToDelete(c)}
                       className="inline-flex items-center gap-1 text-xs font-semibold text-danger hover:underline"
                     >
                       <Trash2 className="size-3.5" /> Hapus
@@ -333,6 +334,17 @@ export default function AdminKandidatPage() {
           </ul>
         )}
       </div>
+
+      <ConfirmDialog
+        open={candidateToDelete !== null}
+        onOpenChange={(open) => !open && setCandidateToDelete(null)}
+        title="Hapus Kandidat"
+        description={`Apakah Anda yakin ingin menghapus kandidat "${candidateToDelete?.chiefName}"? Tindakan ini tidak dapat dibatalkan.`}
+        confirmText="Hapus"
+        onConfirm={async () => {
+          if (candidateToDelete) await remove(candidateToDelete.id);
+        }}
+      />
     </div>
   );
 }

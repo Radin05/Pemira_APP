@@ -32,6 +32,7 @@ import {
 import { REPORT_CATEGORY_LABEL, type ReportCategory } from "@/lib/types/report.types";
 import { useAuthStore } from "@/store/auth.store";
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -718,6 +719,7 @@ export default function KontenPage() {
   const [content, setContent] = useState<PageContent>(DEFAULT_INFO_CONTENT);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -828,7 +830,7 @@ export default function KontenPage() {
             <Button
               type="button"
               variant="outline"
-              onClick={reset}
+              onClick={() => setShowResetConfirm(true)}
               disabled={saving || loading}
               className="h-10 rounded-full px-5 font-semibold"
             >
@@ -850,6 +852,15 @@ export default function KontenPage() {
           )}
         </div>
       </section>
+
+      <ConfirmDialog
+        open={showResetConfirm}
+        onOpenChange={setShowResetConfirm}
+        title="Reset Konten"
+        description={`Apakah Anda yakin ingin mereset konten "${section.title}" ke bawaan template dummy? Perubahan yang ada akan ditimpa.`}
+        confirmText="Reset Konten"
+        onConfirm={reset}
+      />
     </div>
   );
 }
