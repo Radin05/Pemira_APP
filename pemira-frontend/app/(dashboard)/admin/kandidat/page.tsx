@@ -172,7 +172,7 @@ export default function AdminKandidatPage() {
                 className="mt-1.5 h-9 w-full rounded-md border border-ink/15 bg-surface px-3 text-sm"
               >
                 <option value="BEM">BEM (Ketua)</option>
-                <option value="BPM">BPM (Anggota)</option>
+                <option value="BPM">BPM (Ketua)</option>
               </select>
             </div>
             <div>

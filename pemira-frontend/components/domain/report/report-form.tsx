@@ -285,21 +285,25 @@ export function ReportForm() {
       {/* ── Bukti / Formulir ──────────────────────────── */}
       <fieldset disabled={isSubmitting}>
         <legend className="mb-4 text-xs font-bold tracking-[0.2em] text-steel-deep uppercase">
-          {isTemplateMode ? "Upload Formulir" : "Lampiran Bukti"}{" "}
-          <span className="text-ink-muted normal-case">
-            {isTemplateMode ? "(wajib)" : "(opsional)"}
-          </span>
+          {isTemplateMode ? (
+            <>
+              Upload Formulir{" "}
+              <span className="text-ink-muted normal-case">(wajib)</span>
+            </>
+          ) : (
+            "Lampiran Bukti"
+          )}
         </legend>
         {isTemplateMode && (
           <div className="mb-4 rounded-2xl border border-amber/50 bg-amber/10 p-4">
             <p className="text-sm leading-relaxed text-steel-ink">
               Unduh template formulir, isi data laporan, lalu upload kembali hasilnya
-              dalam format PDF atau gambar.
+              dalam format PDF, Word (DOCX), atau gambar.
             </p>
             <Button
               nativeButton={false}
               variant="outline"
-              render={<Link href="/templates/formulir-laporan-a1.txt" download />}
+              render={<Link href="/templates/format-pelaporan-pemira-2026.docx" download="FORMAT PELAPORAN PEMIRA 2026.docx" />}
               className="mt-3 h-10 rounded-full border-steel/40 bg-transparent px-4 text-sm font-semibold text-steel-deep hover:bg-amber/15 hover:text-steel-ink"
             >
               <Download className="mr-2 size-4" /> Unduh Template

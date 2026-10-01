@@ -28,9 +28,16 @@ public class FileStorageService {
 
   private static final long MAX_SIZE_BYTES = 10L * 1024 * 1024;
   private static final Set<String> ALLOWED_TYPES =
-      Set.of("image/jpeg", "image/png", "image/webp", "video/mp4", "application/pdf");
+      Set.of(
+          "image/jpeg",
+          "image/png",
+          "image/webp",
+          "video/mp4",
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   private static final Set<String> ALLOWED_EXT =
-      Set.of("jpg", "jpeg", "png", "webp", "mp4", "pdf");
+      Set.of("jpg", "jpeg", "png", "webp", "mp4", "pdf", "doc", "docx");
 
   private final Path baseDir;
 

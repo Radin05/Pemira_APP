@@ -110,7 +110,7 @@ export const DEFAULT_INFO_CONTENT: InfoContent = {
       title: "Formulir Laporan",
       description:
         "Dokumen untuk menampung laporan dugaan pelanggaran yang diajukan secara resmi oleh mahasiswa sebagai bentuk pengawasan partisipatif.",
-      href: "/templates/formulir-laporan-a1.txt",
+      href: "/templates/format-pelaporan-pemira-2026.docx",
     },
     {
       code: "A-2",

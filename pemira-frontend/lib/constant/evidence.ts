@@ -13,9 +13,11 @@ export const ALLOWED_EVIDENCE_TYPES: readonly string[] = [
   "image/webp",
   "video/mp4",
   "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
 
-export const ALLOWED_EVIDENCE_EXT = ".jpg,.jpeg,.png,.webp,.mp4,.pdf";
+export const ALLOWED_EVIDENCE_EXT = ".jpg,.jpeg,.png,.webp,.mp4,.pdf,.doc,.docx";
 
 export function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
